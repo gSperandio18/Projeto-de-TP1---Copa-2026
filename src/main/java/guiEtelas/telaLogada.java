@@ -6,6 +6,11 @@ package guiEtelas;
 
 import guiEtelas.jogadoresFolder.GerenciarJogadores;
 import guiEtelas.selecoesFolder.GerenciarSelecoes;
+import guiEtelas.estadiosFolder.TelaInicialEstadios;
+import guiEtelas.partidasFolder.cadastrarNovaPartida;
+import guiEtelas.partidasFolder.consultarPartida;
+import guiEtelas.partidasFolder.registroPartida;
+import guiEtelas.arbitrosFolder.cadastroDeArbitros;
 
 /**
  *

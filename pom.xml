@@ -9,7 +9,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>25</maven.compiler.release>
-        <exec.mainClass>guiEtelas.TelaLogin</exec.mainClass>
+        <exec.mainClass>guiEtelas.loginEsignupFolder.TelaLogin</exec.mainClass>
     </properties>
 
     <dependencies>
