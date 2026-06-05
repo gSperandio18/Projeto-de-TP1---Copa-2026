@@ -1,4 +1,4 @@
-package classes.estadios;
+package domain.classes.estadios;
 
 public class ConflitoPaisException extends RuntimeException {
     public ConflitoPaisException(String message) {

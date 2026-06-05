@@ -1,7 +1,7 @@
-package classes.partidas;
+package domain.classes.partidas;
 
-import classes.estadios.Estadio;
-import classes.selecoes.Selecao;
+import domain.classes.estadios.Estadio;
+import domain.classes.selecoes.Selecao;
 
 import java.time.LocalDateTime;
 

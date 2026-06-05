@@ -1,6 +1,6 @@
-package classes.estadios;
+package domain.classes.estadios;
 
-import classes.partidas.Partida;
+import domain.classes.partidas.Partida;
 
 public class DesignacaoArbitroPartida {
     private Arbitro arbitro;

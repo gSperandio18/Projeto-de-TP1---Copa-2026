@@ -1,4 +1,4 @@
-package classes.estadios;
+package domain.classes.estadios;
 
 public class ConflitoHorarioException extends RuntimeException {
     public ConflitoHorarioException(String message) {

@@ -1,6 +1,6 @@
-package classes.estadios;
+package domain.classes.estadios;
 
-import classes.partidas.Partida;
+import domain.classes.partidas.Partida;
 
 import java.util.List;
 import java.util.ArrayList;

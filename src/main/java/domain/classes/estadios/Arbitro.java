@@ -1,7 +1,7 @@
-package classes.estadios;
+package domain.classes.estadios;
 
-import classes.partidas.Partida;
-import classes.administracao.Usuario;
+import domain.classes.partidas.Partida;
+import domain.classes.administracao.Usuario;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ public class Arbitro extends Usuario {
     private int experiencia;
     private List<Partida> partidasApitadas;
 
-    public Arbitro(String nomeCompleto, String email, String senha) {
-        super(nomeCompleto, email, senha);
+    public Arbitro(String nomeCompleto, String email, String senha,Tipo personagem) {
+        super(nomeCompleto, email, senha,personagem);
     }
 
     public String getPais() {

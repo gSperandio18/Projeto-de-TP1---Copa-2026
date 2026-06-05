@@ -1,6 +1,6 @@
-package classes.administracao;
+package domain.classes.administracao;
 
-import classes.estadios.Arbitro;
+import domain.classes.estadios.Arbitro;
 import java.util.List;
 
 public class Administrador extends Usuario {
@@ -8,12 +8,10 @@ public class Administrador extends Usuario {
     private List<Arbitro> arbitros;
     private List<Organizador> organizadores;
 
-    public Administrador(String nomeCompleto,String email, String senha){
-        super(nomeCompleto, email, senha);
-    }
+    public Administrador(String nomeCompleto,String email, String senha,Tipo personagem){
+        super(nomeCompleto, email, senha,personagem);
 
-    public void criaOrganizador(){}
-    public void criaArbitro(){}
+    }
 
     public int getCodigoPartida() {
         return codigoPartida;

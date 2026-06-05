@@ -1,4 +1,4 @@
-package classes.partidas;
+package domain.classes.partidas;
 
 public enum Fase {
     GRUPOS("Fase de grupos"),

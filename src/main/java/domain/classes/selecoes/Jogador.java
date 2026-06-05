@@ -1,4 +1,4 @@
-package classes.selecoes;
+package domain.classes.selecoes;
 
 public class Jogador {
 

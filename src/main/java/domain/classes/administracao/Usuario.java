@@ -1,14 +1,22 @@
-package classes.administracao;
+package domain.classes.administracao;
 
 public class Usuario {
     private String nomeCompleto;
     private String email;
     private String senha;
+    private Tipo personagem;
 
-    public Usuario(String nomeCompleto, String email, String senha){
+    public enum Tipo{
+        ADMINISTRADOR,
+        ARBITRO,
+        ORGANIZADOR;
+    }
+
+    public Usuario(String nomeCompleto, String email, String senha,Tipo personagem){
         this.nomeCompleto = nomeCompleto;
         this.email = email;
         this.senha = senha;
+        this.personagem = personagem;
     }
 
     public String getNomeCompleto() {

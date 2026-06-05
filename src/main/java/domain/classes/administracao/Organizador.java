@@ -1,7 +1,7 @@
-package classes.administracao;
+package domain.classes.administracao;
 
-import classes.partidas.Partida;
-import classes.selecoes.Selecao;
+import domain.classes.partidas.Partida;
+import domain.classes.selecoes.Selecao;
 
 import java.util.List;
 
@@ -11,8 +11,8 @@ public class Organizador extends Usuario {
     private List<Partida> partidas;
     private int codigoPartida;
 
-    public Organizador(String nomeCompleto, String senha, String email) {
-        super(nomeCompleto, email, senha);
+    public Organizador(String nomeCompleto, String senha, String email,Tipo personagem) {
+        super(nomeCompleto, email, senha, personagem);
     }
 
     public Partida criaPartida() {

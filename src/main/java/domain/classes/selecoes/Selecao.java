@@ -1,4 +1,4 @@
-package classes.selecoes;
+package domain.classes.selecoes;
 
 import java.util.ArrayList;
 import java.util.List;
