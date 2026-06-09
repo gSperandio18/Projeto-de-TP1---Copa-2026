@@ -1,49 +1,21 @@
 package domain.classes.administracao;
 
 import domain.classes.partidas.Partida;
+import domain.classes.selecoes.Jogador;
 import domain.classes.selecoes.Selecao;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Organizador extends Usuario {
-    private String selecao;
-    private String partida;
-    private List<Partida> partidas;
-    private int codigoPartida;
+    static private List<Partida> partidas = new ArrayList<>();
+    static private List<Selecao> selecoes = new ArrayList<>();
 
     public Organizador(String nomeCompleto, String senha, String email,Tipo personagem) {
         super(nomeCompleto, email, senha, personagem);
     }
 
-    public Partida criaPartida() {
-        return null;
-    }
-
-    public void excluiPartida() {
-    }
-
-    public Selecao criaSelecao() {
-        return null;
-    }
-
-    public void excluiSelecao() {
-    }
-
-    public String getSelecao() {
-        return selecao;
-    }
-
-    public void setSelecao(String selecao) {
-        this.selecao = selecao;
-    }
-
-    public String getPartida() {
-        return partida;
-    }
-
-    public void setPartida(String partida) {
-        this.partida = partida;
-    }    public List<Partida> getPartidas() {
+    public static List<Partida> getPartidas() {
         return partidas;
     }
 
@@ -51,11 +23,11 @@ public class Organizador extends Usuario {
         this.partidas = partidas;
     }
 
-    public int getCodigoPartida() {
-        return codigoPartida;
+    public static List<Selecao> getSelecoes() {
+        return selecoes;
     }
 
-    public void setCodigoPartida(int codigoPartida) {
-        this.codigoPartida = codigoPartida;
+    public void setSelecoes(List<Selecao> selecao){
+        this.selecoes = selecao;
     }
 }
