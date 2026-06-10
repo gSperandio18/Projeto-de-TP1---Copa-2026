@@ -119,26 +119,6 @@ public class OrganizadorController extends UsuarioController {
         System.out.println("Seleção removida com sucesso!");
     }
 
-
-    Partida criaPartida(Estadio estadio, Selecao selecao1, Selecao selecao2,
-                            LocalDateTime dataEHora, Fase fase, Partida.StatusPartida status)
-                            throws Copa2026Exceptions
-    {
-        if(estadio == null){
-            throw new Copa2026Exceptions("Estádio não pode ser vazio");
-        }
-        if(selecao1 == null || selecao2 == null){
-            throw new Copa2026Exceptions("Seleções não podem ser vazias");
-        }
-        if(selecao1.getIdSelecao().equals(selecao2.getIdSelecao())){
-            throw new Copa2026Exceptions("Uma seleção não pode ir contra si própria");
-        }
-        Partida partida = new Partida(estadio, selecao1, selecao2, dataEHora, fase, status);
-        Organizador.getPartidas().add(partida);
-
-        return partida;
-    }
-
     public void excluiPartida(Selecao selecao1, Selecao selecao2 , LocalDateTime dataEHora)throws Copa2026Exceptions{
         if(selecao1 == null || selecao2 == null){
             throw new Copa2026Exceptions("Seleções não podem estar vazias");

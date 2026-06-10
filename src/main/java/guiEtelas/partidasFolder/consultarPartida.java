@@ -103,7 +103,7 @@ public class consultarPartida extends javax.swing.JFrame {
 
         jLabel1.setText("Data: ");
 
-        jTextField1.setText("jTextField1");
+        jTextField1.setText("dd/MM/yyyy");
 
         jLabel2.setText("Filtar por: ");
 
@@ -131,7 +131,7 @@ public class consultarPartida extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)

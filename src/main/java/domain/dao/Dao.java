@@ -15,16 +15,16 @@ public class Dao {
     // cadastrar
 
 
-    Administrador cadastrar(String nomeCompleto, String email, String senha) {
-        // Json.find(nome)
-        // New Admistrar()
-        // json.savo(Admin)
-
-        return Administrador;
-    }
-
-
-    Array buscarPorChave(String chave) {
-
-    }
+//    Administrador cadastrar(String nomeCompleto, String email, String senha) {
+//        // Json.find(nome)
+//        // New Admistrar()
+//        // json.savo(Admin)
+//
+//        return Administrador;
+//    }
+//
+//
+//    Array buscarPorChave(String chave) {
+//
+//    }
 }
