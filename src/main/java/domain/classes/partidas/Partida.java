@@ -4,6 +4,7 @@ import domain.classes.estadios.Estadio;
 import domain.classes.selecoes.Selecao;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class Partida {
 
@@ -41,6 +42,8 @@ public class Partida {
         this.dataEHora = dataEHora;
         this.fase = fase;
         this.status = status;
+
+        this.id = UUID.randomUUID().toString();
     }
 
     public String getId() {
@@ -101,5 +104,32 @@ public class Partida {
 
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
+    }
+
+    @Override
+    public String toString() {
+
+        return selecao1.getPaisSelecao()
+                + " x "
+                + selecao2.getPaisSelecao();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+
+        if(this == o)
+            return true;
+
+        if(!(o instanceof Partida))
+            return false;
+
+        Partida partida = (Partida) o;
+
+        return id.equals(partida.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return id.hashCode();
     }
 }

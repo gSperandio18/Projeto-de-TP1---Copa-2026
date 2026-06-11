@@ -3,15 +3,40 @@ package domain.classes.estadios;
 import domain.classes.partidas.Partida;
 
 public class DesignacaoArbitroPartida {
+
     private Arbitro arbitro;
+
     private Partida partida;
 
-    private final String paisSelecao1 = partida.getSelecao1().getPaisSelecao();
-    private final String paisSelecao2 = partida.getSelecao2().getPaisSelecao();
+    private boolean principal;
 
-    public void apitaPartida(Partida novaPartida) throws ConflitoPaisException {
-        if (arbitro.getPais().equals(paisSelecao1) || arbitro.getPais().equals(paisSelecao2)) {
-            throw new ConflitoPaisException("Erro: a partida possui árbitro de mesmo país que uma das seleções");
-        }
+    public DesignacaoArbitroPartida(
+            Arbitro arbitro,
+            Partida partida,
+            boolean principal) {
+
+        this.arbitro = arbitro;
+        this.partida = partida;
+        this.principal = principal;
+    }
+
+    public Arbitro getArbitro() {
+        return arbitro;
+    }
+
+    public Partida getPartida() {
+        return partida;
+    }
+
+    public boolean isPrincipal() {
+        return principal;
+    }
+
+    @Override
+    public String toString() {
+
+        return arbitro.getNomeCompleto()
+                + " - "
+                + partida.toString();
     }
 }

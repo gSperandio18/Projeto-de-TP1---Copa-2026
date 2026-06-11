@@ -11,7 +11,7 @@ public class Organizador extends Usuario {
     static private List<Partida> partidas = new ArrayList<>();
     static private List<Selecao> selecoes = new ArrayList<>();
 
-    public Organizador(String nomeCompleto, String senha, String email,Tipo personagem) {
+    public Organizador(String nomeCompleto, String senha, String email, Tipo personagem) {
         super(nomeCompleto, email, senha, personagem);
     }
 
@@ -27,7 +27,7 @@ public class Organizador extends Usuario {
         return selecoes;
     }
 
-    public void setSelecoes(List<Selecao> selecao){
+    public void setSelecoes(List<Selecao> selecao) {
         this.selecoes = selecao;
     }
 }
