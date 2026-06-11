@@ -1,9 +1,35 @@
 package controller.administracao;
 
 import controller.exceptions.Copa2026Exceptions;
+import domain.classes.administracao.SessaoUsuario;
+import domain.classes.administracao.Usuario;
 
 public class UsuarioController {
 
+    protected Usuario getUsuarioLogado(){
+        return SessaoUsuario.getInstancia().getUsuarioAtual();
+    }
+
+    protected void verificarPermissaoAdmin() throws Copa2026Exceptions{
+        Usuario atual = getUsuarioLogado();
+        if(atual == null){
+            throw new Copa2026Exceptions("Nenhum usuário logado");
+        }
+        if(!atual.podeAdministrarSistema()){
+            throw new Copa2026Exceptions("Acesso negado: apenas administradores");
+        }
+    }
+
+    protected void verificarPermissaoCompeticao() throws Copa2026Exceptions{
+        Usuario atual = getUsuarioLogado();
+
+        if (atual == null) {
+            throw new Copa2026Exceptions("Nenhum usuário logado");
+        }
+        if(!atual.podeGerenciarCompeticao()){
+            throw new Copa2026Exceptions("Acesso negado! Apenas organizadores e administradores");
+        }
+    }
     public void validarNome(String nomeCompleto) throws Copa2026Exceptions{
         if(nomeCompleto == null){
             throw new Copa2026Exceptions("Nome não pode estar vazio"); //incluir mensagem de erro

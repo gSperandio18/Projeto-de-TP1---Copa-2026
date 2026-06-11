@@ -1,6 +1,6 @@
 package domain.classes.administracao;
 
-public class Usuario {
+public abstract class Usuario {
     private String nomeCompleto;
     private String email;
     private String senha;
@@ -10,6 +10,13 @@ public class Usuario {
         ADMINISTRADOR,
         ARBITRO,
         ORGANIZADOR;
+
+        public boolean podeGerenciarCompeticao(){
+            return this == ADMINISTRADOR || this == ORGANIZADOR;
+        }
+        public boolean podeAdministrarSistema(){
+            return this == ADMINISTRADOR;
+        }
     }
 
     public Usuario(String nomeCompleto, String email, String senha,Tipo personagem){
@@ -41,5 +48,15 @@ public class Usuario {
 
     public void setSenha(String senha) {
         this.senha = senha;
+    }
+
+    public Tipo getPersonagem(){ return personagem; }
+
+    public boolean podeGerenciarCompeticao(){
+        return personagem.podeGerenciarCompeticao();
+    }
+
+    public boolean podeAdministrarSistema(){
+        return personagem.podeAdministrarSistema();
     }
 }

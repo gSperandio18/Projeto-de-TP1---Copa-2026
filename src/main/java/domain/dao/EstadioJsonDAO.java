@@ -1,6 +1,6 @@
-package dao;
+package domain.dao;
 
-import classes.estadios.Estadio;
+import domain.classes.estadios.Estadio;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EstadioJsonDAO implements EstadioDAO {
-
     private static final String ARQUIVO =
             "estadios.json";
 
@@ -31,7 +30,6 @@ public class EstadioJsonDAO implements EstadioDAO {
 
     @Override
     public void salvar(List<Estadio> estadios) {
-
         try(FileWriter writer =
                     new FileWriter(ARQUIVO)) {
 

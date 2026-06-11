@@ -1,13 +1,13 @@
-package controller;
+package controller.estadios;
 
-import classes.estadios.Arbitro;
-import classes.estadios.ConflitoPaisException;
-import classes.estadios.DesignacaoArbitroPartida;
-import classes.partidas.Partida;
-import classes.administracao.Usuario;
+import domain.classes.estadios.Arbitro;
+import domain.classes.estadios.ConflitoPaisException;
+import domain.classes.estadios.DesignacaoArbitroPartida;
+import domain.classes.partidas.Partida;
+import domain.classes.administracao.Usuario;
 
-import dao.DesignacaoDAO;
-import dao.DesignacaoJsonDAO;
+import domain.dao.DesignacaoDAO;
+import domain.dao.DesignacaoJsonDAO;
 
 import java.util.List;
 

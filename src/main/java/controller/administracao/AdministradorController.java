@@ -1,68 +1,115 @@
 package controller.administracao;
 
 import controller.exceptions.Copa2026Exceptions;
+import controller.partidas.PartidaController;
 import domain.classes.administracao.*;
 import domain.classes.administracao.Usuario.Tipo;
 import domain.classes.estadios.Arbitro;
 import domain.classes.partidas.Partida;
 import domain.classes.partidas.Resultado;
 import domain.classes.selecoes.Selecao;
+import domain.dao.UsuarioDAO;
+import domain.dao.UsuarioJsonDAO;
+
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class AdministradorController extends UsuarioController{
+    private UsuarioDAO usuarioDAO;
+    private List<Usuario> usuarios;
+
+    public AdministradorController() {
+        this.usuarioDAO = new UsuarioJsonDAO();
+        this.usuarios = usuarioDAO.carregar();
+    }
+
     Administrador cadastrarAdministrador(String nomeCompleto, String email, String senha, Tipo personagem)throws Copa2026Exceptions {
         validarNome(nomeCompleto);
         validarSenha(senha);
         if(email == null) throw new Copa2026Exceptions("Email não pode ser vazio");
 
         Administrador adm = new Administrador(nomeCompleto, email, senha, personagem);
-        Administrador.getAdministradores().add(adm);
+        usuarios.add(adm);
+        usuarioDAO.salvar(usuarios);
+
         return adm;
     }
 
-    public void criaUsuario(String nomeCompleto, String email, String senha, Tipo personagem )throws Copa2026Exceptions{
+    public void criaUsuario(String nomeCompleto, String email, String senha,String dataNascimento, Tipo personagem )throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
         validarNome(nomeCompleto);
         validarSenha(senha);
         if(email == null) return;
 
+        if(buscarUsuarioPorNome(nomeCompleto) != null){
+            throw new Copa2026Exceptions("Nome já cadastrado");
+        }
+
         if(personagem == Tipo.ARBITRO){
-            Arbitro arbitro = new Arbitro(nomeCompleto,senha,email,personagem);
-            Administrador.getArbitros().add(arbitro);
+            Arbitro arbitro = new Arbitro(nomeCompleto,email,senha,dataNascimento, personagem);
+            usuarios.add(arbitro);
+            usuarioDAO.salvar(usuarios);
         }else if(personagem == Tipo.ORGANIZADOR){
             Organizador organizador = new Organizador(nomeCompleto, senha, email,personagem);
-            Administrador.getOrganizadores().add(organizador);
+            usuarios.add(organizador);
+            usuarioDAO.salvar(usuarios);
         }
     }
 
-    public void excluiUsuario(String nomeCompleto, String senha, Tipo personagem)throws Copa2026Exceptions{
-        validarNome(nomeCompleto);
-        validarSenha(senha);
+    public void excluiUsuario(String nomeCompleto, String email)throws Copa2026Exceptions{
+        Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
 
-        if(personagem == Tipo.ORGANIZADOR){
-            for(Organizador org: Administrador.getOrganizadores()) {
-                if (org.getNomeCompleto().equals(nomeCompleto)) {
-                    Administrador.getOrganizadores().remove(org);
-                    System.out.println("Organizador excluído com sucesso");
-                    return;
-                }
-            }
-        }else if(personagem == Tipo.ARBITRO){
-            for(Arbitro arb: Administrador.getArbitros()){
-                if(arb.getNomeCompleto().equals(nomeCompleto)){
-                    Administrador.getArbitros().remove(arb);
-                    System.out.println("Árbitro excluído com sucesso");
-                    return;
-                }
+        if(usuario == null){
+            throw new Copa2026Exceptions("Usuário não encontrado!");
+        }
+
+        Usuario logado = getUsuarioLogado();
+        if(logado.getEmail().equals(email)){
+            throw new Copa2026Exceptions("Você não pode excluir a si mesmo");
+        }
+
+        usuarios.remove(usuario);
+        usuarioDAO.salvar(usuarios);
+    }
+
+    public void editarUsuario(String nomeCompleto, String novoNome, String novoEmail, String novaSenha) throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
+
+        Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
+        if(usuario == null){
+            throw new Copa2026Exceptions("Usuário não encontrado: "+nomeCompleto);
+        }
+        if(novoNome != null){
+            validarNome(novoNome);
+            usuario.setNomeCompleto(nomeCompleto);
+        }else if(novoEmail != null){
+            usuario.setEmail(novoEmail);
+        }else if(novaSenha != null){
+            usuario.setSenha(novaSenha);
+        }
+
+        usuarioDAO.salvar(usuarios);
+    }
+
+    public Usuario buscarUsuarioPorNome(String nomeCompleto) throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
+        for(Usuario u : usuarios){
+            if(u.getNomeCompleto().equalsIgnoreCase(nomeCompleto)){
+                return u;
             }
         }
+
+        return null;
     }
 
     public String geraRelatorio() throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
+
         //verificar se há partida para gerar relatório
         StringBuilder relatorio = new StringBuilder();
 
-        List<Partida> todasPartidas = Organizador.getPartidas();
+        PartidaDAO partidaDAO = new PartidaJsonDAO();
+        List<Partida> todasPartidas = partidaDAO.carregar();
 
         if(todasPartidas.isEmpty()){
             throw new Copa2026Exceptions("Não há partidas registradas para gerar relatório");
