@@ -1,6 +1,6 @@
-package dao;
+package domain.dao;
 
-import classes.estadios.Estadio;
+import domain.classes.estadios.Estadio;
 import java.util.List;
 
 public interface EstadioDAO {

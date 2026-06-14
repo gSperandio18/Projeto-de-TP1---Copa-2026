@@ -21,13 +21,13 @@ public class AdministradorController extends UsuarioController{
         return adm;
     }
 
-    public void criaUsuario(String nomeCompleto, String email, String senha, Tipo personagem )throws Copa2026Exceptions{
+    public void criaUsuario(String nomeCompleto, String email, String senha, String dataNascimento, Tipo personagem)throws Copa2026Exceptions{
         validarNome(nomeCompleto);
         validarSenha(senha);
         if(email == null) return;
 
         if(personagem == Tipo.ARBITRO){
-            Arbitro arbitro = new Arbitro(nomeCompleto,senha,email,personagem);
+            Arbitro arbitro = new Arbitro(nomeCompleto, senha, email, dataNascimento, personagem);
             Administrador.getArbitros().add(arbitro);
         }else if(personagem == Tipo.ORGANIZADOR){
             Organizador organizador = new Organizador(nomeCompleto, senha, email,personagem);

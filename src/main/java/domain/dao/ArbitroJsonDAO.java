@@ -1,6 +1,6 @@
-package dao;
+package domain.dao;
 
-import classes.estadios.Arbitro;
+import domain.classes.estadios.Arbitro;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 public class OrganizadorController extends UsuarioController {
-    //Note que o Organizador tem acesso a todas as seleções e joagores
+    //Note que o Organizador tem acesso a todas as seleções e jogadores
     //Ele que administra isso, então ele tem acesso a todos
 
     public boolean validarJogadores(List<Jogador> equipe) throws Copa2026Exceptions{
@@ -158,25 +158,5 @@ public class OrganizadorController extends UsuarioController {
             }
         }
         return null;
-    }
-
-    public Partida buscarPartida(Selecao selecao1, Selecao selecao2 , LocalDateTime dataEHora){
-        for(Partida p: Organizador.getPartidas()){
-            if(p.getSelecao1().getIdSelecao().equals(selecao1.getIdSelecao()) && p.getSelecao2().getIdSelecao().equals(selecao2.getIdSelecao()) && p.getDataEHora().equals(dataEHora)){
-                return p;
-            }
-        }
-        return null;
-    }
-
-    public List<Partida> buscarPartidasPorSelecao(Selecao selecao){
-        List<Partida> partidasEcontradas = new ArrayList<>();
-
-        for(Partida p: Organizador.getPartidas()){
-            if(p.getSelecao1().getIdSelecao().equals(selecao.getIdSelecao()) || p.getSelecao2().getIdSelecao().equals(selecao.getIdSelecao())){
-                partidasEcontradas.add(p);
-            }
-        }
-        return partidasEcontradas;
     }
 }

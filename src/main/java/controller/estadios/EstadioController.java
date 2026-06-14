@@ -4,8 +4,8 @@ import domain.classes.estadios.Estadio;
 import domain.classes.partidas.Partida;
 import domain.classes.administracao.Usuario;
 
-import dao.EstadioDAO;
-import dao.EstadioJsonDAO;
+import domain.dao.EstadioDAO;
+import domain.dao.EstadioJsonDAO;
 
 import java.util.List;
 import java.util.stream.Collectors;

@@ -1,10 +1,10 @@
-package controller;
+package controller.estadios;
 
-import classes.estadios.Arbitro;
-import classes.administracao.Usuario;
+import domain.classes.estadios.Arbitro;
+import domain.classes.administracao.Usuario;
 
-import dao.ArbitroDAO;
-import dao.ArbitroJsonDAO;
+import domain.dao.ArbitroDAO;
+import domain.dao.ArbitroJsonDAO;
 
 import java.util.List;
 import java.util.stream.Collectors;
