@@ -22,7 +22,7 @@ public class DesignacaoJsonDAO implements DesignacaoDAO {
 
                     .registerTypeAdapter(
                             LocalDateTime.class,
-                            new LocalDateTimeAdapter()
+                            new dao.LocalDateTimeAdapter()
                     )
 
                     .setPrettyPrinting()
