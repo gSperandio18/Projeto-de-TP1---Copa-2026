@@ -69,7 +69,7 @@ public class telaLogada extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleções"));
 
         jButton3.setText("Gerenciar Seleções");
         jButton3.addActionListener(this::jButton3ActionPerformed);
@@ -91,7 +91,7 @@ public class telaLogada extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Jogadores"));
 
         jButton4.setText("Gerenciar Jogadores");
         jButton4.addActionListener(this::jButton4ActionPerformed);
@@ -113,7 +113,7 @@ public class telaLogada extends javax.swing.JFrame {
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Estádios"));
 
         jButton1.setText("Gerenciar Estádios");
         jButton1.addActionListener(this::jButton1ActionPerformed);
@@ -135,7 +135,7 @@ public class telaLogada extends javax.swing.JFrame {
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Árbitros"));
 
         jButton2.setText("Gerenciar Árbitros");
         jButton2.addActionListener(this::jButton2ActionPerformed);
@@ -157,7 +157,7 @@ public class telaLogada extends javax.swing.JFrame {
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
-        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder(null));
+        jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Partidas"));
 
         jButton5.setText("Cadastrar nova partida");
         jButton5.addActionListener(this::jButton5ActionPerformed);
