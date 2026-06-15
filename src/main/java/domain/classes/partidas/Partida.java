@@ -4,6 +4,7 @@ import domain.classes.estadios.Estadio;
 import domain.classes.selecoes.Selecao;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public class Partida {
@@ -108,10 +109,13 @@ public class Partida {
 
     @Override
     public String toString() {
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        String dataFormatada = this.dataEHora.toLocalDate().format(formato);
 
         return selecao1.getPaisSelecao()
                 + " x "
-                + selecao2.getPaisSelecao();
+                + selecao2.getPaisSelecao()
+                + " (" + dataFormatada + ")";
     }
 
     @Override
@@ -120,10 +124,8 @@ public class Partida {
         if(this == o)
             return true;
 
-        if(!(o instanceof Partida))
+        if(!(o instanceof Partida partida))
             return false;
-
-        Partida partida = (Partida) o;
 
         return id.equals(partida.id);
     }

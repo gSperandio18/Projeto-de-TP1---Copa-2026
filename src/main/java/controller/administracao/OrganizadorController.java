@@ -17,15 +17,15 @@ import java.util.*;
 
 public class OrganizadorController extends UsuarioController {
     private PartidaController partidaController;
-    private SelecaoDAO selecaoDAO;
+//    private SelecaoDAO selecaoDAO;
     private PartidaDAO partidaDAO;
     private List<Selecao> selecoes;
     private List<Partida> partidas;
 
     public OrganizadorController(){
-        this.selecaoDAO = new SelecaoJsonDAO();
+//        this.selecaoDAO = new SelecaoJsonDAO();
         this.partidaDAO = new PartidaJsonDAO();
-        this.selecoes = selecaoDAO.carregar();
+//        this.selecoes = selecaoDAO.carregar();
         this.partidas = partidaDAO.carregar();
     }
 
@@ -106,7 +106,7 @@ public class OrganizadorController extends UsuarioController {
             selecao.getJogadores().add(jogador);
         }
         selecoes.add(selecao);
-        selecaoDAO.salvar(selecoes);
+//        selecaoDAO.salvar(selecoes);
 
         return selecao;
     }
@@ -119,7 +119,7 @@ public class OrganizadorController extends UsuarioController {
             throw new Copa2026Exceptions("Seleção não encontrada");
         }
         selecoes.remove(selecao);
-        selecaoDAO.salvar(selecoes);
+//        selecaoDAO.salvar(selecoes);
     }
 
     /*GERENCIA PARTIDAS*/
@@ -130,7 +130,7 @@ public class OrganizadorController extends UsuarioController {
             throw new Copa2026Exceptions("Seleção não cadastrada no sistema!");
         }
 
-        partidaController.cadastrarPartida(estadio, selecao1, selecao2, data, horario, fase, status);
+        partidaController.cadastrarPartida(estadio, selecao1, selecao2, data, horario, fase, status, null);
     }
 
     public void excluiPartida(Selecao selecao1, Selecao selecao2 , LocalDateTime dataEHora)throws Copa2026Exceptions{

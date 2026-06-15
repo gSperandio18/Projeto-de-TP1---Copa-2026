@@ -4,6 +4,23 @@
  */
 package guiEtelas.partidasFolder;
 
+import controller.estadios.ArbitroController;
+import controller.exceptions.Copa2026Exceptions;
+import controller.partidas.PartidaController;
+import controller.estadios.EstadioController;
+import domain.classes.administracao.SessaoUsuario;
+import domain.classes.estadios.ConflitoHorarioException;
+import domain.classes.estadios.ConflitoPaisException;
+import domain.classes.estadios.Estadio;
+import domain.classes.selecoes.Selecao;
+import domain.classes.partidas.Partida.StatusPartida;
+import domain.classes.partidas.Fase;
+import domain.classes.estadios.Arbitro;
+
+import javax.swing.*;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+
 /**
  *
  * @author giova
@@ -17,7 +34,51 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
      */
     public cadastrarNovaPartida() {
         initComponents();
+        carregarMenuEstadios();
+        carregarFasesEStatus();
+        carregarArbitros();
+//        carregarMenuSelecoes();
     }
+    
+    private void carregarMenuEstadios() {
+        EstadioController estadioController = new EstadioController(SessaoUsuario.getInstancia().getUsuarioAtual());
+        List<Estadio> estadios = estadioController.listar();
+
+        for (Estadio e : estadios) {
+            menuEstadios.addItem(e); 
+        }
+
+        menuEstadios.setSelectedIndex(-1);
+    }
+    
+    private void carregarFasesEStatus() {
+        for (Fase f : Fase.values()) {
+            fasePartida.addItem(f);
+        }
+
+        for (StatusPartida s : StatusPartida.values()) {
+            statusPartida.addItem(s);
+        }
+
+        fasePartida.setSelectedIndex(-1);
+        statusPartida.setSelectedIndex(-1);
+    }
+
+    private void carregarArbitros() {
+        ArbitroController controller = new ArbitroController(SessaoUsuario.getInstancia().getUsuarioAtual());
+        DefaultListModel<Arbitro> modelo = new DefaultListModel<>();
+
+        List<Arbitro> arbitros = controller.listar();
+        for (Arbitro a : arbitros) { modelo.addElement(a); }
+
+        listaArbitros.setModel(modelo);
+    }
+/*
+    TODO: colocar as seleções nos menus
+    private void carregarMenuSelecoes() {
+
+    }
+*/
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,11 +91,8 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         dataPartida = new javax.swing.JTextField();
         horarioPartida = new javax.swing.JTextField();
@@ -44,6 +102,12 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         jLabel7 = new javax.swing.JLabel();
         statusPartida = new javax.swing.JComboBox<>();
         botaoSalvar = new javax.swing.JButton();
+        menuEstadios = new javax.swing.JComboBox<>();
+        menuSelecao1 = new javax.swing.JComboBox<>();
+        menuSelecao2 = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        listaArbitros = new javax.swing.JList<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar nova partida - Copa 2026");
@@ -58,27 +122,24 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         jLabel4.setText("Seleção 2: ");
 
-        jTextField4.addActionListener(this::jTextField4ActionPerformed);
-
         jLabel1.setText("Data:");
 
         dataPartida.setText("dd/MM/yyyy");
-        dataPartida.addActionListener(this::dataPartidaActionPerformed);
 
         horarioPartida.setText("hh:mm");
-        horarioPartida.addActionListener(this::horarioPartidaActionPerformed);
 
         jLabel5.setText("Horário: ");
 
         jLabel6.setText("Fase: ");
 
-        fasePartida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Grupos", "Oitavas de final", "Quartas de final", "Semifinais", "Final" }));
-
         jLabel7.setText("Status: ");
 
-        statusPartida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Agendada", "Em andamento", "Concluída" }));
-
         botaoSalvar.setText("Salvar Partida");
+        botaoSalvar.addActionListener(this::botaoSalvarActionPerformed);
+
+        jLabel8.setText("Árbitros");
+
+        jScrollPane1.setViewportView(listaArbitros);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -90,13 +151,13 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2))
+                        .addComponent(menuEstadios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fasePartida, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(fasePartida, 0, 158, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -104,24 +165,28 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 218, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(menuSelecao1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel4)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField4))
+                                .addComponent(menuSelecao2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(statusPartida, 0, 235, Short.MAX_VALUE))
+                                .addComponent(statusPartida, 0, 299, Short.MAX_VALUE))
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(horarioPartida)))))
+                                .addComponent(horarioPartida))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jScrollPane1)))
                 .addContainerGap())
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(144, 144, 144)
+                .addGap(135, 135, 135)
                 .addComponent(botaoSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -131,13 +196,13 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(menuEstadios, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(menuSelecao1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuSelecao2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
@@ -152,9 +217,16 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel7)
                         .addComponent(statusPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(34, 34, 34)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(67, 67, 67)
+                        .addComponent(jLabel8)))
+                .addGap(18, 18, 18)
                 .addComponent(botaoSalvar)
-                .addContainerGap(195, Short.MAX_VALUE))
+                .addContainerGap(73, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 590, 400));
@@ -163,17 +235,22 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField4ActionPerformed
-
-    private void dataPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dataPartidaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_dataPartidaActionPerformed
-
-    private void horarioPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_horarioPartidaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_horarioPartidaActionPerformed
+    private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
+        try {
+            PartidaController controller = new PartidaController();
+            controller.cadastrarPartida(
+                    (Estadio) menuEstadios.getSelectedItem(), (Selecao) menuSelecao1.getSelectedItem(),
+                    (Selecao) menuSelecao2.getSelectedItem(), dataPartida.getText(), horarioPartida.getText(),
+                    (Fase) fasePartida.getSelectedItem(), (StatusPartida) statusPartida.getSelectedItem(),
+                    listaArbitros.getSelectedValuesList());
+        } catch (Copa2026Exceptions | ConflitoHorarioException | ConflitoPaisException e) {
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage(),
+                    "Erro no cadastro de partida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_botaoSalvarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,7 +280,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JTextField dataPartida;
-    private javax.swing.JComboBox<String> fasePartida;
+    private javax.swing.JComboBox<Fase> fasePartida;
     private javax.swing.JTextField horarioPartida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -212,10 +289,13 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JComboBox<String> statusPartida;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JList<Arbitro> listaArbitros;
+    private javax.swing.JComboBox<Estadio> menuEstadios;
+    private javax.swing.JComboBox<Selecao> menuSelecao1;
+    private javax.swing.JComboBox<Selecao> menuSelecao2;
+    private javax.swing.JComboBox<StatusPartida> statusPartida;
     // End of variables declaration//GEN-END:variables
 }

@@ -4,6 +4,13 @@
  */
 package guiEtelas.partidasFolder;
 
+import controller.exceptions.Copa2026Exceptions;
+import domain.classes.partidas.Partida;
+import controller.partidas.PartidaController;
+
+import javax.swing.*;
+import java.util.List;
+
 /**
  *
  * @author giova
@@ -17,6 +24,18 @@ public class registroPartida extends javax.swing.JFrame {
      */
     public registroPartida() {
         initComponents();
+        carregarPartidasFinalizadas();
+    }
+
+    private void carregarPartidasFinalizadas() {
+        PartidaController partidaController = new PartidaController();
+        List<Partida> partidasFinalizadas = partidaController.filtrarPartidas(Partida.StatusPartida.FINALIZADA, null, null, null);
+
+        for (Partida p : partidasFinalizadas) {
+            menuPartidas.addItem(p);
+        }
+
+        menuPartidas.setSelectedIndex(-1);
     }
 
     /**
@@ -30,14 +49,14 @@ public class registroPartida extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        placarSelecao1 = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
+        placarSelecao2 = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        jButton1 = new javax.swing.JButton();
+        acontecimentos = new javax.swing.JTextArea();
+        menuPartidas = new javax.swing.JComboBox<>();
+        botaoRegistrar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Registrar dados de Partida - Copa 2026");
@@ -52,12 +71,10 @@ public class registroPartida extends javax.swing.JFrame {
 
         jLabel3.setText("Placar da Seleção 2: ");
 
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setBorder(javax.swing.BorderFactory.createTitledBorder(" Outros acontecimentos: "));
-        jScrollPane1.setViewportView(jTextArea1);
+        acontecimentos.setColumns(20);
+        acontecimentos.setRows(5);
+        acontecimentos.setBorder(javax.swing.BorderFactory.createTitledBorder(" Outros acontecimentos: "));
+        jScrollPane1.setViewportView(acontecimentos);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -74,9 +91,12 @@ public class registroPartida extends javax.swing.JFrame {
                             .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)
-                            .addComponent(jTextField3))))
+                            .addComponent(menuPartidas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(placarSelecao2, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(placarSelecao1, javax.swing.GroupLayout.Alignment.LEADING))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -85,15 +105,15 @@ public class registroPartida extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(menuPartidas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(placarSelecao1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(placarSelecao2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -101,16 +121,28 @@ public class registroPartida extends javax.swing.JFrame {
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 460, 270));
 
-        jButton1.setText("Registrar resultado");
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 290, 190, -1));
+        botaoRegistrar.setText("Registrar resultado");
+        botaoRegistrar.addActionListener(this::botaoRegistrarActionPerformed);
+        getContentPane().add(botaoRegistrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(145, 290, 190, -1));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
+    private void botaoRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRegistrarActionPerformed
+        try {
+            PartidaController controller = new PartidaController();
+            controller.registrarResultados((Partida) menuPartidas.getSelectedItem(), placarSelecao1.getText(),
+                    placarSelecao2.getText(), acontecimentos.getText()
+            );
+        } catch (Copa2026Exceptions e) {
+            JOptionPane.showMessageDialog(null,
+                    e.getMessage(),
+                    "Erro no registro de resultados da partida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+    }//GEN-LAST:event_botaoRegistrarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -138,15 +170,15 @@ public class registroPartida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JTextArea acontecimentos;
+    private javax.swing.JButton botaoRegistrar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextArea jTextArea1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
+    private javax.swing.JComboBox<Partida> menuPartidas;
+    private javax.swing.JTextField placarSelecao1;
+    private javax.swing.JTextField placarSelecao2;
     // End of variables declaration//GEN-END:variables
 }
