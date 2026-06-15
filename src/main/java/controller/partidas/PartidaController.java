@@ -6,13 +6,21 @@ import domain.classes.partidas.Fase;
 import domain.classes.partidas.Partida;
 import domain.classes.partidas.Resultado;
 import domain.classes.selecoes.Selecao;
+import domain.dao.partidas.PartidaDAO;
+import domain.dao.partidas.PartidaJsonDAO;
 
-import java.lang.reflect.Array;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.List;
 
 public class PartidaController {
+    private final PartidaDAO dao;
+
+    PartidaController() {
+        this.dao = new PartidaJsonDAO();
+    }
+
     public void cadastrarPartida(Estadio estadio, Selecao selecao1, Selecao selecao2, String data,
                                  String horario, Fase fase, Partida.StatusPartida status) throws Copa2026Exceptions {
 
@@ -26,7 +34,7 @@ public class PartidaController {
 
 
         /* Pegar todas as partidas e verificar se alguma delas ocorre no mesmo horário e tem alguma das seleções dessa partida */
-        ArrayList<Partida> partidas = new ArrayList<>(); // TODO: pegar essa lista pela DAO de partidas
+        List<Partida> partidas = dao.carregar();
         for (Partida p : partidas) {
 
             // Considerando que um jogo tem aproximadamente 90 minutos, não pode haver outros jogos com a mesma seleção
@@ -35,7 +43,7 @@ public class PartidaController {
             LocalDateTime finalPartidaNova = dataPartida.plusMinutes(90);
 
             // Houve colisão de horários com a partida "p"
-            if (dataPartida.isBefore(finalPartidaExistente) || p.getDataEHora().isBefore(finalPartidaNova)) {
+            if (dataPartida.isBefore(finalPartidaExistente) && p.getDataEHora().isBefore(finalPartidaNova)) {
                 if (selecao1.equals(p.getSelecao1()) || selecao1.equals(p.getSelecao2())) {
                     throw new Copa2026Exceptions("A seleção do(a) " + selecao1.getPaisSelecao() + " já vai jogar um jogo no mesmo horário.");
                 } else if (selecao2.equals(p.getSelecao1()) || selecao2.equals(p.getSelecao2())) {
@@ -44,13 +52,13 @@ public class PartidaController {
             }
         }
 
-        // TODO: salvar partida nova pela DAO
         Partida novaPartida = new Partida(estadio, selecao1, selecao2, dataPartida, fase, status);
+        partidas.add(novaPartida);
+        dao.salvar(partidas);
     }
 
-    public ArrayList<Partida> filtrarPartidas(Selecao filtroSelecao, Fase filtroFase, String dataFiltro) {
-        // TODO: pegar essa lista pela DAO
-        ArrayList<Partida> partidas = new ArrayList<>();
+    public List<Partida> filtrarPartidas(Selecao filtroSelecao, Fase filtroFase, String dataFiltro) {
+        List<Partida> partidas = dao.carregar();
         ArrayList<Partida> partidasEncontradas = new ArrayList<>();
 
         for (Partida p : partidas) {
@@ -60,7 +68,7 @@ public class PartidaController {
             boolean dataDesejada = (dataFiltro == null) || dataFiltro.trim().isEmpty() ||
                                     (p.getDataEHora().toLocalDate().toString().contains(dataFiltro));
 
-            if (selecaoDesejada || faseDesejada || dataDesejada) {
+            if (selecaoDesejada && faseDesejada && dataDesejada) {
                 partidasEncontradas.add(p);
             }
         }
@@ -69,16 +77,28 @@ public class PartidaController {
     }
 
     public void registrarResultados(Partida partida, int placarSelecao1, int placarSelecao2, String descricao) throws Copa2026Exceptions {
-        if (placarSelecao1 < 0 | placarSelecao2 < 0) {
+        if (placarSelecao1 < 0 || placarSelecao2 < 0) {
             throw new Copa2026Exceptions("O placar de uma seleção não pode ser negativo.");
         } else if (partida.getStatus() == (Partida.StatusPartida.FINALIZADA)) {
             throw new Copa2026Exceptions("A partida selecionada já foi finalizada anteriormente.");
         }
 
-        // O que vai ser o ID da partida?
-        partida.setResultado(new Resultado("id", partida, placarSelecao1, placarSelecao2, descricao));
+        /* passar mesmo ID gerado para a partida */
+        partida.setResultado(new Resultado(partida.getId(), partida, placarSelecao1, placarSelecao2, descricao));
         partida.setStatus(Partida.StatusPartida.FINALIZADA);
 
-        // TODO: atualizar a lista de partidas pelo DAO
+        /* atualizar no JSON */
+        List<Partida> partidas = dao.carregar();
+
+        for (int i = 0; i < partidas.size(); i++) {
+            Partida p = partidas.get(i);
+
+            if (p.getId().equals(partida.getId())) {
+                partidas.set(i, partida);
+                break;
+            }
+        }
+
+        dao.salvar(partidas);
     }
 }

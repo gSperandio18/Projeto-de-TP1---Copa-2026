@@ -10,6 +10,8 @@ import domain.classes.partidas.Resultado;
 import domain.classes.selecoes.Selecao;
 import domain.dao.UsuarioDAO;
 import domain.dao.UsuarioJsonDAO;
+import domain.dao.partidas.PartidaDAO;
+import domain.dao.partidas.PartidaJsonDAO;
 
 import java.time.LocalDateTime;
 import java.util.*;

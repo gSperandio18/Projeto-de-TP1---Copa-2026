@@ -9,6 +9,8 @@ import domain.classes.partidas.Fase;
 import domain.classes.partidas.Partida;
 import domain.classes.selecoes.Jogador;
 import domain.classes.selecoes.Selecao;
+import domain.dao.partidas.PartidaDAO;
+import domain.dao.partidas.PartidaJsonDAO;
 
 import java.time.LocalDateTime;
 import java.util.*;

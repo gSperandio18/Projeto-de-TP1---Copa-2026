@@ -24,7 +24,7 @@ public class Partida {
         }
     }
 
-    private String id;
+    private final String id;
     private Estadio estadio;
     private Selecao selecao1;
     private Selecao selecao2;
