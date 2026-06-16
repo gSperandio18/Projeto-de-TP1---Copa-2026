@@ -1,10 +1,10 @@
 package controller.estadios;
 
+import domain.classes.administracao.SessaoUsuario;
 import domain.classes.estadios.Arbitro;
 import domain.classes.estadios.ConflitoPaisException;
 import domain.classes.estadios.DesignacaoArbitroPartida;
 import domain.classes.partidas.Partida;
-import domain.classes.administracao.Usuario;
 
 import domain.dao.DesignacaoDAO;
 import domain.dao.DesignacaoJsonDAO;
@@ -12,28 +12,20 @@ import domain.dao.DesignacaoJsonDAO;
 import java.util.List;
 
 public class DesignacaoController {
-
-    private final Usuario usuarioLogado;
-
     private final DesignacaoDAO dao;
 
     private final List<DesignacaoArbitroPartida>
             designacoes;
 
-    public DesignacaoController(
-            Usuario usuarioLogado) {
-
-        this.usuarioLogado =
-                usuarioLogado;
+    public DesignacaoController() {
 
         dao = new DesignacaoJsonDAO();
-
         designacoes = dao.carregar();
     }
 
     private void validarPermissao() {
 
-        if (!usuarioLogado
+        if (!SessaoUsuario.getInstancia().getUsuarioAtual()
                 .podeGerenciarCompeticao()) {
 
             throw new SecurityException(
