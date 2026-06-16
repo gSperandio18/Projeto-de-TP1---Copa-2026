@@ -33,6 +33,8 @@ public class LoginController extends UsuarioController {
                     SessaoUsuario.getInstancia().setUsuarioAtual(u);
                     return;
                 } else {
+                    System.out.println(senha);
+                    System.out.println(u.getSenha());
                     throw new Copa2026Exceptions("Senha incorreta.");
                 }
             }

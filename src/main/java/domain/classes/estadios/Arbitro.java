@@ -14,7 +14,7 @@ public class Arbitro extends Usuario {
     private String caminhoFoto;
     private String codigo;
     private String dataNascimento;
-    private Tipo personagem;
+    //private Tipo personagem;
 
     private transient List<Partida> partidasApitadas;
 

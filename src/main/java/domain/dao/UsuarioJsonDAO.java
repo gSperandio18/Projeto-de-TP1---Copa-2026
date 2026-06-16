@@ -22,6 +22,7 @@ public class UsuarioJsonDAO implements UsuarioDAO {
                 .registerTypeAdapter(Usuario.class, new UsuarioDeserializer())  // ← USE THIS
                 .setPrettyPrinting()
                 .create();
+        System.out.println("📂 Arquivo JSON será salvo em: " + new File(ARQUIVO).getAbsolutePath());
     }
     @Override
     public void salvar(List<Usuario> usuarios){

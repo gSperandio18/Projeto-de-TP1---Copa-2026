@@ -4,9 +4,16 @@
  */
 package guiEtelas.loginEsignupFolder;
 
+import controller.administracao.AdministradorController;
+import domain.classes.administracao.Administrador;
+import domain.classes.administracao.Usuario;
+import domain.dao.UsuarioDAO;
+import domain.dao.UsuarioJsonDAO;
 import guiEtelas.telaLogada;
 import javax.swing.JOptionPane;
 import controller.exceptions.Copa2026Exceptions;
+
+import java.util.List;
 
 /**
  *

@@ -13,6 +13,8 @@ import guiEtelas.partidasFolder.registroPartida;
 import guiEtelas.arbitrosFolder.cadastroDeArbitros;
 import guiEtelas.relatorioFolder.relatorioTela;
 import guiEtelas.gestaoDeUsuario.gestaoDeUsuariosTela;
+import domain.classes.administracao.Usuario;
+import domain.classes.administracao.SessaoUsuario;
 
 /**
  *
@@ -21,12 +23,13 @@ import guiEtelas.gestaoDeUsuario.gestaoDeUsuariosTela;
 public class telaLogada extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(telaLogada.class.getName());
-
+    private Usuario usuarioLogado;
     /**
      * Creates new form telaLogada
      */
     public telaLogada() {
         initComponents();
+        usuarioLogado = SessaoUsuario.getInstancia().getUsuarioAtual();
     }
 
     /**
@@ -58,7 +61,9 @@ public class telaLogada extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
         btnRelatorios = new javax.swing.JMenu();
+        menuItemRelatorios = new javax.swing.JMenuItem();
         btnGestaoUsuarios = new javax.swing.JMenu();
+        menuItemGestao = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -313,9 +318,19 @@ public class telaLogada extends javax.swing.JFrame {
 
         btnRelatorios.setText("Relatórios");
         btnRelatorios.addActionListener(this::btnRelatoriosActionPerformed);
+
+        menuItemRelatorios.setText("Relatórios");
+        menuItemRelatorios.addActionListener(this::menuItemRelatoriosActionPerformed);
+        btnRelatorios.add(menuItemRelatorios);
+
         jMenuBar1.add(btnRelatorios);
 
         btnGestaoUsuarios.setText("Gestão de Usuários");
+
+        menuItemGestao.setText("Gestão");
+        menuItemGestao.addActionListener(this::menuItemGestaoActionPerformed);
+        btnGestaoUsuarios.add(menuItemGestao);
+
         jMenuBar1.add(btnGestaoUsuarios);
 
         jMenu5.setText("Consulta Geral");
@@ -365,6 +380,16 @@ public class telaLogada extends javax.swing.JFrame {
         // TODO add your handling code here:
         new relatorioTela().setVisible(true);
     }//GEN-LAST:event_btnRelatoriosActionPerformed
+
+    private void menuItemRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRelatoriosActionPerformed
+
+        new relatorioTela().setVisible(true);
+    }//GEN-LAST:event_menuItemRelatoriosActionPerformed
+
+    private void menuItemGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemGestaoActionPerformed
+
+        new gestaoDeUsuariosTela().setVisible(true);
+    }//GEN-LAST:event_menuItemGestaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -416,5 +441,7 @@ public class telaLogada extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JMenuItem menuItemGestao;
+    private javax.swing.JMenuItem menuItemRelatorios;
     // End of variables declaration//GEN-END:variables
 }

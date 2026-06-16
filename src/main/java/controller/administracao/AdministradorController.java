@@ -27,7 +27,7 @@ public class AdministradorController extends UsuarioController{
     }
 
     /*CRIA USUÁRIO PELO ADMIN*/
-    public void criaUsuario(String nomeCompleto, String email, String senha/*,String dataNascimento*/, Tipo personagem )throws Copa2026Exceptions{
+    public void criaUsuario(String nomeCompleto, String email, String senha/*,String dataNascimento*/, Tipo personagem)throws Copa2026Exceptions{
         String dataNascimento = "VALIDO";
         verificarPermissaoAdmin();
         validarNome(nomeCompleto);
