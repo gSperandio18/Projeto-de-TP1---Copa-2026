@@ -3,6 +3,8 @@ package controller.administracao;
 import controller.exceptions.Copa2026Exceptions;
 import domain.classes.administracao.SessaoUsuario;
 import domain.classes.administracao.Usuario;
+import domain.dao.UsuarioJsonDAO;
+import domain.dao.UsuarioDAO;
 
 import java.util.ArrayList;
 
@@ -12,14 +14,24 @@ import java.util.ArrayList;
  */
 
 public class LoginController extends UsuarioController {
+    private UsuarioJsonDAO usuarioDAO;
+
+    public LoginController(){
+        this.usuarioDAO = new UsuarioJsonDAO();
+    }
+
     public void fazerLogin(String email, String senha) throws Copa2026Exceptions {
-        // TODO: colocar a parte da DAO aqui
-        ArrayList<Usuario> usuarios = new ArrayList<>();
+        validarSenha(senha);
+        if(email == null){ throw new Copa2026Exceptions("Email não pode ser vazio");}
+
+        java.util.List<Usuario> usuarios = usuarioDAO.carregar();
 
         for (Usuario u : usuarios) {
             if (u.getEmail().equals(email)) {
                 if (u.getSenha().equals(senha)) {
+                    //Achou o personagem
                     SessaoUsuario.getInstancia().setUsuarioAtual(u);
+                    return;
                 } else {
                     throw new Copa2026Exceptions("Senha incorreta.");
                 }

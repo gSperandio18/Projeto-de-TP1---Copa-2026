@@ -11,6 +11,8 @@ import guiEtelas.partidasFolder.cadastrarNovaPartida;
 import guiEtelas.partidasFolder.consultarPartida;
 import guiEtelas.partidasFolder.registroPartida;
 import guiEtelas.arbitrosFolder.cadastroDeArbitros;
+import guiEtelas.relatorioFolder.relatorioTela;
+import guiEtelas.gestaoDeUsuario.gestaoDeUsuariosTela;
 
 /**
  *
@@ -55,8 +57,8 @@ public class telaLogada extends javax.swing.JFrame {
         jButton7 = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        btnRelatorios = new javax.swing.JMenu();
+        btnGestaoUsuarios = new javax.swing.JMenu();
         jMenu5 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
@@ -309,11 +311,12 @@ public class telaLogada extends javax.swing.JFrame {
 
         getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
 
-        jMenu1.setText("Relatórios");
-        jMenuBar1.add(jMenu1);
+        btnRelatorios.setText("Relatórios");
+        btnRelatorios.addActionListener(this::btnRelatoriosActionPerformed);
+        jMenuBar1.add(btnRelatorios);
 
-        jMenu2.setText("Gestão de Usuários");
-        jMenuBar1.add(jMenu2);
+        btnGestaoUsuarios.setText("Gestão de Usuários");
+        jMenuBar1.add(btnGestaoUsuarios);
 
         jMenu5.setText("Consulta Geral");
         jMenuBar1.add(jMenu5);
@@ -358,6 +361,11 @@ public class telaLogada extends javax.swing.JFrame {
         new GerenciarJogadores().setVisible(true);
     }//GEN-LAST:event_jButton4ActionPerformed
 
+    private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
+        // TODO add your handling code here:
+        new relatorioTela().setVisible(true);
+    }//GEN-LAST:event_btnRelatoriosActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -384,6 +392,8 @@ public class telaLogada extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu btnGestaoUsuarios;
+    private javax.swing.JMenu btnRelatorios;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
@@ -391,8 +401,6 @@ public class telaLogada extends javax.swing.JFrame {
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;

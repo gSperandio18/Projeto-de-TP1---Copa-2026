@@ -22,6 +22,7 @@ public class OrganizadorController extends UsuarioController {
     private List<Selecao> selecoes;
     private List<Partida> partidas;
 
+    /*CONSTRUTOR*/
     public OrganizadorController(){
 //        this.selecaoDAO = new SelecaoJsonDAO();
         this.partidaDAO = new PartidaJsonDAO();
@@ -59,6 +60,7 @@ public class OrganizadorController extends UsuarioController {
         return true;
     }
 
+    /*VERIFICADOR*/
     private boolean jogadorEstaEmOutraSelecao(Jogador jogador){
         //Percorre todas as selecoes buscando jogador em mais de uma ao mesmo tempo
         for(Selecao selecao: selecoes){

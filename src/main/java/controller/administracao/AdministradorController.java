@@ -20,24 +20,15 @@ public class AdministradorController extends UsuarioController{
     private UsuarioDAO usuarioDAO;
     private List<Usuario> usuarios;
 
+    /*CONSTRUTOR*/
     public AdministradorController() {
         this.usuarioDAO = new UsuarioJsonDAO();
         this.usuarios = usuarioDAO.carregar();
     }
 
-    Administrador cadastrarAdministrador(String nomeCompleto, String email, String senha, Tipo personagem)throws Copa2026Exceptions {
-        validarNome(nomeCompleto);
-        validarSenha(senha);
-        if(email == null) throw new Copa2026Exceptions("Email não pode ser vazio");
-
-        Administrador adm = new Administrador(nomeCompleto, email, senha, personagem);
-        usuarios.add(adm);
-        usuarioDAO.salvar(usuarios);
-
-        return adm;
-    }
-
-    public void criaUsuario(String nomeCompleto, String email, String senha,String dataNascimento, Tipo personagem )throws Copa2026Exceptions{
+    /*CRIA USUÁRIO PELO ADMIN*/
+    public void criaUsuario(String nomeCompleto, String email, String senha/*,String dataNascimento*/, Tipo personagem )throws Copa2026Exceptions{
+        String dataNascimento = "VALIDO";
         verificarPermissaoAdmin();
         validarNome(nomeCompleto);
         validarSenha(senha);
@@ -55,9 +46,31 @@ public class AdministradorController extends UsuarioController{
             Organizador organizador = new Organizador(nomeCompleto, senha, email,personagem);
             usuarios.add(organizador);
             usuarioDAO.salvar(usuarios);
+        }else if(personagem == Tipo.ADMINISTRADOR){
+            Administrador administrador = new Administrador(nomeCompleto, email, senha, personagem);
+            usuarios.add(administrador);
+            usuarioDAO.salvar(usuarios);
         }
     }
 
+    /*CRIA USUÁRIO NA TELA SINGUP*/
+    public void cadastroPublico(String nomeCompleto, String email, String senha, Tipo personagem) throws Copa2026Exceptions{
+        String dataNascimento = "VALIDO";
+        validarNome(nomeCompleto);
+        validarSenha(senha);
+
+        if (personagem == Tipo.ARBITRO) {
+            Arbitro arbitro = new Arbitro(nomeCompleto, email, senha, dataNascimento, personagem);
+            usuarios.add(arbitro);
+            usuarioDAO.salvar(usuarios);
+        } else if (personagem == Tipo.ORGANIZADOR) {
+            Organizador organizador = new Organizador(nomeCompleto, email, senha, personagem);
+            usuarios.add(organizador);
+            usuarioDAO.salvar(usuarios);
+        }
+    }
+
+    /*EXCLUI USUÁRIO PELO ADMIN*/
     public void excluiUsuario(String nomeCompleto, String email)throws Copa2026Exceptions{
         Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
 
@@ -74,25 +87,26 @@ public class AdministradorController extends UsuarioController{
         usuarioDAO.salvar(usuarios);
     }
 
-    public void editarUsuario(String nomeCompleto, String novoNome, String novoEmail, String novaSenha) throws Copa2026Exceptions{
+    /*EDITA USUÁRIO PELO ADMIN*/
+    public void editarUsuario(String nomeCompleto, String novoEmail, String novaSenha, Tipo novoPersonagem) throws Copa2026Exceptions{
         verificarPermissaoAdmin();
 
         Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
         if(usuario == null){
             throw new Copa2026Exceptions("Usuário não encontrado: "+nomeCompleto);
         }
-        if(novoNome != null){
-            validarNome(novoNome);
-            usuario.setNomeCompleto(nomeCompleto);
-        }else if(novoEmail != null){
+        if(novoEmail != null){
             usuario.setEmail(novoEmail);
         }else if(novaSenha != null){
             usuario.setSenha(novaSenha);
+        }else if(usuario.getPersonagem() != null){
+            usuario.setPersonagem(novoPersonagem);
         }
 
         usuarioDAO.salvar(usuarios);
     }
 
+    /*RETORNA UM USUÁRIO POR MEIO DO SEU NOME*/
     public Usuario buscarUsuarioPorNome(String nomeCompleto) throws Copa2026Exceptions{
         verificarPermissaoAdmin();
         for(Usuario u : usuarios){
@@ -104,6 +118,30 @@ public class AdministradorController extends UsuarioController{
         return null;
     }
 
+    /*RETORNA UMA LISTA DE USUÁRIOS COM NOME EM COMUM*/
+    public List<Usuario> buscarUsuariosPorNome(String nome) throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
+
+        List<Usuario> resultado = new ArrayList<>();
+        if(nome == null || nome.trim().isEmpty()){
+            return new ArrayList<>(usuarios);
+        }
+
+        for (Usuario u : usuarios) {
+            if (u.getNomeCompleto().toLowerCase().contains(nome.toLowerCase())) {
+                resultado.add(u);
+            }
+        }
+        return resultado;
+    }
+
+    /*RETORNAR TODOS OS USUÁRIOS*/
+    public List<Usuario> listarTodosUsuarios() throws Copa2026Exceptions {
+        verificarPermissaoAdmin();
+        return new ArrayList<>(usuarios);
+    }
+
+    /*GERA O RELATÓRIO NECESSÁRIO DO ADMIN*/
     public String geraRelatorio() throws Copa2026Exceptions{
         verificarPermissaoAdmin();
 
@@ -167,6 +205,7 @@ public class AdministradorController extends UsuarioController{
         return relatorio.toString();
     }
 
+    /*METODO AUXILIAR DO GERA RELATORIO*/
     private String analisarDesempenhoString(Selecao selecao, int golsFeitos, int golsSofridos){
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("   🇧🇷 %s:\n", selecao.getPaisSelecao()));
@@ -184,6 +223,7 @@ public class AdministradorController extends UsuarioController{
         return sb.toString();
     }
 
+    /*METODO AUXILIAR DO GERA RELATORIO*/
     private String formatarData(LocalDateTime data){
         return data.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
     }

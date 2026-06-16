@@ -52,6 +52,8 @@ public abstract class Usuario {
 
     public Tipo getPersonagem(){ return personagem; }
 
+    public void setPersonagem(Tipo personagem){ this.personagem = personagem;}
+
     public boolean podeGerenciarCompeticao(){
         return personagem.podeGerenciarCompeticao();
     }
