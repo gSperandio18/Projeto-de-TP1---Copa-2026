@@ -8,7 +8,6 @@ import controller.estadios.ArbitroController;
 import controller.exceptions.Copa2026Exceptions;
 import controller.partidas.PartidaController;
 import controller.estadios.EstadioController;
-import domain.classes.administracao.SessaoUsuario;
 import domain.classes.estadios.ConflitoHorarioException;
 import domain.classes.estadios.ConflitoPaisException;
 import domain.classes.estadios.Estadio;
@@ -114,7 +113,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     }
     
     private void carregarMenuEstadios() {
-        EstadioController estadioController = new EstadioController(SessaoUsuario.getInstancia().getUsuarioAtual());
+        EstadioController estadioController = new EstadioController();
         List<Estadio> estadios = estadioController.listar();
 
         for (Estadio e : estadios) {
@@ -138,7 +137,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     }
 
     private void carregarArbitros() {
-        ArbitroController controller = new ArbitroController(SessaoUsuario.getInstancia().getUsuarioAtual());
+        ArbitroController controller = new ArbitroController();
         DefaultListModel<Arbitro> modelo = new DefaultListModel<>();
 
         List<Arbitro> arbitros = controller.listar();

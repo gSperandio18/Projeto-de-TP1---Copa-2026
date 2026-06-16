@@ -2,7 +2,7 @@ package controller.estadios;
 
 import domain.classes.estadios.Estadio;
 import domain.classes.partidas.Partida;
-import domain.classes.administracao.Usuario;
+import domain.classes.administracao.SessaoUsuario;
 
 import domain.dao.EstadioDAO;
 import domain.dao.EstadioJsonDAO;
@@ -11,25 +11,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EstadioController {
-
-    private final Usuario usuarioLogado;
-
     private final EstadioDAO dao;
-
     private final List<Estadio> estadios;
 
-    public EstadioController(Usuario usuarioLogado) {
-
-        this.usuarioLogado = usuarioLogado;
-
+    public EstadioController() {
         dao = new EstadioJsonDAO();
-
         estadios = dao.carregar();
     }
 
     private void validarPermissao() {
 
-        if (!usuarioLogado.podeGerenciarCompeticao()) {
+        if (!SessaoUsuario.getInstancia().getUsuarioAtual().podeGerenciarCompeticao()) {
 
             throw new SecurityException(
                     "Usuário sem permissão."
