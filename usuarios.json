@@ -1,0 +1,53 @@
+[
+  {
+    "nomeCompleto": "gi",
+    "email": "gi@gmail.com",
+    "senha": "GI18092006!",
+    "personagem": "ADMINISTRADOR"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-974e5d29",
+    "dataNascimento": "VALIDO",
+    "nomeCompleto": "Daniel",
+    "email": "daniel@gmail.com",
+    "senha": "Daniel123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-746edfee",
+    "dataNascimento": "VALIDO",
+    "nomeCompleto": "Maria",
+    "email": "maria@gmail.com",
+    "senha": "Maria123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-7b48cec7",
+    "dataNascimento": "VALIDO",
+    "nomeCompleto": "Pedro",
+    "email": "pedro@gmail.com",
+    "senha": "Pedro123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-56c70970",
+    "dataNascimento": "VALIDO",
+    "nomeCompleto": "Leonardo",
+    "email": "leonardo@gmail.com",
+    "senha": "Leonardo123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-da207dfe",
+    "dataNascimento": "VALIDO",
+    "nomeCompleto": "Ppip",
+    "email": "pioo@gmail.com",
+    "senha": "Pip123456!",
+    "personagem": "ARBITRO"
+  }
+]
