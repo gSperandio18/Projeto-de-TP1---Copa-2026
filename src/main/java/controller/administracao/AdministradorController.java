@@ -1,7 +1,6 @@
 package controller.administracao;
 
 import controller.exceptions.Copa2026Exceptions;
-import controller.partidas.PartidaController;
 import domain.classes.administracao.*;
 import domain.classes.administracao.Usuario.Tipo;
 import domain.classes.estadios.Arbitro;
@@ -12,18 +11,25 @@ import domain.dao.UsuarioDAO;
 import domain.dao.UsuarioJsonDAO;
 import domain.dao.partidas.PartidaDAO;
 import domain.dao.partidas.PartidaJsonDAO;
+import domain.dao.ArbitroDAO;
+import domain.dao.ArbitroJsonDAO;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 public class AdministradorController extends UsuarioController{
     private UsuarioDAO usuarioDAO;
     private List<Usuario> usuarios;
+    private ArbitroDAO arbitroDAO;
+    private List<Arbitro> arbitros;
 
     /*CONSTRUTOR*/
     public AdministradorController() {
         this.usuarioDAO = new UsuarioJsonDAO();
         this.usuarios = usuarioDAO.carregar();
+        this.arbitroDAO = new ArbitroJsonDAO();
+        arbitros = arbitroDAO.carregar();
     }
 
     /*CRIA USUÁRIO PELO ADMIN*/
@@ -42,6 +48,9 @@ public class AdministradorController extends UsuarioController{
             Arbitro arbitro = new Arbitro(nomeCompleto,email,senha,dataNascimento, personagem);
             usuarios.add(arbitro);
             usuarioDAO.salvar(usuarios);
+            arbitros.add(arbitro);
+            arbitroDAO.salvar(arbitros);
+
         }else if(personagem == Tipo.ORGANIZADOR){
             Organizador organizador = new Organizador(nomeCompleto, senha, email,personagem);
             usuarios.add(organizador);
@@ -63,6 +72,8 @@ public class AdministradorController extends UsuarioController{
             Arbitro arbitro = new Arbitro(nomeCompleto, email, senha, dataNascimento, personagem);
             usuarios.add(arbitro);
             usuarioDAO.salvar(usuarios);
+            arbitros.add(arbitro);
+            arbitroDAO.salvar(arbitros);
         } else if (personagem == Tipo.ORGANIZADOR) {
             Organizador organizador = new Organizador(nomeCompleto, email, senha, personagem);
             usuarios.add(organizador);
@@ -85,6 +96,12 @@ public class AdministradorController extends UsuarioController{
 
         usuarios.remove(usuario);
         usuarioDAO.salvar(usuarios);
+
+        if(usuario instanceof Arbitro){
+            arbitros.removeIf(a ->
+                    a.getEmail().equalsIgnoreCase(usuario.getEmail()));
+            arbitroDAO.salvar(arbitros);
+        }
     }
 
     /*EDITA USUÁRIO PELO ADMIN*/
@@ -92,18 +109,68 @@ public class AdministradorController extends UsuarioController{
         verificarPermissaoAdmin();
 
         Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
+
+
         if(usuario == null){
             throw new Copa2026Exceptions("Usuário não encontrado: "+nomeCompleto);
         }
+
+        String emailAntigo = usuario.getEmail();
+        Tipo personagemAntigo = usuario.getPersonagem();
+
         if(novoEmail != null){
             usuario.setEmail(novoEmail);
-        }else if(novaSenha != null){
+
+        } if(novaSenha != null){                    //Tirei os else's pq apenas 1 modificação poderia ser feita por vez com eles
             usuario.setSenha(novaSenha);
-        }else if(usuario.getPersonagem() != null){
+
+        }
+
+        if(novoPersonagem != null){
+            if(personagemAntigo != Tipo.ARBITRO &&
+                    novoPersonagem == Tipo.ARBITRO){
+
+                throw new Copa2026Exceptions(
+                        "Conversão para árbitro não é suportada. Cadastre um novo árbitro."
+                );
+            }
+
             usuario.setPersonagem(novoPersonagem);
         }
 
         usuarioDAO.salvar(usuarios);
+
+        if(personagemAntigo == Tipo.ARBITRO){
+
+            // Referee became Organizer or Administrator
+            if(novoPersonagem != null &&
+                    novoPersonagem != Tipo.ARBITRO){
+
+                arbitros.removeIf(a ->
+                        a.getEmail().equalsIgnoreCase(emailAntigo));
+
+            } else {
+
+                // Referee remains a referee, update data in arbitros.json
+                for(Arbitro a : arbitros){
+
+                    if(a.getEmail().equalsIgnoreCase(emailAntigo)){
+
+                        if(novoEmail != null){
+                            a.setEmail(novoEmail);
+                        }
+
+                        if(novaSenha != null){
+                            a.setSenha(novaSenha);
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            arbitroDAO.salvar(arbitros);
+        }
     }
 
     /*RETORNA UM USUÁRIO POR MEIO DO SEU NOME*/
@@ -225,6 +292,6 @@ public class AdministradorController extends UsuarioController{
 
     /*METODO AUXILIAR DO GERA RELATORIO*/
     private String formatarData(LocalDateTime data){
-        return data.format(java.time.format.DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
+        return data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
     }
 }
