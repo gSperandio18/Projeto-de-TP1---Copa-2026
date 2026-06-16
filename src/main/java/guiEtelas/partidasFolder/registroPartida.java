@@ -18,6 +18,7 @@ import java.util.List;
 public class registroPartida extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(registroPartida.class.getName());
+    private final PartidaController partidaController = new PartidaController();
 
     /**
      * Creates new form registroPartida
@@ -28,12 +29,9 @@ public class registroPartida extends javax.swing.JFrame {
     }
 
     private void carregarPartidasFinalizadas() {
-        PartidaController partidaController = new PartidaController();
         List<Partida> partidasFinalizadas = partidaController.filtrarPartidas(Partida.StatusPartida.FINALIZADA, null, null, null);
 
-        for (Partida p : partidasFinalizadas) {
-            menuPartidas.addItem(p);
-        }
+        for (Partida p : partidasFinalizadas) { menuPartidas.addItem(p); }
 
         menuPartidas.setSelectedIndex(-1);
     }
@@ -131,8 +129,7 @@ public class registroPartida extends javax.swing.JFrame {
 
     private void botaoRegistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoRegistrarActionPerformed
         try {
-            PartidaController controller = new PartidaController();
-            controller.registrarResultados((Partida) menuPartidas.getSelectedItem(), placarSelecao1.getText(),
+            partidaController.registrarResultados((Partida) menuPartidas.getSelectedItem(), placarSelecao1.getText(),
                     placarSelecao2.getText(), acontecimentos.getText()
             );
         } catch (Copa2026Exceptions e) {

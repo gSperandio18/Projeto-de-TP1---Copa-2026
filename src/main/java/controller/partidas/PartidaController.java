@@ -87,7 +87,7 @@ public class PartidaController {
             }
         }
 
-        Partida novaPartida = new Partida(estadio, selecao1, selecao2, dataPartida, fase, status);
+        Partida novaPartida = new Partida(estadio, selecao1, selecao2, dataPartida, fase, status, arbitros);
         partidas.add(novaPartida);
         dao.salvar(partidas);
     }
@@ -110,7 +110,7 @@ public class PartidaController {
             boolean selecaoDesejada = (filtroSelecao == null) || (p.getSelecao1().equals(filtroSelecao)) || (p.getSelecao2().equals(filtroSelecao));
             boolean faseDesejada = (filtroFase == null) || (p.getFase() == filtroFase);
             boolean dataDesejada = (dataFiltro == null) || (dataFiltro.trim().isEmpty()) ||
-                                    (p.getDataEHora().toLocalDate().toString().contains(dataFiltro));
+                                    (p.getDataEHora().toLocalDate().toString().contains(dataFiltro)); // TODO: validar formato da data
 
             if (statusDesejado && selecaoDesejada && faseDesejada && dataDesejada) {
                 partidasEncontradas.add(p);
@@ -145,19 +145,7 @@ public class PartidaController {
         partida.setResultado(new Resultado(partida.getId(), partida, sel1, sel2, descricao));
         partida.setStatus(Partida.StatusPartida.FINALIZADA);
 
-        /* atualizar no JSON */
-        List<Partida> partidas = dao.carregar();
-
-        for (int i = 0; i < partidas.size(); i++) {
-            Partida p = partidas.get(i);
-
-            if (p.getId().equals(partida.getId())) {
-                partidas.set(i, partida);
-                break;
-            }
-        }
-
-        dao.salvar(partidas);
+        salvarPartidaEditada(partida);
     }
 
     public void excluirPartida(Partida partida) {
@@ -166,7 +154,16 @@ public class PartidaController {
         dao.salvar(partidas);
     }
 
-    public void editarPartida(Partida partida) {
+    public void salvarPartidaEditada(Partida partida) {
+        List<Partida> partidas = dao.carregar();
+        for (int i = 0; i < partidas.size(); i++) {
+            Partida p = partidas.get(i);
 
+            if (p.equals(partida)) {
+                partidas.set(i, partida);
+                break;
+            }
+        }
+        dao.salvar(partidas);
     }
 }

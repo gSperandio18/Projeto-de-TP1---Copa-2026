@@ -12,13 +12,14 @@ import domain.classes.administracao.SessaoUsuario;
 import domain.classes.estadios.ConflitoHorarioException;
 import domain.classes.estadios.ConflitoPaisException;
 import domain.classes.estadios.Estadio;
+import domain.classes.partidas.Partida;
 import domain.classes.selecoes.Selecao;
 import domain.classes.partidas.Partida.StatusPartida;
 import domain.classes.partidas.Fase;
 import domain.classes.estadios.Arbitro;
 
 import javax.swing.*;
-import java.util.ConcurrentModificationException;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 /**
@@ -28,16 +29,79 @@ import java.util.List;
 public class cadastrarNovaPartida extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(cadastrarNovaPartida.class.getName());
+    private final PartidaController partidaController = new PartidaController();
+    private Partida partidaEditada = null; // Pro botão de salvar saber se foi uma edição ou cadastro
 
-    /**
-     * Creates new form cadastrarNovaPartida
-     */
+    /* Construtor padrão para cadastrar partidas novas */
     public cadastrarNovaPartida() {
         initComponents();
         carregarMenuEstadios();
         carregarFasesEStatus();
         carregarArbitros();
 //        carregarMenuSelecoes();
+
+        /* Esconder a parte dos resultados a princípio, e só mostrar se o status selecionado for de "finalizado" */
+        verParteEscondida(false);
+    }
+
+    /* Construtor para editar uma partida existente */
+    public cadastrarNovaPartida(Partida partida) {
+        initComponents();
+        carregarMenuEstadios();
+        carregarFasesEStatus();
+        carregarArbitros();
+//        carregarMenuSelecoes();
+
+        /*
+          * Todos os campos são definidos com os atributos da partida
+          * A preencherCampos() já lida com a parte dos campos de resultado escondidos
+        */
+        preencherCampos(partida);
+        partidaEditada = partida;
+    }
+
+    private void verParteEscondida(boolean ver) {
+        labelPlacar1.setVisible(ver);
+        labelPlacar2.setVisible(ver);
+        placarSelecao1.setVisible(ver);
+        placarSelecao2.setVisible(ver);
+        acontecimentos.setVisible(ver);
+    }
+
+    private void preencherCampos(Partida partida) {
+        menuEstadios.setSelectedItem(partida.getEstadio());
+        menuSelecao1.setSelectedItem(partida.getSelecao1());
+        menuSelecao2.setSelectedItem(partida.getSelecao2());
+        dataPartida.setText(partida.getDataEHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")));
+        horarioPartida.setText(partida.getDataEHora().format(DateTimeFormatter.ofPattern("HH:mm")));
+        fasePartida.setSelectedItem(partida.getFase());
+        statusPartida.setSelectedItem(partida.getStatus());
+
+        if (partida.getResultado() != null) {
+            verParteEscondida(true);
+            placarSelecao1.setText(String.valueOf(partida.getResultado().getPlacarSelecao1()));
+            placarSelecao2.setText(String.valueOf(partida.getResultado().getPlacarSelecao2()));
+            acontecimentos.setText(partida.getResultado().getEventos());
+        } else {
+            verParteEscondida(false);
+        }
+
+        /* Para selecionar os árbitros na JList, precisamos dos índices dos árbitros da partida */
+        int[] indices = new int[partida.getArbitros().size()];
+        int atual = 0;
+        ListModel<Arbitro> modelo = listaArbitros.getModel();
+
+        for (int i = 0; i < modelo.getSize(); i++) {
+            Arbitro a = modelo.getElementAt(i);
+
+            if (partida.getArbitros().contains(a)) {
+                indices[atual] = i;
+                atual++;
+            }
+        }
+
+        /* Com os índices, preencher o campo dos árbitros */
+        listaArbitros.setSelectedIndices(indices);
     }
     
     private void carregarMenuEstadios() {
@@ -101,13 +165,19 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         fasePartida = new javax.swing.JComboBox<>();
         jLabel7 = new javax.swing.JLabel();
         statusPartida = new javax.swing.JComboBox<>();
-        botaoSalvar = new javax.swing.JButton();
         menuEstadios = new javax.swing.JComboBox<>();
         menuSelecao1 = new javax.swing.JComboBox<>();
         menuSelecao2 = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         listaArbitros = new javax.swing.JList<>();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        acontecimentos = new javax.swing.JTextArea();
+        labelPlacar1 = new javax.swing.JLabel();
+        placarSelecao1 = new javax.swing.JTextField();
+        labelPlacar2 = new javax.swing.JLabel();
+        placarSelecao2 = new javax.swing.JTextField();
+        botaoSalvar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar nova partida - Copa 2026");
@@ -134,12 +204,24 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         jLabel7.setText("Status: ");
 
-        botaoSalvar.setText("Salvar Partida");
-        botaoSalvar.addActionListener(this::botaoSalvarActionPerformed);
+        statusPartida.addActionListener(this::statusPartidaActionPerformed);
 
-        jLabel8.setText("Árbitros");
+        jLabel8.setText("Árbitros:");
 
         jScrollPane1.setViewportView(listaArbitros);
+
+        acontecimentos.setColumns(20);
+        acontecimentos.setRows(5);
+        acontecimentos.setBorder(javax.swing.BorderFactory.createTitledBorder("Acontecimentos da partida"));
+        jScrollPane2.setViewportView(acontecimentos);
+        acontecimentos.getAccessibleContext().setAccessibleName("Acontecimentos");
+
+        labelPlacar1.setText("<html>Placar da<br>Seleção 1:");
+
+        labelPlacar2.setText("<html>Placar da<br>Seleção 2:");
+
+        botaoSalvar.setText("Salvar Partida");
+        botaoSalvar.addActionListener(this::botaoSalvarActionPerformed);
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -148,45 +230,48 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(menuEstadios, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(fasePartida, 0, 158, Short.MAX_VALUE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(dataPartida))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(menuSelecao1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(menuSelecao2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(statusPartida, 0, 299, Short.MAX_VALUE))
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addComponent(jLabel5)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(horarioPartida))))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jLabel3)
+                        .addGroup(jPanel2Layout.createSequentialGroup()
+                            .addGap(9, 9, 9)
+                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLabel6)
+                                .addComponent(jLabel1)))
                         .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1)))
-                .addContainerGap())
+                        .addComponent(labelPlacar2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(labelPlacar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel2))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(dataPartida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                                    .addComponent(menuSelecao1, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(fasePartida, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(64, 64, 64)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel7))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(menuSelecao2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(horarioPartida)
+                                    .addComponent(statusPartida, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(placarSelecao1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(placarSelecao2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(18, 18, 18)
+                                .addComponent(jScrollPane2))
+                            .addComponent(menuEstadios, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap(10, Short.MAX_VALUE))
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(135, 135, 135)
+                .addGap(137, 137, 137)
                 .addComponent(botaoSalvar, javax.swing.GroupLayout.PREFERRED_SIZE, 303, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -214,43 +299,67 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                     .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel6)
                         .addComponent(fasePartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel7)
-                        .addComponent(statusPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(statusPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel7)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(27, 27, 27)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(67, 67, 67)
+                        .addGap(59, 59, 59)
                         .addComponent(jLabel8)))
-                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(58, 58, 58)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelPlacar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(placarSelecao1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(51, 51, 51)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(labelPlacar2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(placarSelecao2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 37, Short.MAX_VALUE)
                 .addComponent(botaoSalvar)
-                .addContainerGap(73, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 590, 400));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 590, 560));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
+        // TODO: Tratamento de exceções só pra edição
         try {
-            PartidaController controller = new PartidaController();
-            controller.cadastrarPartida(
-                    (Estadio) menuEstadios.getSelectedItem(), (Selecao) menuSelecao1.getSelectedItem(),
-                    (Selecao) menuSelecao2.getSelectedItem(), dataPartida.getText(), horarioPartida.getText(),
-                    (Fase) fasePartida.getSelectedItem(), (StatusPartida) statusPartida.getSelectedItem(),
-                    listaArbitros.getSelectedValuesList());
+            if (partidaEditada == null) { /* Foi feito um cadastro de partida nova */
+                partidaController.cadastrarPartida(
+                        (Estadio) menuEstadios.getSelectedItem(), (Selecao) menuSelecao1.getSelectedItem(),
+                        (Selecao) menuSelecao2.getSelectedItem(), dataPartida.getText(), horarioPartida.getText(),
+                        (Fase) fasePartida.getSelectedItem(), (StatusPartida) statusPartida.getSelectedItem(),
+                        listaArbitros.getSelectedValuesList());
+            } else { /* Foi feita uma edição */
+                partidaController.salvarPartidaEditada(partidaEditada);
+            }
         } catch (Copa2026Exceptions | ConflitoHorarioException | ConflitoPaisException e) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Erro no cadastro de partida",
                     JOptionPane.ERROR_MESSAGE
             );
         }
     }//GEN-LAST:event_botaoSalvarActionPerformed
+
+    private void statusPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_statusPartidaActionPerformed
+        StatusPartida status = (StatusPartida) statusPartida.getSelectedItem();
+        verParteEscondida(status == StatusPartida.FINALIZADA); // true se o selecionado é FINALIZADA, false senão
+        this.revalidate();
+        this.repaint();
+    }//GEN-LAST:event_statusPartidaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -278,6 +387,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTextArea acontecimentos;
     private javax.swing.JButton botaoSalvar;
     private javax.swing.JTextField dataPartida;
     private javax.swing.JComboBox<Fase> fasePartida;
@@ -292,10 +402,15 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel labelPlacar1;
+    private javax.swing.JLabel labelPlacar2;
     private javax.swing.JList<Arbitro> listaArbitros;
     private javax.swing.JComboBox<Estadio> menuEstadios;
     private javax.swing.JComboBox<Selecao> menuSelecao1;
     private javax.swing.JComboBox<Selecao> menuSelecao2;
+    private javax.swing.JTextField placarSelecao1;
+    private javax.swing.JTextField placarSelecao2;
     private javax.swing.JComboBox<StatusPartida> statusPartida;
     // End of variables declaration//GEN-END:variables
 }

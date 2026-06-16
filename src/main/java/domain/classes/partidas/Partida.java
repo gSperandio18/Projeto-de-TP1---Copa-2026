@@ -1,10 +1,12 @@
 package domain.classes.partidas;
 
+import domain.classes.estadios.Arbitro;
 import domain.classes.estadios.Estadio;
 import domain.classes.selecoes.Selecao;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.UUID;
 
 public class Partida {
@@ -33,9 +35,10 @@ public class Partida {
     private Fase fase;
     private StatusPartida status;
     private Resultado resultado;
+    private List<Arbitro> arbitros;
 
     public Partida(Estadio estadio, Selecao selecao1, Selecao selecao2,
-                   LocalDateTime dataEHora, Fase fase, StatusPartida status)
+                   LocalDateTime dataEHora, Fase fase, StatusPartida status, List<Arbitro> arbitros)
     {
         this.estadio = estadio;
         this.selecao1 = selecao1;
@@ -43,6 +46,7 @@ public class Partida {
         this.dataEHora = dataEHora;
         this.fase = fase;
         this.status = status;
+        this.arbitros = arbitros;
 
         this.id = UUID.randomUUID().toString();
     }
@@ -106,6 +110,10 @@ public class Partida {
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
     }
+
+    public List<Arbitro> getArbitros() { return arbitros; }
+
+    public void setArbitros(List<Arbitro> arbitros) { this.arbitros = arbitros; }
 
     @Override
     public String toString() {
