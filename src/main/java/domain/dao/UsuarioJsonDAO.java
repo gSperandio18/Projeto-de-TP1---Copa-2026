@@ -17,7 +17,9 @@ public class UsuarioJsonDAO implements UsuarioDAO {
     private final Gson gson;
 
     public UsuarioJsonDAO() {
-        this.gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+        this.gson = new GsonBuilder()
+                .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
+                .registerTypeAdapter(Usuario.class, new UsuarioDeserializer())  // ← USE THIS
                 .setPrettyPrinting()
                 .create();
     }
