@@ -63,6 +63,8 @@ public class registroPartida extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
+        jPanel1.setPreferredSize(new java.awt.Dimension(460, 350));
+
         jLabel1.setText("Partidas finalizadas: ");
 
         jLabel2.setText("Placar da Seleção 1: ");
