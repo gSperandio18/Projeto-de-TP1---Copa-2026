@@ -4,5 +4,37 @@
     "email": "gi@gmail.com",
     "senha": "GI18092006!",
     "personagem": "ADMINISTRADOR"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-6e09515d",
+    "nomeCompleto": "Pierluigi Collina",
+    "email": "collina@fifa.com",
+    "senha": "SenhaLegal123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-7eddf68c",
+    "nomeCompleto": "Howard Webb",
+    "email": "webb@premierleague.com",
+    "senha": "SenhaLegal123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-888cdabc",
+    "nomeCompleto": "Sandro Meira Ricci",
+    "email": "ricci@cbf.com",
+    "senha": "SenhaLegal123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-f52e93ef",
+    "nomeCompleto": "Nestor Pitana",
+    "email": "pitana@afa.com",
+    "senha": "SenhaLegal123!",
+    "personagem": "ARBITRO"
   }
 ]

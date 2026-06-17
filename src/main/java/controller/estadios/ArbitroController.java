@@ -19,11 +19,20 @@ public class ArbitroController {
     }
 
     private void validarPermissao() {
+        if (SessaoUsuario.getInstancia()
+                .getUsuarioAtual() == null) {
+
+            throw new SecurityException(
+                    "Nenhum usuário logado."
+            );
+        }
+
         if (!SessaoUsuario.getInstancia().getUsuarioAtual().podeGerenciarCompeticao()) {
             throw new SecurityException("Usuário sem permissão.");
         }
     }
 
+    /*
     public void cadastrar(Arbitro arbitro) {
         validarPermissao();
 
@@ -38,6 +47,10 @@ public class ArbitroController {
         arbitros.add(arbitro);
         dao.salvar(arbitros);
     }
+
+    Essa funcionalidade já é implementada pelo AdministradorController
+
+     */
 
     public void editar(String codigo,String pais,int experiencia) {
         validarPermissao();
@@ -56,6 +69,7 @@ public class ArbitroController {
         );
     }
 
+    /*
     public void excluir(String email) {
         validarPermissao();
 
@@ -69,30 +83,51 @@ public class ArbitroController {
 
         dao.salvar(arbitros);
     }
+    Essa funcionalidade já é implementada pelo AdministradorController
+     */
 
     public List<Arbitro> listar() {
         return new ArrayList<>(arbitros);
     }
 
-    public List<Arbitro> buscarPorPais(
-            String pais) {
+
+    public List<Arbitro> pesquisar(
+            String nome,
+            String pais,
+            Integer experienciaMinima) {
 
         return arbitros.stream()
+
                 .filter(a ->
-                        a.getPais() != null &&
-                        a.getPais()
-                                .equalsIgnoreCase(pais))
-                .collect(Collectors.toList());
+                        nome == null ||
+                                nome.isBlank() ||
+                                a.getNomeCompleto()
+                                        .toLowerCase()
+                                        .contains(nome.toLowerCase()))
+
+                .filter(a ->
+                        pais == null ||
+                                pais.isBlank() ||
+                                pais.equals("Todos") ||
+                                (a.getPais() != null &&
+                                        a.getPais().equalsIgnoreCase(pais)))
+
+                .filter(a ->
+                        experienciaMinima == null ||
+                                a.getExperiencia() >= experienciaMinima)
+
+                .toList();
     }
 
-    public List<Arbitro> buscarPorExperiencia(
-            int experienciaMinima) {
+    public Arbitro buscarPorCodigo(String codigo) {
 
-        return arbitros.stream()
-                .filter(a ->
-                        a.getExperiencia()
-                                >= experienciaMinima)
-                .collect(Collectors.toList());
+        for (Arbitro a : arbitros) {
+            if (a.getCodigo().equals(codigo)) {
+                return a;
+            }
+        }
+
+        return null;
     }
 
 }

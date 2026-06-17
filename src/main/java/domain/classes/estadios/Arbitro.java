@@ -44,6 +44,13 @@ public class Arbitro extends Usuario {
     }
 
     public void setExperiencia(int experiencia) {
+
+        if(experiencia < 0){
+            throw new IllegalArgumentException(
+                    "Experiência não pode ser negativa."
+            );
+        }
+
         this.experiencia = experiencia;
     }
 
