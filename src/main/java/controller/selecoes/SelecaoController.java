@@ -1,6 +1,5 @@
 package controller.selecoes;
 
-import domain.classes.administracao.SessaoUsuario;
 import domain.classes.selecoes.Selecao;
 import domain.dao.SelecaoDAO;
 import domain.dao.SelecaoJsonDAO;
@@ -19,6 +18,20 @@ public class SelecaoController {
 
     public List<Selecao> listar() {
         return new ArrayList<>(selecoes);
+    }
+
+    public void cadastrar(Selecao selecao) {
+
+        for(Selecao a : selecoes){
+            if(a.getIdSelecao().equalsIgnoreCase(selecao.getIdSelecao())){
+                throw new IllegalArgumentException(
+                        "Seleção já cadastrada."
+                );
+            }
+        }
+
+        selecoes.add(selecao);
+        dao.salvar(selecoes);
     }
 
     public List<Selecao> pesquisar(
@@ -53,5 +66,46 @@ public class SelecaoController {
 
                 .toList();
     }
+
+    public void editar(
+            String id,
+            String pais,
+            String tecnico,
+            Character grupo) {
+
+        for (Selecao selecao : selecoes) {
+
+            if (selecao.getIdSelecao().equals(id)) {
+
+                selecao.setPaisSelecao(pais);
+                selecao.setTecnico(tecnico);
+                selecao.setGrupo(grupo);
+
+                dao.salvar(selecoes);
+
+                return;
+            }
+        }
+
+        throw new IllegalArgumentException(
+                "Seleção não encontrada."
+        );
+    }
+
+    public void excluir(String id) {
+
+        boolean removido = selecoes.removeIf(
+                e -> e.getIdSelecao().equals(id)
+        );
+
+        if(!removido){
+            throw new IllegalArgumentException(
+                    "Seleção não encontrada."
+            );
+        }
+
+        dao.salvar(selecoes);
+    }
+
 
 }
