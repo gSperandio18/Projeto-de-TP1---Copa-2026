@@ -132,7 +132,7 @@ public class OrganizadorController extends UsuarioController {
             throw new Copa2026Exceptions("Seleção não cadastrada no sistema!");
         }
 
-        partidaController.cadastrarPartida(estadio, selecao1, selecao2, data, horario, fase, status, null);
+        partidaController.cadastrarPartida(estadio, selecao1, selecao2, data, horario, fase, status);
     }
 
     public void excluiPartida(Selecao selecao1, Selecao selecao2 , LocalDateTime dataEHora)throws Copa2026Exceptions{

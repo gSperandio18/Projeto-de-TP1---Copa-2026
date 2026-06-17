@@ -13,7 +13,6 @@ import java.util.List;
 
 public class DesignacaoController {
     private final DesignacaoDAO dao;
-
     private final List<DesignacaoArbitroPartida> designacoes;
 
     public DesignacaoController() {
@@ -55,13 +54,13 @@ public class DesignacaoController {
         dao.salvar(designacoes);
     }
 
+    public void designarLista(List<Arbitro> arbitros, Partida partida, Arbitro principal) {
+        for (Arbitro a : arbitros) { designar(a, partida, a.equals(principal)); }
+    }
+
     public boolean possuiArbitroPrincipal(Partida partida) {
         return designacoes.stream()
-                .anyMatch(d ->
-                        d.getPartida()
-                                .equals(partida)
-                                &&
-                                d.isPrincipal());
+                .anyMatch(d -> d.getPartida().equals(partida) && d.isPrincipal());
     }
 
     public List<DesignacaoArbitroPartida> listar() {
@@ -73,5 +72,19 @@ public class DesignacaoController {
         if(!possuiPrincipal){
             throw new IllegalStateException("A partida deve possuir um árbitro principal.");
         }
+    }
+
+    public List<Arbitro> listarArbitros(Partida partida) {
+        return designacoes.stream()
+                .filter(p -> p.getPartida().equals(partida)) // As Designações com a partida
+                .map(DesignacaoArbitroPartida::getArbitro) // Da Designação, pegar o árbitro
+                .toList();
+    }
+
+    public List<Partida> listarPartidas(Arbitro arbitro) {
+        return designacoes.stream()
+                .filter(p -> p.getArbitro().equals(arbitro)) // As Designações com o árbitro
+                .map(DesignacaoArbitroPartida::getPartida) // Da Designação, pegar a partida
+                .toList();
     }
 }
