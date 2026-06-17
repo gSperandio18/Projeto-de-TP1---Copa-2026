@@ -4,6 +4,15 @@
  */
 package guiEtelas.estadiosFolder;
 
+import controller.estadios.EstadioController;
+import domain.classes.administracao.Administrador;
+import domain.classes.administracao.SessaoUsuario;
+import domain.classes.administracao.Usuario;
+import domain.classes.estadios.Estadio;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author giova
@@ -15,8 +24,15 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     /**
      * Creates new form TelaInicialEstadios
      */
+    
+    private final EstadioController estadioController;
+    
     public TelaInicialEstadios() {
         initComponents();
+        
+        estadioController = new EstadioController();
+
+        carregarTabela();
     }
 
     /**
@@ -35,7 +51,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jcbSelectCountry = new javax.swing.JComboBox<>();
+        jcbSelecionarPais = new javax.swing.JComboBox<>();
         estadoPartida = new javax.swing.JTextField();
         cidadePartida = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
@@ -43,15 +59,15 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
         nomeEstadio = new javax.swing.JTextField();
         idEstadio = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        anoInauguracao = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtLotacaoMax = new javax.swing.JTextField();
+        txtAnoInauguracao = new javax.swing.JTextField();
         botaoNovo = new javax.swing.JButton();
         botaoEditar = new javax.swing.JButton();
         botaoExcluir = new javax.swing.JButton();
         botaoPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jTableEstadios = new javax.swing.JTable();
 
         jTextField2.setText("jTextField2");
 
@@ -71,7 +87,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
 
         jLabel4.setText("Cidade: ");
 
-        jcbSelectCountry.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        jcbSelecionarPais.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Todos", "Canadá", "Estados Unidos", "México" }));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -90,7 +106,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                             .addComponent(jLabel2))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jcbSelectCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jcbSelecionarPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(estadoPartida, javax.swing.GroupLayout.PREFERRED_SIZE, 131, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(75, Short.MAX_VALUE))
         );
@@ -100,7 +116,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jcbSelectCountry, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jcbSelecionarPais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -118,13 +134,12 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
 
         jLabel1.setText("Ano de Inauguração: ");
 
-        anoInauguracao.setBorder(null);
-        anoInauguracao.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(java.text.DateFormat.getDateInstance(java.text.DateFormat.SHORT))));
-        anoInauguracao.setToolTipText("dd/MM/yyyy");
-
         jLabel7.setText("Lotação máxima:");
 
-        jTextField1.setToolTipText("1000");
+        txtLotacaoMax.setToolTipText("1000");
+
+        txtAnoInauguracao.setToolTipText("yyyy");
+        txtAnoInauguracao.addActionListener(this::txtAnoInauguracaoActionPerformed);
 
         javax.swing.GroupLayout jpnlDadosEstadioLayout = new javax.swing.GroupLayout(jpnlDadosEstadio);
         jpnlDadosEstadio.setLayout(jpnlDadosEstadioLayout);
@@ -147,8 +162,8 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                             .addComponent(jLabel7))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jpnlDadosEstadioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(anoInauguracao, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addComponent(txtLotacaoMax, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtAnoInauguracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 69, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
@@ -168,10 +183,10 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                         .addGap(15, 15, 15)
                         .addGroup(jpnlDadosEstadioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(anoInauguracao, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(txtAnoInauguracao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(jpnlDadosEstadioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtLotacaoMax, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel7))
                         .addGap(3, 3, 3))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -182,6 +197,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
         botaoNovo.addActionListener(this::botaoNovoActionPerformed);
 
         botaoEditar.setText("Editar");
+        botaoEditar.addActionListener(this::botaoEditarActionPerformed);
 
         botaoExcluir.setText("Excluir");
         botaoExcluir.addActionListener(this::botaoExcluirActionPerformed);
@@ -189,15 +205,28 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
         botaoPesquisar.setText("Pesquisar");
         botaoPesquisar.addActionListener(this::botaoPesquisarActionPerformed);
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTableEstadios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Nome", "Código", "País", "Lotação"
+                "Nome", "Código", "Lotação", "Ano", "País", "Estado", "Cidade"
             }
-        ));
-        jScrollPane1.setViewportView(jTable1);
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Object.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTableEstadios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableEstadiosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableEstadios);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -214,12 +243,13 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jScrollPane1)
                             .addGroup(layout.createSequentialGroup()
+                                .addGap(11, 11, 11)
                                 .addComponent(botaoNovo)
-                                .addGap(118, 118, 118)
+                                .addGap(109, 109, 109)
                                 .addComponent(botaoEditar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(botaoExcluir)
-                                .addGap(120, 120, 120)
+                                .addGap(117, 117, 117)
                                 .addComponent(botaoPesquisar)))))
                 .addContainerGap())
         );
@@ -242,22 +272,276 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
+    
+    private void carregarTabela(){
 
+        DefaultTableModel modelo =
+                (DefaultTableModel) jTableEstadios.getModel();
+
+        modelo.setRowCount(0);
+
+        for(Estadio estadio :
+                estadioController.listar()){
+
+            modelo.addRow(new Object[]{
+                    estadio.getNome(),
+                    estadio.getCodigo(),
+                    estadio.getCapacidade(),
+                    estadio.getAnoInauguracao(),
+                    estadio.getPais(),
+                    estadio.getEstado(),
+                    estadio.getCidade()
+            });
+        }
+    }
+    
+    private void limparCampos(){
+
+    idEstadio.setText("");
+    nomeEstadio.setText("");
+
+    txtAnoInauguracao.setText("");
+    txtLotacaoMax.setText("");
+
+    estadoPartida.setText("");
+    cidadePartida.setText("");
+
+    jcbSelecionarPais.setSelectedIndex(0);
+    
+    idEstadio.setEditable(true);
+    }
+    
     private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        // TODO add your handling code here:
+        System.out.println("Botão Clicado");
+        
+        try {
+
+        String codigo = idEstadio.getText().trim();
+        String nome = nomeEstadio.getText().trim();
+
+        int ano = Integer.parseInt(
+                txtAnoInauguracao.getText().trim()
+        );
+
+        int capacidade = Integer.parseInt(
+                txtLotacaoMax.getText().trim()
+        );
+
+        String pais =
+                (String) jcbSelecionarPais.getSelectedItem();
+        
+        if ("Todos".equals(pais)) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um país válido."
+            );
+            return;
+        }
+
+        String estado =
+                estadoPartida.getText().trim();
+
+        String cidade =
+                cidadePartida.getText().trim();
+
+        Estadio estadio =
+                new Estadio(
+                        codigo,
+                        nome,
+                        ano,
+                        capacidade,
+                        pais,
+                        estado,
+                        cidade
+                );
+
+        estadioController.cadastrar(estadio);
+
+        carregarTabela();
+
+        limparCampos();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Estádio cadastrado com sucesso!"
+        );
+
+        } catch(Exception e){
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage()
+            );
+        }
     }//GEN-LAST:event_botaoNovoActionPerformed
 
+    
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_botaoPesquisarActionPerformed
+        System.out.println("Botão Clicado");
+        
+        try {
+        String pais = jcbSelecionarPais.getSelectedItem().equals("Todos") ? null : (String) jcbSelecionarPais.getSelectedItem();
+        List<Estadio> resultados =
+                estadioController.pesquisar(
+                        nomeEstadio.getText().trim(),
+                        pais,
+                        estadoPartida.getText().trim(),
+                        cidadePartida.getText().trim(),
+                        txtLotacaoMax.getText().isBlank()
+                                ? null
+                                : Integer.parseInt(txtLotacaoMax.getText())
+                );
 
+        DefaultTableModel modelo =
+                (DefaultTableModel) jTableEstadios.getModel();
+
+        modelo.setRowCount(0);
+
+        for (Estadio estadio : resultados) {
+
+            modelo.addRow(new Object[]{
+                    estadio.getNome(),
+                    estadio.getCodigo(),
+                    estadio.getCapacidade(),
+                    estadio.getAnoInauguracao(),
+                    estadio.getPais(),
+                    estadio.getEstado(),
+                    estadio.getCidade()
+            });
+        }
+
+        } catch (Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage()
+            );
+        }
+    }//GEN-LAST:event_botaoPesquisarActionPerformed
+    
+    
+    
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
-        // TODO add your handling code here:
+        System.out.println("Botão Clicado");
+        
+        int linha = jTableEstadios.getSelectedRow();
+
+        if(linha == -1){
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Selecione um estádio."
+            );
+            return;
+        }
+
+        String codigo =
+                jTableEstadios.getValueAt(linha, 1).toString();
+
+        estadioController.excluir(codigo);
+
+        carregarTabela();
+        
+        limparCampos();
     }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    private void txtAnoInauguracaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAnoInauguracaoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtAnoInauguracaoActionPerformed
+
+    private void jTableEstadiosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEstadiosMouseClicked
+        System.out.println("Linha clicada");
+        
+        int linha = jTableEstadios.getSelectedRow();
+
+        idEstadio.setText(
+                jTableEstadios.getValueAt(linha,1).toString()
+        );
+        
+        idEstadio.setEditable(false);
+
+        nomeEstadio.setText(
+                jTableEstadios.getValueAt(linha,0).toString()
+        );
+
+        txtLotacaoMax.setText(
+                jTableEstadios.getValueAt(linha,2).toString()
+        );
+
+        txtAnoInauguracao.setText(
+                jTableEstadios.getValueAt(linha,3).toString()
+        );
+
+        jcbSelecionarPais.setSelectedItem(
+                jTableEstadios.getValueAt(linha,4).toString()
+        );
+
+        estadoPartida.setText(
+                jTableEstadios.getValueAt(linha,5).toString()
+        );
+
+        cidadePartida.setText(
+                jTableEstadios.getValueAt(linha,6).toString()
+        );
+    }//GEN-LAST:event_jTableEstadiosMouseClicked
+
+    private void botaoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditarActionPerformed
+        System.out.println("Botão Clicado");
+        
+        if(jTableEstadios.getSelectedRow() == -1){
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Selecione um estádio na tabela."
+                );
+                return;
+            }
+        
+        try {
+            
+            String pais = (String) jcbSelecionarPais.getSelectedItem();
+
+            if ("Todos".equals(pais)) {
+                JOptionPane.showMessageDialog(
+                        this,
+                        "Selecione um país válido."
+                );
+                return;
+            }
+
+            estadioController.editar(
+                    idEstadio.getText().trim(),
+                    nomeEstadio.getText().trim(),
+                    Integer.parseInt(txtLotacaoMax.getText()),
+                    (String) jcbSelecionarPais.getSelectedItem(),
+                    estadoPartida.getText().trim(),
+                    cidadePartida.getText().trim(),
+                    Integer.parseInt(txtAnoInauguracao.getText())
+            );
+
+            carregarTabela();
+
+            limparCampos();
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Estádio atualizado com sucesso."
+            );
+
+        } catch(Exception e) {
+
+            JOptionPane.showMessageDialog(
+                    this,
+                    e.getMessage()
+            );
+        }
+    }//GEN-LAST:event_botaoEditarActionPerformed
 
     /**
      * @param args the command line arguments
      */
+    
+    
+    
+    
     public static void main(String args[]) {
         // 1. Setup the FlatLaf Light Look and Feel
             try {
@@ -265,13 +549,29 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
             } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
             }
+           
+            Administrador adminTeste =
+            new Administrador(
+                    "Administrador Teste",
+                    "admin@teste.com",
+                    "123",
+                    Usuario.Tipo.ADMINISTRADOR
+            );
+
+            SessaoUsuario.getInstancia()
+                    .setUsuarioAtual(adminTeste);
+            
+            System.out.println(
+                SessaoUsuario.getInstancia()
+                        .getUsuarioAtual()
+                        .getNomeCompleto()
+                );
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new TelaInicialEstadios().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JFormattedTextField anoInauguracao;
     private javax.swing.JButton botaoEditar;
     private javax.swing.JButton botaoExcluir;
     private javax.swing.JButton botaoNovo;
@@ -289,11 +589,12 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JTable jTableEstadios;
     private javax.swing.JTextField jTextField2;
-    private javax.swing.JComboBox<String> jcbSelectCountry;
+    private javax.swing.JComboBox<String> jcbSelecionarPais;
     private javax.swing.JPanel jpnlDadosEstadio;
     private javax.swing.JTextField nomeEstadio;
+    private javax.swing.JTextField txtAnoInauguracao;
+    private javax.swing.JTextField txtLotacaoMax;
     // End of variables declaration//GEN-END:variables
 }

@@ -36,6 +36,12 @@ public class EstadioController {
 
         for(Estadio e : estadios){
 
+            if ("Todos".equals(estadio.getPais())) {
+                throw new IllegalArgumentException(
+                        "Selecione um país válido."
+                );
+            }
+
             if(e.getCodigo().equals(
                     estadio.getCodigo())){
 
@@ -67,6 +73,12 @@ public class EstadioController {
         validarPermissao();
 
         for (Estadio estadio : estadios) {
+
+            if ("Todos".equals(estadio.getPais())) {
+                throw new IllegalArgumentException(
+                        "Selecione um país válido."
+                );
+            }
 
             if (estadio.getCodigo().equals(codigo)) {
 
@@ -133,54 +145,34 @@ public class EstadioController {
         return new ArrayList<>(estadios);
     }
 
-    public List<Estadio> buscarPorNome(
-            String nome) {
+    public List<Estadio> pesquisar(
+            String nome,
+            String pais,
+            String estado,
+            String cidade,
+            Integer capacidadeMinima) {
 
         return estadios.stream()
-                .filter(e ->
-                        e.getNome()
-                                .toLowerCase()
+                .filter(e -> nome == null ||
+                        nome.isBlank() ||
+                        e.getNome().toLowerCase()
                                 .contains(nome.toLowerCase()))
-                .collect(Collectors.toList());
-    }
 
-    public List<Estadio> buscarPorCapacidade(
-            int capacidadeMinima) {
+                .filter(e -> pais == null ||
+                        pais.isBlank() ||
+                        e.getPais().equalsIgnoreCase(pais))
 
-        return estadios.stream()
-                .filter(e ->
-                        e.getCapacidade()
-                                >= capacidadeMinima)
-                .collect(Collectors.toList());
-    }
+                .filter(e -> estado == null ||
+                        estado.isBlank() ||
+                        e.getEstado().equalsIgnoreCase(estado))
 
-    public List<Estadio> buscarPorCidade(
-            String cidade) {
+                .filter(e -> cidade == null ||
+                        cidade.isBlank() ||
+                        e.getCidade().equalsIgnoreCase(cidade))
 
-        return estadios.stream()
-                .filter(e ->
-                        e.getCidade()
-                                .equalsIgnoreCase(cidade))
-                .toList();
-    }
+                .filter(e -> capacidadeMinima == null ||
+                        e.getCapacidade() >= capacidadeMinima)
 
-    public List<Estadio> buscarPorPais(
-            String pais) {
-
-        return estadios.stream()
-                .filter(e ->
-                        e.getPais()
-                                .equalsIgnoreCase(pais))
-                .toList();
-    }
-
-    public List<Estadio> buscarPorEstado(
-            String estado) {
-
-        return estadios.stream()
-                .filter(e ->
-                        e.getEstado()
-                                .equalsIgnoreCase(estado))
                 .toList();
     }
 }

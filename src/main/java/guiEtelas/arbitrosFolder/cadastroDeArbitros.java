@@ -213,8 +213,7 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
     }//GEN-LAST:event_botaoFotoActionPerformed
 
     private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        Arbitro novoArbitro = new Arbitro(nomeArbitro.getText(), );
-        arbitroController.cadastrar();
+
     }//GEN-LAST:event_botaoNovoActionPerformed
 
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed

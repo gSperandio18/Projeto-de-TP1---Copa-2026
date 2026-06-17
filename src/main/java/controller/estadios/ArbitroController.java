@@ -28,9 +28,9 @@ public class ArbitroController {
         validarPermissao();
 
         for(Arbitro a : arbitros){
-            if(a.getCodigo().equals(arbitro.getCodigo())){
+            if(a.getEmail().equalsIgnoreCase(arbitro.getEmail())){
                 throw new IllegalArgumentException(
-                        "Código de árbitro já cadastrado."
+                        "E-mail já cadastrado."
                 );
             }
         }
