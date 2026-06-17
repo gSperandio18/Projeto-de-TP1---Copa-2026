@@ -1,6 +1,7 @@
 package controller.administracao;
 
 import controller.exceptions.Copa2026Exceptions;
+import controller.partidas.PartidaController;
 import domain.classes.administracao.*;
 import domain.classes.administracao.Usuario.Tipo;
 import domain.classes.estadios.Arbitro;
@@ -49,9 +50,8 @@ public class AdministradorController extends UsuarioController{
             usuarioDAO.salvar(usuarios);
             arbitros.add(arbitro);
             arbitroDAO.salvar(arbitros);
-
         }else if(personagem == Tipo.ORGANIZADOR){
-            Organizador organizador = new Organizador(nomeCompleto, senha, email,personagem);
+            Organizador organizador = new Organizador(nomeCompleto, email, senha,personagem);
             usuarios.add(organizador);
             usuarioDAO.salvar(usuarios);
         }else if(personagem == Tipo.ADMINISTRADOR){
@@ -73,7 +73,7 @@ public class AdministradorController extends UsuarioController{
             arbitros.add(arbitro);
             arbitroDAO.salvar(arbitros);
         } else if (personagem == Tipo.ORGANIZADOR) {
-            Organizador organizador = new Organizador(nomeCompleto, senha, email, personagem);
+            Organizador organizador = new Organizador(nomeCompleto, email, senha, personagem);
             usuarios.add(organizador);
             usuarioDAO.salvar(usuarios);
         }
@@ -137,7 +137,6 @@ public class AdministradorController extends UsuarioController{
         }
 
         usuarioDAO.salvar(usuarios);
-
         if(personagemAntigo == Tipo.ARBITRO){
 
             // Referee became Organizer or Administrator
@@ -169,6 +168,23 @@ public class AdministradorController extends UsuarioController{
 
             arbitroDAO.salvar(arbitros);
         }
+
+        this.usuarios = usuarioDAO.carregar();
+    }
+
+    public void editarEmail(String nomeCompleto, String novoEmail)throws Copa2026Exceptions{
+        verificarPermissaoAdmin();
+
+        Usuario usuario = buscarUsuarioPorNome(nomeCompleto);
+        if(usuario == null){
+            throw new Copa2026Exceptions("Usuário não encontrado: "+nomeCompleto);
+        }
+
+        if(novoEmail == null){throw new Copa2026Exceptions("Email não pode ser vazio");}
+        usuario.setEmail(novoEmail);
+
+        usuarioDAO.salvar(usuarios);
+        this.usuarios = usuarioDAO.carregar();
     }
 
     /*RETORNA UM USUÁRIO POR MEIO DO SEU NOME*/
@@ -291,5 +307,10 @@ public class AdministradorController extends UsuarioController{
     /*METODO AUXILIAR DO GERA RELATORIO*/
     private String formatarData(LocalDateTime data){
         return data.format(DateTimeFormatter.ofPattern("dd/MM/yyyy - HH:mm"));
+    }
+
+    public void recarregarUsuarios() {
+        this.usuarios = usuarioDAO.carregar();  // Recarrega do arquivo
+        System.out.println("🔄 Lista recarregada: " + usuarios.size() + " usuários");
     }
 }

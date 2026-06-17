@@ -42,8 +42,6 @@ public class relatorioTela extends javax.swing.JFrame {
         areaRelatorio = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         btnGerar = new javax.swing.JButton();
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Relatório de Competições");
@@ -98,13 +96,8 @@ public class relatorioTela extends javax.swing.JFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(18, Short.MAX_VALUE))
+                .addContainerGap(41, Short.MAX_VALUE))
         );
-
-        jMenu2.setText("Relatório das competições");
-        jMenuBar2.add(jMenu2);
-
-        setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -166,8 +159,6 @@ public class relatorioTela extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextArea areaRelatorio;
     private javax.swing.JButton btnGerar;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;

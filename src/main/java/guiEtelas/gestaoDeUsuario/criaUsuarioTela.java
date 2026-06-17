@@ -65,7 +65,7 @@ public class criaUsuarioTela extends javax.swing.JFrame {
 
         jLabel4.setText("Tipo de conta:");
 
-        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Organizador", "Árbitro", "Administrador" }));
+        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ORGANIZADOR", "ARBITRO", "ADMINISTRADOR" }));
         comboBoxTipo.addActionListener(this::comboBoxTipoActionPerformed);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -362,7 +362,7 @@ public class criaUsuarioTela extends javax.swing.JFrame {
         try{
             adminController.criaUsuario(nome,email,senha,tipoUsuario);
             
-            JOptionPane.showMessageDialog(this,"Usuário cirado com sucesso!","Sucesso",JOptionPane.INFORMATION_MESSAGE);
+            JOptionPane.showMessageDialog(this,"Usuário criado com sucesso!","Sucesso",JOptionPane.INFORMATION_MESSAGE);
             txtNome.setText("");
             txtEmail.setText("");
             txtSenha.setText("");

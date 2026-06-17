@@ -3,6 +3,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package guiEtelas.gestaoDeUsuario;
+import controller.administracao.AdministradorController;
+import controller.exceptions.Copa2026Exceptions;
+import domain.classes.administracao.Usuario;
+import domain.classes.administracao.Usuario.Tipo;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -11,12 +16,41 @@ package guiEtelas.gestaoDeUsuario;
 public class editarUsuarioTela extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(editarUsuarioTela.class.getName());
-
+    private AdministradorController adminController;
+    private Usuario usuarioOriginal;
+    private boolean editado = false;
+    
     /**
      * Creates new form editarUsuario
      */
     public editarUsuarioTela() {
         initComponents();
+        adminController = new AdministradorController();
+    }
+    
+    public editarUsuarioTela(Usuario usuario) {
+        initComponents();
+        adminController = new AdministradorController();
+        this.usuarioOriginal = usuario;
+        setLocationRelativeTo(null);
+        preencherDados();
+    }
+    
+    private void preencherDados(){
+        comboBoxTipo.removeAllItems();
+        comboBoxTipo.addItem(Tipo.ADMINISTRADOR);
+        comboBoxTipo.addItem(Tipo.ORGANIZADOR);
+        comboBoxTipo.addItem(Tipo.ARBITRO);
+        
+        comboBoxTipo.setSelectedItem(usuarioOriginal.getPersonagem());
+        
+        txtNomeCompleto.setText(usuarioOriginal.getNomeCompleto());
+        txtEmailAntigo.setText(usuarioOriginal.getEmail());
+        txtEmailAntigo.setEditable(false);
+    }
+
+    public boolean isEditado(){
+        return editado;
     }
 
     /**
@@ -32,24 +66,24 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         jPanel4 = new javax.swing.JPanel();
         jLabel4 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        comboBoxTipo = new javax.swing.JComboBox<>();
         jPanel5 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNomeCompleto = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        txtEmailAntigo = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
+        txtEmailNovo = new javax.swing.JTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jPasswordField1 = new javax.swing.JPasswordField();
+        txtSenha = new javax.swing.JPasswordField();
         jPanel8 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
-        jPasswordField2 = new javax.swing.JPasswordField();
+        txtConfirmarSenha = new javax.swing.JPasswordField();
         jPanel9 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btnEditar = new javax.swing.JButton();
+        btnCancelar = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -60,8 +94,12 @@ public class editarUsuarioTela extends javax.swing.JFrame {
 
         jLabel4.setText("Novo tipo de conta:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Organizador", "Árbitro" }));
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
+        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new Usuario.Tipo[]{
+                Tipo.ORGANIZADOR,
+                Tipo.ARBITRO,
+                Tipo.ADMINISTRADOR
+        }));
+        comboBoxTipo.addActionListener(this::comboBoxTipoActionPerformed);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -71,7 +109,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(comboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 351, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
@@ -80,7 +118,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(comboBoxTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -90,7 +128,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
 
         jLabel3.setText("E-mail novo:");
 
-        jTextField4.setText("jTextField4");
+        txtEmailNovo.addActionListener(this::txtEmailNovoActionPerformed);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -100,11 +138,11 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 503, Short.MAX_VALUE)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(txtEmailAntigo, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jTextField4))
+                    .addComponent(txtEmailNovo))
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -113,11 +151,11 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel6)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmailAntigo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtEmailNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -128,7 +166,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jTextField1)
+                    .addComponent(txtNomeCompleto)
                     .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
             .addComponent(jPanel6, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -139,7 +177,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtNomeCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 6, Short.MAX_VALUE))
@@ -154,7 +192,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPasswordField1)
+                    .addComponent(txtSenha)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -164,7 +202,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel7)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -177,7 +215,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPasswordField2)
+                    .addComponent(txtConfirmarSenha)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -187,14 +225,15 @@ public class editarUsuarioTela extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel8)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPasswordField2, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtConfirmarSenha, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 5, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Editar");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnEditar.setText("Editar");
+        btnEditar.addActionListener(this::btnEditarActionPerformed);
 
-        jButton1.setText("Cancelar");
+        btnCancelar.setText("Cancelar");
+        btnCancelar.addActionListener(this::btnCancelarActionPerformed);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -202,16 +241,16 @@ public class editarUsuarioTela extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                 .addGap(35, 35, 35)
-                .addComponent(jButton1)
+                .addComponent(btnCancelar)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(37, 37, 37))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
-                .addComponent(jButton1))
+                .addComponent(btnEditar, javax.swing.GroupLayout.DEFAULT_SIZE, 29, Short.MAX_VALUE)
+                .addComponent(btnCancelar))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -314,13 +353,70 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void comboBoxTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboBoxTipoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_comboBoxTipoActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
+        Tipo novoTipo = (Tipo)comboBoxTipo.getSelectedItem();
+        String novoNome = txtNomeCompleto.getText().trim();
+        String emailAntigo = txtEmailAntigo.getText().trim();
+        String novoEmail = txtEmailNovo.getText().trim();
+        String novaSenha = new String(txtSenha.getPassword());
+        String confirmarSenha = new String(txtConfirmarSenha.getPassword());
+        
+        if(novoNome.isEmpty()){
+            JOptionPane.showMessageDialog(this,"Nome não pode ficar vazio!","Aviso",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!novoEmail.isEmpty() && !novoEmail.contains("@")){
+            JOptionPane.showMessageDialog(this,"Email inválido! Ele deve conter '@'","Aviso",JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        if(!novaSenha.isEmpty() && !novaSenha.equals(confirmarSenha)){
+            JOptionPane.showMessageDialog(this,"As senhas não conferem!","Aviso",JOptionPane.WARNING_MESSAGE);
+            txtSenha.setText("");
+            txtConfirmarSenha.setText("");
+            return;
+        }
+        int confirm = JOptionPane.showConfirmDialog(this,"Deseja realmente editar o usuário?","Confirmar edição",JOptionPane.YES_NO_OPTION);
+        if(confirm != JOptionPane.YES_OPTION){
+            return;
+        }
+        
+        try{
+            if(!novoNome.equals(usuarioOriginal.getNomeCompleto())){
+                adminController.editarUsuario(usuarioOriginal.getNomeCompleto(),novoNome,null,null);
+                usuarioOriginal.setNomeCompleto(novoNome);
+            }
+            if(!novoEmail.isEmpty() && !novoEmail.equals(emailAntigo)){
+                adminController.editarEmail(usuarioOriginal.getNomeCompleto(),novoEmail);
+                usuarioOriginal.setEmail(novoEmail);
+            }
+            if(!novaSenha.isEmpty()){
+                adminController.editarUsuario(usuarioOriginal.getNomeCompleto(),null,novaSenha,null);                
+            }
+            if (novoTipo != usuarioOriginal.getPersonagem()) {
+                adminController.editarUsuario(usuarioOriginal.getNomeCompleto(), null, null, novoTipo);
+            }
+            editado = true;
+            
+            JOptionPane.showMessageDialog(this,"Usuário editado com sucesso!");
+            this.dispose();
+        }catch(Copa2026Exceptions e){            
+            JOptionPane.showMessageDialog(this,e.getMessage(),"Erro",JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarActionPerformed
+
+    private void txtEmailNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailNovoActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailNovoActionPerformed
+
+    private void btnCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarActionPerformed
+        // TODO add your handling code here:
+        this.dispose();
+    }//GEN-LAST:event_btnCancelarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -348,9 +444,9 @@ public class editarUsuarioTela extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JComboBox<String> jComboBox1;
+    private javax.swing.JButton btnCancelar;
+    private javax.swing.JButton btnEditar;
+    private javax.swing.JComboBox<Usuario.Tipo> comboBoxTipo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -367,10 +463,10 @@ public class editarUsuarioTela extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
-    private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField4;
+    private javax.swing.JPasswordField txtConfirmarSenha;
+    private javax.swing.JTextField txtEmailAntigo;
+    private javax.swing.JTextField txtEmailNovo;
+    private javax.swing.JTextField txtNomeCompleto;
+    private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
 }

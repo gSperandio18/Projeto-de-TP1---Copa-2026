@@ -8,6 +8,7 @@ import controller.exceptions.Copa2026Exceptions;
 import domain.classes.administracao.Usuario;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.util.ArrayList;
 import java.util.List;
 /**
  *
@@ -28,11 +29,25 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         adminController = new AdministradorController();
         configurarTabela();
         carregarUsuarios("");
+
+        dialogConfirmarExclusao.setSize(400, 250);
+        dialogConfirmarExclusao.setLocationRelativeTo(this);
+        dialogConfirmarExclusao.setModal(true);
+
     }
     
     private void configurarTabela(){
-        modeloTabela = new DefaultTableModel();
-        
+        modeloTabela = new DefaultTableModel() {
+        @Override
+            public boolean isCellEditable(int row, int column) {
+            return false;
+            }
+        };
+
+        modeloTabela.addColumn("Nome completo");
+        modeloTabela.addColumn("Email");
+        modeloTabela.addColumn("Cargo");
+
         tabelaUsuarios.setModel(modeloTabela);
         tabelaUsuarios.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         
@@ -51,6 +66,8 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
     
     private void carregarUsuarios(String filtro){
         try{
+
+            adminController.recarregarUsuarios();
             modeloTabela.setRowCount(0);
             
             if(filtro == null || filtro.trim().isEmpty()){
@@ -58,7 +75,12 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
             }else{
                 usuariosAtuais = adminController.buscarUsuariosPorNome(filtro);
             }
-            
+
+            if(usuariosAtuais == null){
+                System.err.println("⚠️ usuariosAtuais é NULL!");
+                usuariosAtuais = new ArrayList<>();
+            }
+
             for(Usuario u: usuariosAtuais){
                 modeloTabela.addRow(new Object[]{
                     u.getNomeCompleto(),
@@ -79,7 +101,9 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
             );
             
             JOptionPane.showMessageDialog(this,"Usuário excluído!");
-            carregarUsuarios(txtBusca.getText());
+
+            txtBusca.setText("");
+            carregarUsuarios("");
             usuarioSelecionado = null;
             dialogConfirmarExclusao.setVisible(false);
         }catch(Copa2026Exceptions e){
@@ -108,8 +132,6 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         lblNomeCompleto = new javax.swing.JLabel();
         lblEmail = new javax.swing.JLabel();
         lblTipo = new javax.swing.JLabel();
-        jMenuBar2 = new javax.swing.JMenuBar();
-        jMenu2 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         btnEditar = new javax.swing.JButton();
         btnCriar = new javax.swing.JButton();
@@ -119,8 +141,8 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         btnBuscar = new javax.swing.JButton();
         txtBusca = new javax.swing.JTextField();
-        jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
+
+        dialogConfirmarExclusao.setTitle("Confirmação de Exclusão");
 
         btnCancelarExclusao.setText("Cancelar");
         btnCancelarExclusao.addActionListener(this::btnCancelarExclusaoActionPerformed);
@@ -143,10 +165,10 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblTipo, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblNomeCompleto, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblEmail, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(lblNomeCompleto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblEmail, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblTipo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -191,11 +213,6 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
                     .addComponent(btnConfirmarExclusao))
                 .addGap(37, 37, 37))
         );
-
-        jMenu2.setText("Confirmação de Exclusão");
-        jMenuBar2.add(jMenu2);
-
-        dialogConfirmarExclusao.setJMenuBar(jMenuBar2);
 
         javax.swing.GroupLayout dialogConfirmarExclusaoLayout = new javax.swing.GroupLayout(dialogConfirmarExclusao.getContentPane());
         dialogConfirmarExclusao.getContentPane().setLayout(dialogConfirmarExclusaoLayout);
@@ -247,7 +264,15 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
             new String [] {
                 "Nome completo", "Email", "Cargo"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         scrollTabela.setViewportView(tabelaUsuarios);
 
         jPanel2.setLayout(new java.awt.GridLayout(1, 0));
@@ -259,11 +284,6 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         txtBusca.setText("Nome Completo");
         txtBusca.addActionListener(this::txtBuscaActionPerformed);
         jPanel2.add(txtBusca);
-
-        jMenu1.setText("Gestão de usuários");
-        jMenuBar1.add(jMenu1);
-
-        setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -288,7 +308,7 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 41, Short.MAX_VALUE)
                 .addComponent(scrollTabela, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -307,7 +327,7 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         lblNomeCompleto.setText("Nome: " + usuarioSelecionado.getNomeCompleto());
         lblEmail.setText("Email: " + usuarioSelecionado.getEmail());
         lblTipo.setText("Tipo: " + usuarioSelecionado.getPersonagem().toString());
-        
+
         dialogConfirmarExclusao.setVisible(true);
     }//GEN-LAST:event_btnExcluirActionPerformed
 
@@ -326,9 +346,17 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this,"Selecione um usuário!");
             return;
         }
-        
-        new editarUsuarioTela().setVisible(true);
-        carregarUsuarios(txtBusca.getText());
+        editarUsuarioTela tela = new editarUsuarioTela(usuarioSelecionado);
+        tela.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // Quando a tela fechar, recarrega
+                adminController.recarregarUsuarios();
+                txtBusca.setText("");
+                carregarUsuarios("");
+            }
+        });
+        tela.setVisible(true);
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnCancelarExclusaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCancelarExclusaoActionPerformed
@@ -338,8 +366,17 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
 
     private void btnCriarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCriarActionPerformed
         // TODO add your handling code here:
-        new criaUsuarioTela().setVisible(true);
-        carregarUsuarios(txtBusca.getText());
+        criaUsuarioTela tela =  new criaUsuarioTela();
+        tela.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent e) {
+                // Quando a tela fechar, recarrega
+                adminController.recarregarUsuarios();
+                txtBusca.setText("");
+                carregarUsuarios("");
+            }
+        });
+        tela.setVisible(true);
     }//GEN-LAST:event_btnCriarActionPerformed
 
     private void btnConfirmarExclusaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarExclusaoActionPerformed
@@ -381,10 +418,6 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
     private javax.swing.JButton btnExcluir;
     private javax.swing.JDialog dialogConfirmarExclusao;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
-    private javax.swing.JMenuBar jMenuBar1;
-    private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
