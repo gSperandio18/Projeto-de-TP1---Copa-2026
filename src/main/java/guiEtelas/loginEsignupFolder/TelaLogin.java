@@ -30,6 +30,10 @@ public class TelaLogin extends javax.swing.JFrame {
         initComponents();
         
         loginController = new controller.administracao.LoginController();
+        getRootPane().setDefaultButton(btnLogin);
+
+        txtEmail.addActionListener(e -> btnLoginActionPerformed(null));
+        txtSenha.addActionListener(e -> btnLoginActionPerformed(null));
     }
 
     /**
