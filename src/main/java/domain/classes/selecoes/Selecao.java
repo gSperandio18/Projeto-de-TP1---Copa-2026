@@ -8,7 +8,7 @@ public class Selecao {
     private String idSelecao;
     private String paisSelecao;
     private String tecnico;
-    private char grupo;
+    private Character grupo;
 
     private List<Jogador> jogadores;
 
@@ -88,7 +88,7 @@ public class Selecao {
         this.tecnico = tecnico;
     }
 
-    public char getGrupo() {
+    public Character getGrupo() {
         return grupo;
     }
 
