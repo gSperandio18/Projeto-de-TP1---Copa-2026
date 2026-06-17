@@ -312,7 +312,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     }
     
     private void botaoNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoNovoActionPerformed
-        System.out.println("Botão Clicado");
+        //System.out.println("Botão Clicado");
         
         try {
 
@@ -377,7 +377,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
 
     
     private void botaoPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoPesquisarActionPerformed
-        System.out.println("Botão Clicado");
+        //System.out.println("Botão Clicado");
         
         try {
         String pais = jcbSelecionarPais.getSelectedItem().equals("Todos") ? null : (String) jcbSelecionarPais.getSelectedItem();
@@ -422,7 +422,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     
     
     private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
-        System.out.println("Botão Clicado");
+        //System.out.println("Botão Clicado");
         
         int linha = jTableEstadios.getSelectedRow();
 
@@ -449,7 +449,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     }//GEN-LAST:event_txtAnoInauguracaoActionPerformed
 
     private void jTableEstadiosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEstadiosMouseClicked
-        System.out.println("Linha clicada");
+        //System.out.println("Linha clicada");
         
         int linha = jTableEstadios.getSelectedRow();
 
@@ -485,7 +485,7 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
     }//GEN-LAST:event_jTableEstadiosMouseClicked
 
     private void botaoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditarActionPerformed
-        System.out.println("Botão Clicado");
+        //System.out.println("Botão Clicado");
         
         if(jTableEstadios.getSelectedRow() == -1){
                 JOptionPane.showMessageDialog(
@@ -550,6 +550,8 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
             System.err.println("Failed to initialize LaF");
             }
            
+            //Para fins de teste e compilação APENAS desta tela, tire o comentário abaixo:
+            /*
             Administrador adminTeste =
             new Administrador(
                     "Administrador Teste",
@@ -566,7 +568,8 @@ public class TelaInicialEstadios extends javax.swing.JFrame {
                         .getUsuarioAtual()
                         .getNomeCompleto()
                 );
-
+            */
+            
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new TelaInicialEstadios().setVisible(true));
     }
