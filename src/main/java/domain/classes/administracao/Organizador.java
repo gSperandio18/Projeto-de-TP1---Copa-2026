@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Organizador extends Usuario {
-    public Organizador(String nomeCompleto, String senha, String email,Tipo personagem) {
+    public Organizador(String nomeCompleto, String email, String senha,Tipo personagem) {
         super(nomeCompleto, email, senha, personagem);
     }
 }

@@ -297,7 +297,7 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
         String codigo = jTableArbitros.getValueAt(linha, 0).toString();
         Arbitro selecionado = arbitroController.buscarPorCodigo(codigo);
         
-        new designarArbitroParaNovaPartida().setVisible(true);
+        new designarArbitroParaNovaPartida(selecionado).setVisible(true);
     }//GEN-LAST:event_btnDesignarPartidaActionPerformed
 
     private void btnEditarArbitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarArbitroActionPerformed

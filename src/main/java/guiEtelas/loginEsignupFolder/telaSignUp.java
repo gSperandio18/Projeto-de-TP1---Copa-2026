@@ -25,6 +25,12 @@ public class telaSignUp extends javax.swing.JFrame {
     public telaSignUp() {
         initComponents();
         adminController = new AdministradorController();
+        getRootPane().setDefaultButton(btnCadastrar);
+
+        txtNome.addActionListener(e -> btnCadastrarActionPerformed(null));
+        txtEmail.addActionListener(e -> btnCadastrarActionPerformed(null));
+        txtSenha.addActionListener(e -> btnCadastrarActionPerformed(null));
+        txtConfirmarSenha.addActionListener(e -> btnCadastrarActionPerformed(null));
     }
 
     /**
@@ -75,7 +81,7 @@ public class telaSignUp extends javax.swing.JFrame {
 
         jLabel4.setText("Tipo de conta:");
 
-        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Organizador", "Árbitro" }));
+        comboBoxTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "ORGANIZADOR", "ARBITRO" }));
         comboBoxTipo.addActionListener(this::comboBoxTipoActionPerformed);
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -350,6 +356,7 @@ public class telaSignUp extends javax.swing.JFrame {
         if(tipo.equals("ORGANIZADOR")){
             tipoUsuario = Usuario.Tipo.ORGANIZADOR;
         }else{
+            System.out.println("entrou aqui!");
             tipoUsuario = Usuario.Tipo.ARBITRO;
         }
         
@@ -361,7 +368,7 @@ public class telaSignUp extends javax.swing.JFrame {
             }
             
             JOptionPane.showMessageDialog(this,"Cadastro realizado com sucesso!\nFaça login para continuar.","Sucesso",JOptionPane.INFORMATION_MESSAGE);
-            new TelaLogin().setVisible(true);
+            //new TelaLogin().setVisible(true);
             this.dispose();
         }catch (Copa2026Exceptions e){
             JOptionPane.showMessageDialog(this,e.getMessage(),"Erro no cadastro!", JOptionPane.ERROR_MESSAGE);

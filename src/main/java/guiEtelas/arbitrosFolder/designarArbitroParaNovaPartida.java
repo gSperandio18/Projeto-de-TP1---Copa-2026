@@ -4,6 +4,14 @@
  */
 package guiEtelas.arbitrosFolder;
 
+import controller.estadios.DesignacaoController;
+import controller.exceptions.Copa2026Exceptions;
+import controller.partidas.PartidaController;
+import domain.classes.estadios.Arbitro;
+import domain.classes.partidas.Partida;
+
+import javax.swing.*;
+
 /**
  *
  * @author giova
@@ -11,12 +19,25 @@ package guiEtelas.arbitrosFolder;
 public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(designarArbitroParaNovaPartida.class.getName());
+    private Arbitro arbitro = null;
+    DesignacaoController designacaoController = new DesignacaoController();
+    PartidaController partidaController = new PartidaController();
 
-    /**
-     * Creates new form designarArbitroParaNovaPartida
-     */
+    /* Construtor padrão caso precise */
     public designarArbitroParaNovaPartida() {
         initComponents();
+    }
+
+    /* Construtor que recebe o árbitro pra preencher o código dele automaticamente */
+    public designarArbitroParaNovaPartida(Arbitro arbitro) {
+        initComponents();
+        preencherCodigoArbitro(arbitro);
+        this.arbitro = arbitro;
+    }
+
+    private void preencherCodigoArbitro(Arbitro arbitro) {
+        String codigo = arbitro.getCodigo();
+        caixaCodigoArbitro.setText(codigo);
     }
 
     /**
@@ -30,10 +51,10 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
 
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        caixaCodigoArbitro = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        caixaCodigoPartida = new javax.swing.JTextField();
+        botaoDesignar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Designar árbitro à nova partida");
@@ -43,46 +64,46 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
 
         jLabel1.setText("Código do Árbitro:");
 
-        jTextField1.setText("*inserido automaticamente");
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        caixaCodigoArbitro.setText("*inserido automaticamente");
 
         jLabel2.setText("Código da Partida: ");
 
-        jButton1.setText("Designar");
+        botaoDesignar.setText("Designar");
+        botaoDesignar.addActionListener(this::botaoDesignarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(23, 23, 23)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE))
-                        .addGap(4, 4, 4)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2)))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(126, 126, 126)
-                        .addComponent(jButton1)))
-                .addContainerGap(39, Short.MAX_VALUE))
+                    .addComponent(jLabel1)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(caixaCodigoArbitro, javax.swing.GroupLayout.DEFAULT_SIZE, 231, Short.MAX_VALUE)
+                    .addComponent(caixaCodigoPartida))
+                .addContainerGap())
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(140, 140, 140)
+                .addComponent(botaoDesignar)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(15, Short.MAX_VALUE)
+                .addContainerGap(29, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(caixaCodigoArbitro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton1))
+                    .addComponent(caixaCodigoPartida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(12, 12, 12)
+                .addComponent(botaoDesignar)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -106,9 +127,31 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    private void botaoDesignarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoDesignarActionPerformed
+        Partida partida = null;
+
+        /* Achar a partida pelo código / ID */
+        for (Partida p : partidaController.listar()) {
+            if (p.getId().equals(caixaCodigoPartida.getText())) {
+                partida = p;
+            }
+        }
+
+        /* Não encontrou partida com esse código / ID */
+        if (partida == null) {
+            JOptionPane.showMessageDialog(this,
+                    "Não foi encontrada uma partida com esse código.",
+                    "Erro na busca por partida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        } else {
+            /* Essa só vai ser a principal se a partida ainda não tiver um principal */
+            boolean principal = !designacaoController.possuiArbitroPrincipal(partida);
+            designacaoController.designar(arbitro, partida, principal);
+        }
+
+
+    }//GEN-LAST:event_botaoDesignarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -126,11 +169,11 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton botaoDesignar;
+    private javax.swing.JTextField caixaCodigoArbitro;
+    private javax.swing.JTextField caixaCodigoPartida;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
