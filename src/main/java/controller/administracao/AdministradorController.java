@@ -33,8 +33,7 @@ public class AdministradorController extends UsuarioController{
     }
 
     /*CRIA USUÁRIO PELO ADMIN*/
-    public void criaUsuario(String nomeCompleto, String email, String senha/*,String dataNascimento*/, Tipo personagem)throws Copa2026Exceptions{
-        String dataNascimento = "VALIDO";
+    public void criaUsuario(String nomeCompleto, String email, String senha, Tipo personagem)throws Copa2026Exceptions{
         verificarPermissaoAdmin();
         validarNome(nomeCompleto);
         validarSenha(senha);
@@ -45,7 +44,7 @@ public class AdministradorController extends UsuarioController{
         }
 
         if(personagem == Tipo.ARBITRO){
-            Arbitro arbitro = new Arbitro(nomeCompleto,email,senha,dataNascimento, personagem);
+            Arbitro arbitro = new Arbitro(nomeCompleto,email,senha, personagem);
             usuarios.add(arbitro);
             usuarioDAO.salvar(usuarios);
             arbitros.add(arbitro);
@@ -64,18 +63,17 @@ public class AdministradorController extends UsuarioController{
 
     /*CRIA USUÁRIO NA TELA SINGUP*/
     public void cadastroPublico(String nomeCompleto, String email, String senha, Tipo personagem) throws Copa2026Exceptions{
-        String dataNascimento = "VALIDO";
         validarNome(nomeCompleto);
         validarSenha(senha);
 
         if (personagem == Tipo.ARBITRO) {
-            Arbitro arbitro = new Arbitro(nomeCompleto, email, senha, dataNascimento, personagem);
+            Arbitro arbitro = new Arbitro(nomeCompleto, email, senha, personagem);
             usuarios.add(arbitro);
             usuarioDAO.salvar(usuarios);
             arbitros.add(arbitro);
             arbitroDAO.salvar(arbitros);
         } else if (personagem == Tipo.ORGANIZADOR) {
-            Organizador organizador = new Organizador(nomeCompleto, email, senha, personagem);
+            Organizador organizador = new Organizador(nomeCompleto, senha, email, personagem);
             usuarios.add(organizador);
             usuarioDAO.salvar(usuarios);
         }

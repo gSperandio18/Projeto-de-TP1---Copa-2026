@@ -13,7 +13,6 @@ public class Arbitro extends Usuario {
     private int experiencia;
     private String caminhoFoto;
     private String codigo;
-    private String dataNascimento;
     //private Tipo personagem;
 
     private transient List<Partida> partidasApitadas;
@@ -22,7 +21,6 @@ public class Arbitro extends Usuario {
             String nomeCompleto,
             String email,
             String senha,
-            String dataNascimento,
             Tipo personagem) {
 
         super(nomeCompleto, email, senha, personagem);
@@ -36,7 +34,6 @@ public class Arbitro extends Usuario {
                                 .toString()
                                 .substring(0,8);
 
-        this.dataNascimento = dataNascimento;
     }
 
     public void adicionarPartida(Partida partida){
@@ -76,10 +73,6 @@ public class Arbitro extends Usuario {
         return codigo;
     }
 
-    public String getDataNascimento() {
-        return dataNascimento;
-    }
-
     public String getCaminhoFoto() {
         return caminhoFoto;
     }
@@ -97,10 +90,6 @@ public class Arbitro extends Usuario {
         }
 
         this.caminhoFoto = caminhoFoto;
-    }
-
-    public void setDataNascimento(String dataNascimento) {
-        this.dataNascimento = dataNascimento;
     }
 
     @Override

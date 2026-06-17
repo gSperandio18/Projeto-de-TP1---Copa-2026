@@ -30,10 +30,7 @@ public class UsuarioDeserializer implements JsonDeserializer<Usuario> {
             case ORGANIZADOR:
                 return new Organizador(nome, email, senha, tipo);
             case ARBITRO:
-                // If you have dataNascimento in JSON, extract it
-                String dataNascimento = jsonObject.has("dataNascimento") ?
-                        jsonObject.get("dataNascimento").getAsString() : null;
-                return new Arbitro(nome, email, senha, dataNascimento, tipo);
+                return new Arbitro(nome, email, senha, tipo);
             default:
                 throw new JsonParseException("Unknown user type: " + tipoStr);
         }
