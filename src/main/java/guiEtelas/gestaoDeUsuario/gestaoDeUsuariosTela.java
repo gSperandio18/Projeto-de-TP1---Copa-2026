@@ -214,7 +214,8 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Gestão de Usuários");
 
         jPanel1.setLayout(new java.awt.GridLayout(1, 0));
 
@@ -293,6 +294,7 @@ public class gestaoDeUsuariosTela extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcluirActionPerformed

@@ -53,7 +53,8 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Editar Usuário");
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 153));
 
@@ -310,6 +311,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed

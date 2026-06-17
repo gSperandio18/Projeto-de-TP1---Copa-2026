@@ -45,7 +45,8 @@ public class relatorioTela extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         jMenu2 = new javax.swing.JMenu();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Relatório de Competições");
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 153));
 
@@ -117,6 +118,7 @@ public class relatorioTela extends javax.swing.JFrame {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnGerarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerarActionPerformed
