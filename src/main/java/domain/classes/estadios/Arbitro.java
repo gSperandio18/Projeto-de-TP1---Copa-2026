@@ -11,7 +11,6 @@ public class Arbitro extends Usuario {
 
     private String pais;
     private int experiencia;
-    private String caminhoFoto;
     private String codigo;
     //private Tipo personagem;
 
@@ -60,6 +59,7 @@ public class Arbitro extends Usuario {
         return experiencia;
     }
 
+
     public List<Partida> getPartidasApitadas() {
 
         if(partidasApitadas == null) {
@@ -71,26 +71,7 @@ public class Arbitro extends Usuario {
 
     public String getCodigo() {
         return codigo;
-    }
-
-    public String getCaminhoFoto() {
-        return caminhoFoto;
-    }
-
-    public void setCaminhoFoto(String caminhoFoto) {
-
-        if(caminhoFoto != null &&
-                !(caminhoFoto.endsWith(".png")
-                        || caminhoFoto.endsWith(".jpg")
-                        || caminhoFoto.endsWith(".jpeg"))) {
-
-            throw new IllegalArgumentException(
-                    "Formato de imagem inválido."
-            );
-        }
-
-        this.caminhoFoto = caminhoFoto;
-    }
+    } //TA AQUI
 
     @Override
     public String toString() {

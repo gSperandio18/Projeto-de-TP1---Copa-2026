@@ -5,6 +5,7 @@ import domain.classes.administracao.SessaoUsuario;
 import domain.dao.ArbitroDAO;
 import domain.dao.ArbitroJsonDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,32 +26,52 @@ public class ArbitroController {
 
     public void cadastrar(Arbitro arbitro) {
         validarPermissao();
+
+        for(Arbitro a : arbitros){
+            if(a.getCodigo().equals(arbitro.getCodigo())){
+                throw new IllegalArgumentException(
+                        "Código de árbitro já cadastrado."
+                );
+            }
+        }
+
         arbitros.add(arbitro);
         dao.salvar(arbitros);
     }
 
-    public void editar(String email,String pais,int experiencia) {
+    public void editar(String codigo,String pais,int experiencia) {
         validarPermissao();
 
         for (Arbitro arbitro : arbitros) {
-            if (arbitro.getEmail().equalsIgnoreCase(email)) {
+            if (arbitro.getCodigo().equals(codigo)) {
                 arbitro.setPais(pais);
                 arbitro.setExperiencia(experiencia);
                 dao.salvar(arbitros);
                 return;
             }
         }
+
+        throw new IllegalArgumentException(
+                "Árbitro não encontrado."
+        );
     }
 
     public void excluir(String email) {
         validarPermissao();
 
-        arbitros.removeIf(a -> a.getEmail().equalsIgnoreCase(email));
+        boolean removido = arbitros.removeIf(a -> a.getEmail().equalsIgnoreCase(email));
+
+        if(!removido){
+            throw new IllegalArgumentException(
+                    "Árbitro não encontrado."
+            );
+        }
+
         dao.salvar(arbitros);
     }
 
     public List<Arbitro> listar() {
-        return arbitros;
+        return new ArrayList<>(arbitros);
     }
 
     public List<Arbitro> buscarPorPais(
@@ -58,6 +79,7 @@ public class ArbitroController {
 
         return arbitros.stream()
                 .filter(a ->
+                        a.getPais() != null &&
                         a.getPais()
                                 .equalsIgnoreCase(pais))
                 .collect(Collectors.toList());

@@ -9,6 +9,7 @@ import domain.classes.partidas.Partida;
 import domain.dao.DesignacaoDAO;
 import domain.dao.DesignacaoJsonDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DesignacaoController {
@@ -40,6 +41,18 @@ public class DesignacaoController {
 
         validarPermissao();
 
+        if(arbitro == null){
+            throw new IllegalArgumentException(
+                    "Árbitro inválido."
+            );
+        }
+
+        if(partida == null){
+            throw new IllegalArgumentException(
+                    "Partida inválida."
+            );
+        }
+
 
         String pais1 =
                 partida
@@ -50,6 +63,14 @@ public class DesignacaoController {
                 partida
                         .getSelecao2()
                         .getPaisSelecao();
+
+        if(arbitro.getPais() == null ||
+                arbitro.getPais().isBlank()) {
+
+            throw new IllegalArgumentException(
+                    "O árbitro precisa possuir um país cadastrado."
+            );
+        }
 
         if (arbitro.getPais()
                 .equalsIgnoreCase(pais1)
@@ -103,6 +124,8 @@ public class DesignacaoController {
 
         return designacoes.stream()
                 .anyMatch(d ->
+                        d != null &&
+                        d.getPartida() != null &&
                         d.getPartida()
                                 .equals(partida)
                                 &&
@@ -112,7 +135,7 @@ public class DesignacaoController {
     public List<DesignacaoArbitroPartida>
     listar() {
 
-        return designacoes;
+        return new ArrayList<>(designacoes);
     }
 
     public void validarPartida(Partida partida){
@@ -120,6 +143,8 @@ public class DesignacaoController {
         boolean possuiPrincipal =
                 designacoes.stream()
                         .anyMatch(d ->
+                                d != null &&
+                                d.getPartida() != null &&
                                 d.getPartida().equals(partida)
                                         &&
                                         d.isPrincipal());

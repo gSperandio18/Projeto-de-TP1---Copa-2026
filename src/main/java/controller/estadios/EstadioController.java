@@ -7,6 +7,7 @@ import domain.classes.administracao.SessaoUsuario;
 import domain.dao.EstadioDAO;
 import domain.dao.EstadioJsonDAO;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,6 +44,12 @@ public class EstadioController {
             }
         }
 
+        if(estadio == null){
+            throw new IllegalArgumentException(
+                    "Estádio inválido."
+            );
+        }
+
         estadios.add(estadio);
 
         dao.salvar(estadios);
@@ -75,6 +82,10 @@ public class EstadioController {
                 return;
             }
         }
+
+        throw new IllegalArgumentException(
+                "Estádio não encontrado."
+        );
     }
 
     public void excluir(String codigo) {
@@ -112,10 +123,14 @@ public class EstadioController {
                 return;
             }
         }
+
+        throw new IllegalArgumentException(
+                "Estádio não encontrado."
+        );
     }
 
     public List<Estadio> listar() {
-        return estadios;
+        return new ArrayList<>(estadios);
     }
 
     public List<Estadio> buscarPorNome(
