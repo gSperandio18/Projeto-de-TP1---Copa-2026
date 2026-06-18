@@ -35,10 +35,9 @@ public class Partida {
     private Fase fase;
     private StatusPartida status;
     private Resultado resultado;
-    private List<Arbitro> arbitros;
 
     public Partida(Estadio estadio, Selecao selecao1, Selecao selecao2,
-                   LocalDateTime dataEHora, Fase fase, StatusPartida status, List<Arbitro> arbitros)
+                   LocalDateTime dataEHora, Fase fase, StatusPartida status)
     {
         this.estadio = estadio;
         this.selecao1 = selecao1;
@@ -46,9 +45,8 @@ public class Partida {
         this.dataEHora = dataEHora;
         this.fase = fase;
         this.status = status;
-        this.arbitros = arbitros;
 
-        this.id = UUID.randomUUID().toString();
+        this.id = UUID.randomUUID().toString().substring(0, 8);
     }
 
     public String getId() {
@@ -110,10 +108,6 @@ public class Partida {
     public void setResultado(Resultado resultado) {
         this.resultado = resultado;
     }
-
-    public List<Arbitro> getArbitros() { return arbitros; }
-
-    public void setArbitros(List<Arbitro> arbitros) { this.arbitros = arbitros; }
 
     @Override
     public String toString() {

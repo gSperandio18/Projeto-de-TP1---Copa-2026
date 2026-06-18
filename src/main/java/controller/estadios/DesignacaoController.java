@@ -87,4 +87,9 @@ public class DesignacaoController {
                 .map(DesignacaoArbitroPartida::getPartida) // Da Designação, pegar a partida
                 .toList();
     }
+
+    public void limparArbitros(Partida partida) {
+        designacoes.removeIf(d -> d.getPartida().equals(partida));
+        dao.salvar(designacoes);
+    }
 }

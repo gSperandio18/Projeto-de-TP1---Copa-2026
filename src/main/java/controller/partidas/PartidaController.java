@@ -8,6 +8,7 @@ import domain.classes.estadios.Estadio;
 import domain.classes.partidas.Fase;
 import domain.classes.partidas.Partida;
 import domain.classes.partidas.Resultado;
+import domain.classes.selecoes.Jogador;
 import domain.classes.selecoes.Selecao;
 import domain.dao.partidas.PartidaDAO;
 import domain.dao.partidas.PartidaJsonDAO;
@@ -20,13 +21,25 @@ import java.util.List;
 
 public class PartidaController {
     private final PartidaDAO dao;
+    private final List<Partida> partidas;
 
     public PartidaController() {
         this.dao = new PartidaJsonDAO();
+        partidas = dao.carregar();
     }
 
-    public void cadastrarPartida(Estadio estadio, Selecao selecao1, Selecao selecao2, String data,
-                                 String horario, Fase fase, Partida.StatusPartida status, List<Arbitro> arbitros)
+    /* Verifica se todos os jogadores da seleção podem jogar */
+    public boolean verificarSelecoes(Selecao selecao) {
+        for (Jogador j : selecao.getJogadores()) {
+            if (!j.getPodeParticipar()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public LocalDateTime validarDados(Estadio estadio, Selecao selecao1, Selecao selecao2, String data,
+                                      String horario, Fase fase, Partida.StatusPartida status, String idPartidaAIgnorar)
             throws Copa2026Exceptions {
 
         /* Primeira verificação para ver se nada veio vazio */
@@ -37,18 +50,9 @@ public class PartidaController {
         else if (horario == null || horario.isBlank()) { throw new Copa2026Exceptions("É necessário digitar o horário do jogo."); }
         else if (fase == null) { throw new Copa2026Exceptions("É necessário preencher a fase do jogo."); }
         else if (status == null) { throw new Copa2026Exceptions("É necessário preencher o status do jogo."); }
-        else if (arbitros.isEmpty()) { throw new Copa2026Exceptions("É necessário selecionar pelo menos um árbitro."); }
 
         if (selecao1.equals(selecao2)) {
             throw new Copa2026Exceptions("As seleções não podem ser iguais.");
-        }
-
-        /* Verificar que os árbitros não são da mesma nacionalidade das seleções */
-        for (Arbitro a : arbitros) {
-            if (a.getPais().equals(selecao1.getPaisSelecao()) || a.getPais().equals(selecao2.getPaisSelecao())) {
-                throw new ConflitoPaisException("O árbitro " + a.getNomeCompleto() + " é da(o) " + a.getPais()
-                        + " e portanto não pode arbitrar esse jogo, que tem a seleção da " + a.getPais() + ".");
-            }
         }
 
         /* Construir data a partir das strings */
@@ -61,14 +65,25 @@ public class PartidaController {
                     " dd/MM/yyyy e HH:mm.");
         }
 
+        /* Verificar se as seleções têm algum jogador que não pode jogar */
+        if (!verificarSelecoes(selecao1)) {
+            throw new Copa2026Exceptions("A seleção 1 tem um jogador não apto a jogar.");
+        } else if (!verificarSelecoes(selecao2)) {
+            throw new Copa2026Exceptions("A seleção 2 tem um jogador não apto a jogar.");
+        }
 
         /* Pegar todas as partidas e verificar se alguma delas ocorre no mesmo horário e tem alguma das seleções dessa partida
-        * ou tem o mesmo estádio */
-        List<Partida> partidas = dao.carregar();
+         * ou tem o mesmo estádio */
         for (Partida p : partidas) {
 
+            /* Para usar na edição; se estivermos editando uma partida, não queremos que ela cheque a disponibilidade
+              * de horário com ela mesma, então passamos o código da partida para que ela seja ignorada */
+            if (p.getId().equals(idPartidaAIgnorar) && idPartidaAIgnorar != null) {
+                continue;
+            }
+
             /* Considerando que um jogo tem aproximadamente 90 minutos, não pode haver outros jogos com a mesma seleção
-            * nem 90min antes do início desse jogo, nem menos de 90min depois do começo do jogo */
+             * nem 90min antes do início desse jogo, nem menos de 90min depois do começo do jogo */
             LocalDateTime finalPartidaExistente = p.getDataEHora().plusMinutes(90);
             LocalDateTime finalPartidaNova = dataPartida.plusMinutes(90);
 
@@ -87,12 +102,38 @@ public class PartidaController {
             }
         }
 
-        Partida novaPartida = new Partida(estadio, selecao1, selecao2, dataPartida, fase, status, arbitros);
+        return dataPartida;
+    }
+
+    public Partida cadastrarPartida(Estadio estadio, Selecao selecao1, Selecao selecao2, String data,
+                                 String horario, Fase fase, Partida.StatusPartida status)
+            throws Copa2026Exceptions {
+
+        LocalDateTime dataPartida = validarDados(estadio, selecao1, selecao2, data, horario, fase, status, null);
+        Partida novaPartida = new Partida(estadio, selecao1, selecao2, dataPartida, fase, status);
         partidas.add(novaPartida);
+        dao.salvar(partidas);
+
+        return novaPartida;
+    }
+
+    public void editarPartida(Partida partida, Estadio estadio, Selecao selecao1, Selecao selecao2, String data,
+                                    String horario, Fase fase, Partida.StatusPartida status)
+            throws Copa2026Exceptions {
+
+        LocalDateTime dataPartida = validarDados(estadio, selecao1, selecao2, data, horario, fase, status, partida.getId());
+        partida.setEstadio(estadio);
+        partida.setSelecao1(selecao1);
+        partida.setSelecao2(selecao2);
+        partida.setDataEHora(dataPartida);
+        partida.setFase(fase);
+        partida.setStatus(status);
+
+        /* Atualizar o JSON */
         dao.salvar(partidas);
     }
 
-    public List<Partida> listar() { return dao.carregar(); }
+    public List<Partida> listar() { return partidas; }
 
     /*
         * Essa função recebe quatro parâmetros como filtros; ela retorna uma lista de partidas que têm os atributos
@@ -101,7 +142,6 @@ public class PartidaController {
     public List<Partida> filtrarPartidas(Partida.StatusPartida filtroStatus, Selecao filtroSelecao,
                                          Fase filtroFase, String dataFiltro) {
 
-        List<Partida> partidas = dao.carregar();
         ArrayList<Partida> partidasEncontradas = new ArrayList<>();
 
         for (Partida p : partidas) {
@@ -149,13 +189,11 @@ public class PartidaController {
     }
 
     public void excluirPartida(Partida partida) {
-        List<Partida> partidas = dao.carregar();
         partidas.remove(partida); // ele compara os objetos pelo ID, pelo equals() do Partida
         dao.salvar(partidas);
     }
 
     public void salvarPartidaEditada(Partida partida) {
-        List<Partida> partidas = dao.carregar();
         for (int i = 0; i < partidas.size(); i++) {
             Partida p = partidas.get(i);
 
