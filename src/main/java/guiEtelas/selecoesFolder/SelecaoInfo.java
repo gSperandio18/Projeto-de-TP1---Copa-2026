@@ -31,20 +31,20 @@ public class SelecaoInfo extends javax.swing.JFrame {
         jButton6 = new javax.swing.JButton();
         jCheckBoxMenuItem1 = new javax.swing.JCheckBoxMenuItem();
         jLabel1 = new javax.swing.JLabel();
-        nomeJogador = new javax.swing.JTextField();
-        nomeJogador1 = new javax.swing.JTextField();
+        selecaoId = new javax.swing.JTextField();
+        tecnicoSelecao = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        grupoSelecao = new javax.swing.JTextPane();
         jLabel5 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        botaoCadastrar = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        botaoSalvar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        jButton4 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        botaoCancelar = new javax.swing.JButton();
+        botaoEditar = new javax.swing.JButton();
+        pais = new javax.swing.JComboBox<>();
 
         jButton6.setText("jButton6");
 
@@ -53,24 +53,23 @@ public class SelecaoInfo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Informações da Seleção - Copa 2026");
-        setMaximumSize(new java.awt.Dimension(476, 232));
         setMinimumSize(new java.awt.Dimension(476, 232));
         setResizable(false);
 
         jLabel1.setText("Seleção:");
 
-        nomeJogador.addActionListener(this::nomeJogadorActionPerformed);
+        selecaoId.addActionListener(this::selecaoIdActionPerformed);
 
-        nomeJogador1.addActionListener(this::nomeJogador1ActionPerformed);
+        tecnicoSelecao.addActionListener(this::tecnicoSelecaoActionPerformed);
 
         jLabel3.setText("País:");
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jScrollPane1.setViewportView(grupoSelecao);
 
         jLabel5.setText("Grupo:");
 
-        jButton1.setText("Cadastrar nova seleção");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        botaoCadastrar.setText("Cadastrar nova seleção");
+        botaoCadastrar.addActionListener(this::botaoCadastrarActionPerformed);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
@@ -93,16 +92,17 @@ public class SelecaoInfo extends javax.swing.JFrame {
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        jButton5.setText("Salvar");
+        botaoSalvar.setText("Salvar");
 
         jLabel8.setText("Técnico:");
 
-        jButton4.setText("Cancelar");
+        botaoCancelar.setText("Cancelar");
 
-        jButton7.setText("Editar informações");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        botaoEditar.setText("Editar informações");
+        botaoEditar.addActionListener(this::botaoEditarActionPerformed);
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pais.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        pais.addActionListener(this::paisActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -115,11 +115,11 @@ public class SelecaoInfo extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                                 .addGap(4, 4, 4)
-                                .addComponent(jButton1))
+                                .addComponent(botaoCadastrar))
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton5)
+                                .addComponent(botaoSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton7))))
+                                .addComponent(botaoEditar))))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(layout.createSequentialGroup()
@@ -130,12 +130,12 @@ public class SelecaoInfo extends javax.swing.JFrame {
                                 .addComponent(jLabel8)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nomeJogador, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
-                            .addComponent(nomeJogador1))))
+                            .addComponent(selecaoId, javax.swing.GroupLayout.DEFAULT_SIZE, 250, Short.MAX_VALUE)
+                            .addComponent(tecnicoSelecao))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
-                        .addComponent(jButton4)
+                        .addComponent(botaoCancelar)
                         .addGap(24, 24, 24))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
@@ -143,7 +143,7 @@ public class SelecaoInfo extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jComboBox1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(pais, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel5)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -163,24 +163,24 @@ public class SelecaoInfo extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomeJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(selecaoId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel1)
                             .addComponent(jLabel5))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomeJogador1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(tecnicoSelecao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel8)
                             .addComponent(jLabel3)
-                            .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(pais, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton5)
-                    .addComponent(jButton7))
+                    .addComponent(botaoSalvar)
+                    .addComponent(botaoEditar))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton1)
-                    .addComponent(jButton4))
+                    .addComponent(botaoCadastrar)
+                    .addComponent(botaoCancelar))
                 .addGap(18, 18, 18))
         );
 
@@ -188,21 +188,25 @@ public class SelecaoInfo extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void nomeJogadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeJogadorActionPerformed
+    private void selecaoIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selecaoIdActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nomeJogadorActionPerformed
+    }//GEN-LAST:event_selecaoIdActionPerformed
 
-    private void nomeJogador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeJogador1ActionPerformed
+    private void tecnicoSelecaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tecnicoSelecaoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nomeJogador1ActionPerformed
+    }//GEN-LAST:event_tecnicoSelecaoActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botaoCadastrarActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void botaoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_botaoEditarActionPerformed
+
+    private void paisActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_paisActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_paisActionPerformed
 
     /**
      * @param args the command line arguments
@@ -230,13 +234,13 @@ public class SelecaoInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton botaoCadastrar;
+    private javax.swing.JButton botaoCancelar;
+    private javax.swing.JButton botaoEditar;
+    private javax.swing.JButton botaoSalvar;
+    private javax.swing.JTextPane grupoSelecao;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel5;
@@ -244,8 +248,8 @@ public class SelecaoInfo extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextField nomeJogador;
-    private javax.swing.JTextField nomeJogador1;
+    private javax.swing.JComboBox<String> pais;
+    private javax.swing.JTextField selecaoId;
+    private javax.swing.JTextField tecnicoSelecao;
     // End of variables declaration//GEN-END:variables
 }

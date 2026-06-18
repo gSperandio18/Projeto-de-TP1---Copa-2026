@@ -11,6 +11,10 @@ import guiEtelas.partidasFolder.cadastrarNovaPartida;
 import guiEtelas.partidasFolder.consultarPartida;
 import guiEtelas.partidasFolder.registroPartida;
 import guiEtelas.arbitrosFolder.cadastroDeArbitros;
+import guiEtelas.relatorioFolder.relatorioTela;
+import guiEtelas.gestaoDeUsuario.gestaoDeUsuariosTela;
+import domain.classes.administracao.Usuario;
+import domain.classes.administracao.SessaoUsuario;
 
 /**
  *
@@ -19,12 +23,36 @@ import guiEtelas.arbitrosFolder.cadastroDeArbitros;
 public class telaLogada extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(telaLogada.class.getName());
-
+    private Usuario usuarioLogado;
     /**
      * Creates new form telaLogada
      */
     public telaLogada() {
         initComponents();
+        usuarioLogado = SessaoUsuario.getInstancia().getUsuarioAtual();
+
+        if(usuarioLogado.podeGerenciarCompeticao() && usuarioLogado.getPersonagem() == Usuario.Tipo.ORGANIZADOR){
+            menuItemRelatorios.setEnabled(false);
+            btnRelatorios.setEnabled(false);
+            menuItemGestao.setEnabled(false);
+            btnGestaoUsuarios.setEnabled(false);
+        }else if(usuarioLogado.podeGerenciarCompeticao() && usuarioLogado.getPersonagem() == Usuario.Tipo.ADMINISTRADOR){
+            menuItemRelatorios.setEnabled(true);
+            btnRelatorios.setEnabled(true);
+            menuItemGestao.setEnabled(true);
+            btnGestaoUsuarios.setEnabled(true);
+        }else{
+            menuItemRelatorios.setEnabled(false);
+            btnRelatorios.setEnabled(false);
+            menuItemGestao.setEnabled(false);
+            btnGestaoUsuarios.setEnabled(false);
+            btnGerenciarSelecao.setEnabled(false);
+            btnGerenciarJogadores.setEnabled(false);
+            btnGerenciarEstadios.setEnabled(false);
+            btnGerenciarArbitros.setEnabled(false);
+            btnCadastrarNovaPartida.setEnabled(false);
+            btnRegistrarResultadoDePartida.setEnabled(false);
+        }
     }
 
     /**
@@ -39,40 +67,40 @@ public class telaLogada extends javax.swing.JFrame {
         jPanel2 = new javax.swing.JPanel();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
+        btnGerenciarSelecao = new javax.swing.JButton();
         jPanel9 = new javax.swing.JPanel();
-        jButton4 = new javax.swing.JButton();
+        btnGerenciarJogadores = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnGerenciarEstadios = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
-        jButton2 = new javax.swing.JButton();
+        btnGerenciarArbitros = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jPanel6 = new javax.swing.JPanel();
-        jButton5 = new javax.swing.JButton();
+        btnCadastrarNovaPartida = new javax.swing.JButton();
         jPanel10 = new javax.swing.JPanel();
-        jButton6 = new javax.swing.JButton();
+        btnConsultarPartidas = new javax.swing.JButton();
         jPanel11 = new javax.swing.JPanel();
-        jButton7 = new javax.swing.JButton();
+        btnRegistrarResultadoDePartida = new javax.swing.JButton();
         jPanel5 = new javax.swing.JPanel();
         jMenuBar1 = new javax.swing.JMenuBar();
-        jMenu1 = new javax.swing.JMenu();
-        jMenu2 = new javax.swing.JMenu();
+        btnRelatorios = new javax.swing.JMenu();
+        menuItemRelatorios = new javax.swing.JMenuItem();
+        btnGestaoUsuarios = new javax.swing.JMenu();
+        menuItemGestao = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Copa 2026");
-        setMaximumSize(new java.awt.Dimension(695, 613));
         setMinimumSize(new java.awt.Dimension(695, 613));
-        setPreferredSize(new java.awt.Dimension(695, 613));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel8.setBorder(javax.swing.BorderFactory.createTitledBorder("Seleções"));
 
-        jButton3.setText("Gerenciar Seleções");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
+        btnGerenciarSelecao.setText("Gerenciar Seleções");
+        btnGerenciarSelecao.addActionListener(this::btnGerenciarSelecaoActionPerformed);
 
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
@@ -80,21 +108,21 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(54, 54, 54)
-                .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGerenciarSelecao, javax.swing.GroupLayout.PREFERRED_SIZE, 183, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(56, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(47, 47, 47)
-                .addComponent(jButton3)
+                .addComponent(btnGerenciarSelecao)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         jPanel9.setBorder(javax.swing.BorderFactory.createTitledBorder("Jogadores"));
 
-        jButton4.setText("Gerenciar Jogadores");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
+        btnGerenciarJogadores.setText("Gerenciar Jogadores");
+        btnGerenciarJogadores.addActionListener(this::btnGerenciarJogadoresActionPerformed);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
@@ -102,21 +130,21 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel9Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGerenciarJogadores, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(68, 68, 68))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addGap(51, 51, 51)
-                .addComponent(jButton4)
+                .addComponent(btnGerenciarJogadores)
                 .addContainerGap(64, Short.MAX_VALUE))
         );
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Estádios"));
 
-        jButton1.setText("Gerenciar Estádios");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        btnGerenciarEstadios.setText("Gerenciar Estádios");
+        btnGerenciarEstadios.addActionListener(this::btnGerenciarEstadiosActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -124,21 +152,21 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(56, 56, 56)
-                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGerenciarEstadios, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
-                .addComponent(jButton1)
+                .addComponent(btnGerenciarEstadios)
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Árbitros"));
 
-        jButton2.setText("Gerenciar Árbitros");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnGerenciarArbitros.setText("Gerenciar Árbitros");
+        btnGerenciarArbitros.addActionListener(this::btnGerenciarArbitrosActionPerformed);
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -146,21 +174,21 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnGerenciarArbitros, javax.swing.GroupLayout.PREFERRED_SIZE, 186, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(66, 66, 66))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(62, 62, 62)
-                .addComponent(jButton2)
+                .addComponent(btnGerenciarArbitros)
                 .addContainerGap(69, Short.MAX_VALUE))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Partidas"));
 
-        jButton5.setText("Cadastrar nova partida");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
+        btnCadastrarNovaPartida.setText("Cadastrar nova partida");
+        btnCadastrarNovaPartida.addActionListener(this::btnCadastrarNovaPartidaActionPerformed);
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -168,19 +196,19 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(53, Short.MAX_VALUE)
-                .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnCadastrarNovaPartida, javax.swing.GroupLayout.PREFERRED_SIZE, 216, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(45, 45, 45))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                 .addContainerGap(30, Short.MAX_VALUE)
-                .addComponent(jButton5)
+                .addComponent(btnCadastrarNovaPartida)
                 .addGap(26, 26, 26))
         );
 
-        jButton6.setText("Consultar partidas existentes");
-        jButton6.addActionListener(this::jButton6ActionPerformed);
+        btnConsultarPartidas.setText("Consultar partidas existentes");
+        btnConsultarPartidas.addActionListener(this::btnConsultarPartidasActionPerformed);
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
@@ -188,19 +216,19 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(52, Short.MAX_VALUE)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnConsultarPartidas, javax.swing.GroupLayout.PREFERRED_SIZE, 223, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton6)
+                .addComponent(btnConsultarPartidas)
                 .addGap(25, 25, 25))
         );
 
-        jButton7.setText("Registrar resultado de partida");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        btnRegistrarResultadoDePartida.setText("Registrar resultado de partida");
+        btnRegistrarResultadoDePartida.addActionListener(this::btnRegistrarResultadoDePartidaActionPerformed);
 
         javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
         jPanel11.setLayout(jPanel11Layout);
@@ -208,14 +236,14 @@ public class telaLogada extends javax.swing.JFrame {
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel11Layout.createSequentialGroup()
                 .addGap(192, 192, 192)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnRegistrarResultadoDePartida, javax.swing.GroupLayout.PREFERRED_SIZE, 228, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel11Layout.setVerticalGroup(
             jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel11Layout.createSequentialGroup()
                 .addContainerGap(20, Short.MAX_VALUE)
-                .addComponent(jButton7)
+                .addComponent(btnRegistrarResultadoDePartida)
                 .addGap(17, 17, 17))
         );
 
@@ -290,11 +318,11 @@ public class telaLogada extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 78, Short.MAX_VALUE))
+                .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, 557, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 3, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, 560));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -304,16 +332,27 @@ public class telaLogada extends javax.swing.JFrame {
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 433, Short.MAX_VALUE)
+            .addGap(0, 390, Short.MAX_VALUE)
         );
 
-        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, -1));
+        getContentPane().add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 180, -1, 390));
 
-        jMenu1.setText("Relatórios");
-        jMenuBar1.add(jMenu1);
+        btnRelatorios.setText("Relatórios");
+        btnRelatorios.addActionListener(this::btnRelatoriosActionPerformed);
 
-        jMenu2.setText("Gestão de Usuários");
-        jMenuBar1.add(jMenu2);
+        menuItemRelatorios.setText("Relatórios");
+        menuItemRelatorios.addActionListener(this::menuItemRelatoriosActionPerformed);
+        btnRelatorios.add(menuItemRelatorios);
+
+        jMenuBar1.add(btnRelatorios);
+
+        btnGestaoUsuarios.setText("Gestão de Usuários");
+
+        menuItemGestao.setText("Gestão");
+        menuItemGestao.addActionListener(this::menuItemGestaoActionPerformed);
+        btnGestaoUsuarios.add(menuItemGestao);
+
+        jMenuBar1.add(btnGestaoUsuarios);
 
         jMenu5.setText("Consulta Geral");
         jMenuBar1.add(jMenu5);
@@ -330,33 +369,48 @@ public class telaLogada extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btnGerenciarEstadiosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarEstadiosActionPerformed
         new TelaInicialEstadios().setVisible(true);
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btnGerenciarEstadiosActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnGerenciarArbitrosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarArbitrosActionPerformed
         new cadastroDeArbitros().setVisible(true);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnGerenciarArbitrosActionPerformed
 
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    private void btnCadastrarNovaPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCadastrarNovaPartidaActionPerformed
         new cadastrarNovaPartida().setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
+    }//GEN-LAST:event_btnCadastrarNovaPartidaActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void btnConsultarPartidasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConsultarPartidasActionPerformed
         new consultarPartida().setVisible(true);
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_btnConsultarPartidasActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void btnRegistrarResultadoDePartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRegistrarResultadoDePartidaActionPerformed
         new registroPartida().setVisible(true);
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_btnRegistrarResultadoDePartidaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnGerenciarSelecaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarSelecaoActionPerformed
         new GerenciarSelecoes().setVisible(true);
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnGerenciarSelecaoActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+    private void btnGerenciarJogadoresActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGerenciarJogadoresActionPerformed
         new GerenciarJogadores().setVisible(true);
-    }//GEN-LAST:event_jButton4ActionPerformed
+    }//GEN-LAST:event_btnGerenciarJogadoresActionPerformed
+
+    private void btnRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRelatoriosActionPerformed
+        // TODO add your handling code here:
+        new relatorioTela().setVisible(true);
+    }//GEN-LAST:event_btnRelatoriosActionPerformed
+
+    private void menuItemRelatoriosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemRelatoriosActionPerformed
+
+        new relatorioTela().setVisible(true);
+    }//GEN-LAST:event_menuItemRelatoriosActionPerformed
+
+    private void menuItemGestaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuItemGestaoActionPerformed
+
+        new gestaoDeUsuariosTela().setVisible(true);
+    }//GEN-LAST:event_menuItemGestaoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -384,15 +438,15 @@ public class telaLogada extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenu jMenu2;
+    private javax.swing.JButton btnCadastrarNovaPartida;
+    private javax.swing.JButton btnConsultarPartidas;
+    private javax.swing.JButton btnGerenciarArbitros;
+    private javax.swing.JButton btnGerenciarEstadios;
+    private javax.swing.JButton btnGerenciarJogadores;
+    private javax.swing.JButton btnGerenciarSelecao;
+    private javax.swing.JMenu btnGestaoUsuarios;
+    private javax.swing.JButton btnRegistrarResultadoDePartida;
+    private javax.swing.JMenu btnRelatorios;
     private javax.swing.JMenu jMenu3;
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
@@ -408,5 +462,7 @@ public class telaLogada extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JMenuItem menuItemGestao;
+    private javax.swing.JMenuItem menuItemRelatorios;
     // End of variables declaration//GEN-END:variables
 }

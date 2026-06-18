@@ -4,6 +4,18 @@
  */
 package guiEtelas.arbitrosFolder;
 
+import controller.estadios.ArbitroController;
+import domain.classes.administracao.Administrador;
+import domain.classes.administracao.SessaoUsuario;
+import domain.classes.administracao.Usuario;
+import domain.classes.estadios.Arbitro;
+import domain.dao.ArbitroDAO;
+import domain.dao.ArbitroJsonDAO;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author giova
@@ -12,11 +24,17 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(cadastroDeArbitros.class.getName());
 
+    private ArbitroController arbitroController = new ArbitroController();
+
     /**
      * Creates new form cadastroDeArbitros
      */
     public cadastroDeArbitros() {
         initComponents();
+        
+        arbitroController = new ArbitroController();
+        
+        carregarTabela();
     }
 
     /**
@@ -34,19 +52,17 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jPanel2 = new javax.swing.JPanel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        txtExpArbitro = new javax.swing.JTextField();
+        jLabel4 = new javax.swing.JLabel();
+        jcbPaisesDisponiveis = new javax.swing.JComboBox<>();
         jLabel5 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jLabel6 = new javax.swing.JLabel();
-        jTextField5 = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton5 = new javax.swing.JButton();
+        txtNomeArbitro = new javax.swing.JTextField();
+        btnLimpar = new javax.swing.JButton();
+        btnPesquisarArbitro = new javax.swing.JButton();
+        btnDesignarPartida = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTableArbitros = new javax.swing.JTable();
+        btnEditarArbitro = new javax.swing.JButton();
 
         jCheckBoxMenuItem1.setSelected(true);
         jCheckBoxMenuItem1.setText("jCheckBoxMenuItem1");
@@ -63,131 +79,126 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
 
         jLabel3.setText("Experiência: ");
 
-        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Foto"));
+        jLabel4.setText("Anos");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 144, Short.MAX_VALUE)
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 186, Short.MAX_VALUE)
-        );
+        jcbPaisesDisponiveis.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Selecione um País", "África do Sul", "Albânia", "Alemanha", "Angola", "Arábia Saudita", "Argélia", "Argentina", "Austrália", "Áustria", "Bélgica", "Bósnia e Herzegovina", "Brasil", "Cabo Verde", "Camarões", "Canadá", "Catar", "Chile", "China", "Colômbia", "Coreia do Sul", "Costa do Marfim", "Costa Rica", "Croácia", "Curaçao", "El Salvador", "Emirados Árabes Unidos", "Equador", "Escócia", "Eslovênia", "Espanha", "Estados Unidos", "França", "Gabão", "Gana", "Grécia", "Guatemala", "Haiti", "Honduras", "Inglaterra", "Irã", "Iraque", "Itália", "Jamaica", "Japão", "Jordânia", "Kuwait", "Marrocos", "Mauritânia", "México", "Nicarágua", "Noruega", "Nova Zelândia", "Omã", "Países Baixos", "Panamá", "Paraguai", "Peru", "Polônia", "Portugal", "República Checa", "República Democrática do Congo", "Romênia", "Senegal", "Sérvia", "Singapura", "Somália", "Sudão", "Suécia", "Suíça", "Tailândia", "Trinidad e Tobago", "Tunísia", "Turquia", "Uruguai", "Uzbequistão", "Venezuela" }));
 
-        jTextField1.addActionListener(this::jTextField1ActionPerformed);
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText("\"Nome\" apenas para fins de busca. Para selecionar árbitros, clique na tabela");
 
-        jTextField3.addActionListener(this::jTextField3ActionPerformed);
-
-        jButton1.setText("Adicionar Foto");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
-
-        jLabel5.setText("Código: ");
-
-        jLabel6.setText("Data de Nascimento: ");
+        txtNomeArbitro.addActionListener(this::txtNomeArbitroActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGap(31, 31, 31)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jButton1))
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtExpArbitro, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(31, 31, 31)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(jLabel2)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTextField2))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel5)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel3)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(jPanel1Layout.createSequentialGroup()
-                                        .addComponent(jLabel6)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(jcbPaisesDisponiveis, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(286, 286, 286))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jTextField1)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNomeArbitro)))
+                        .addContainerGap())))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel5)
-                            .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addContainerGap()
+                .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(1, 1, 1)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel1)
+                    .addComponent(txtNomeArbitro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jcbPaisesDisponiveis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel3)
+                    .addComponent(txtExpArbitro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton2.setText("Novo");
-        jButton2.addActionListener(this::jButton2ActionPerformed);
+        btnLimpar.setText("Limpar");
+        btnLimpar.addActionListener(this::btnLimparActionPerformed);
 
-        jButton3.setText("Excluir");
+        btnPesquisarArbitro.setText("Pesquisar");
+        btnPesquisarArbitro.addActionListener(this::btnPesquisarArbitroActionPerformed);
 
-        jButton4.setText("Pesquisar");
-        jButton4.addActionListener(this::jButton4ActionPerformed);
+        btnDesignarPartida.setText("Designar para nova Partida");
+        btnDesignarPartida.addActionListener(this::btnDesignarPartidaActionPerformed);
 
-        jButton5.setText("Designar para nova Partida");
-        jButton5.addActionListener(this::jButton5ActionPerformed);
+        jTableArbitros.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Código", "Nome", "E-mail", "Nacionalidade", "Experiência"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.String.class, java.lang.Object.class, java.lang.String.class, java.lang.Integer.class
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+        });
+        jTableArbitros.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTableArbitrosMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(jTableArbitros);
+
+        btnEditarArbitro.setText("Editar");
+        btnEditarArbitro.addActionListener(this::btnEditarArbitroActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jScrollPane1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jButton2)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton3)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton4)
-                        .addGap(18, 18, 18)
-                        .addComponent(jButton5)
-                        .addContainerGap(17, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGap(40, 40, 40)
+                        .addComponent(btnLimpar)
+                        .addGap(76, 76, 76)
+                        .addComponent(btnEditarArbitro)
+                        .addGap(70, 70, 70)
+                        .addComponent(btnPesquisarArbitro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(btnDesignarPartida)
+                        .addGap(19, 19, 19)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,10 +207,12 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
+                    .addComponent(btnLimpar)
+                    .addComponent(btnPesquisarArbitro)
+                    .addComponent(btnDesignarPartida)
+                    .addComponent(btnEditarArbitro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -207,30 +220,146 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void carregarTabela() {
+        DefaultTableModel modelo = (DefaultTableModel) jTableArbitros.getModel();
+        modelo.setRowCount(0);
+
+        for (Arbitro arbitro : arbitroController.listar()) {
+            modelo.addRow(new Object[]{
+                arbitro.getCodigo(),
+                arbitro.getNomeCompleto(),
+                arbitro.getEmail(),
+                arbitro.getPais() == null ? "Não atribuído" : arbitro.getPais(),
+                arbitro.getExperiencia()
+            });
+        }
+    }
+    
+    private void limparCampos() {
+        txtNomeArbitro.setText("");
+        txtExpArbitro.setText("");
+        jcbPaisesDisponiveis.setSelectedIndex(0);
+        
+        txtNomeArbitro.setEditable(true);
+    }
+    
+    
+    
+    private void btnLimparActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimparActionPerformed
+        limparCampos();
+        carregarTabela();
+    }//GEN-LAST:event_btnLimparActionPerformed
+
+    private void btnPesquisarArbitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisarArbitroActionPerformed
+        try {
+            String nome = txtNomeArbitro.getText().trim();
+            String pais = (String) jcbPaisesDisponiveis.getSelectedItem();
+            
+            if ("Todos".equals(pais)) {
+                pais = null;
+            }
+
+            Integer expMinima = null;
+            if (!txtExpArbitro.getText().trim().isEmpty()) {
+                expMinima = Integer.parseInt(txtExpArbitro.getText().trim());
+            }
+
+            List<Arbitro> resultados = arbitroController.pesquisar(nome, pais, expMinima);
+
+            DefaultTableModel modelo = (DefaultTableModel) jTableArbitros.getModel();
+            modelo.setRowCount(0);
+
+            for (Arbitro a : resultados) {
+                modelo.addRow(new Object[]{
+                    a.getCodigo(),
+                    a.getNomeCompleto(),
+                    a.getEmail(),
+                    a.getPais() == null ? "Não atribuído" : a.getPais(),
+                    a.getExperiencia()
+                });
+            }
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "A experiência inserida para pesquisa deve ser um número inteiro.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnPesquisarArbitroActionPerformed
+
+    private void btnDesignarPartidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDesignarPartidaActionPerformed
+        int linha = jTableArbitros.getSelectedRow();
+        if (linha == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um árbitro na tabela para designar à partida.");
+            return;
+        }
+        
+        // Exemplo de como você capturaria o objeto selecionado se precisasse passar para a outra tela:
+        String codigo = jTableArbitros.getValueAt(linha, 0).toString();
+        Arbitro selecionado = arbitroController.buscarPorCodigo(codigo);
+        
+        new designarArbitroParaNovaPartida(selecionado).setVisible(true);
+    }//GEN-LAST:event_btnDesignarPartidaActionPerformed
+
+    private void btnEditarArbitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarArbitroActionPerformed
+        int linha = jTableArbitros.getSelectedRow();
+        
+        if (jTableArbitros.getSelectedRow() == -1) {
+            JOptionPane.showMessageDialog(this, "Selecione um árbitro na tabela para editar.");
+            return;
+        }
+
+        try {
+            String codigo = jTableArbitros.getValueAt(linha, 0).toString();
+            String pais = (String) jcbPaisesDisponiveis.getSelectedItem();
+            
+            if ("Todos".equals(pais)) {
+                JOptionPane.showMessageDialog(this, "Selecione um país válido para o árbitro.");
+                return;
+            }
+
+            int experiencia = Integer.parseInt(txtExpArbitro.getText().trim());
+
+            // Executa a alteração através do Controller
+            arbitroController.editar(codigo, pais, experiencia);
+
+            carregarTabela();
+            limparCampos();
+
+            JOptionPane.showMessageDialog(this, "Dados do árbitro atualizados com sucesso!");
+
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Por favor, insira um valor numérico válido para a experiência.", "Erro", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, e.getMessage(), "Erro", JOptionPane.ERROR_MESSAGE);
+        }
+    }//GEN-LAST:event_btnEditarArbitroActionPerformed
+
+    private void txtNomeArbitroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeArbitroActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_txtNomeArbitroActionPerformed
 
-    private void jTextField3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField3ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField3ActionPerformed
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton2ActionPerformed
-
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        new designarArbitroParaNovaPartida().setVisible(true);
-    }//GEN-LAST:event_jButton5ActionPerformed
-
+    private void jTableArbitrosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableArbitrosMouseClicked
+        int linha = jTableArbitros.getSelectedRow();
+        
+        if (linha != -1) {
+            txtNomeArbitro.setText(jTableArbitros.getValueAt(linha, 1).toString());
+            
+            // Bloqueia a edição do nome caso esteja usando para atualizar dados cadastrados por Admin
+            txtNomeArbitro.setEditable(false); 
+            
+            String pais = jTableArbitros.getValueAt(linha, 3).toString();
+            if (pais.equals("Não atribuído")) {
+                jcbPaisesDisponiveis.setSelectedIndex(0);
+            } else {
+                jcbPaisesDisponiveis.setSelectedItem(pais);
+            }
+            
+            txtExpArbitro.setText(jTableArbitros.getValueAt(linha, 4).toString());
+        }
+    }//GEN-LAST:event_jTableArbitrosMouseClicked
+    
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -241,30 +370,63 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
             } catch (Exception ex) {
             System.err.println("Failed to initialize LaF");
             }
+            
+        //Para testar simulação, des-comente o código abaixo e apague os jsons de arbitro (se houver)
+        /*
+        Administrador adminTeste = new Administrador(
+                "Administrador Teste",
+                "admin@teste.com",
+                "123",
+                Usuario.Tipo.ADMINISTRADOR
+        );
+        SessaoUsuario.getInstancia().setUsuarioAtual(adminTeste);
 
+        // 3. Utilizando o Controller apropriado para o Mock
+        try {
+            ArbitroController arbitroController = new ArbitroController();
+            
+            // Instancia o controller responsável pelas inclusões
+            // (Ajuste o nome exato da classe se ela se chamar de outra forma no seu projeto)
+            controller.administracao.AdministradorController adminController = new controller.administracao.AdministradorController();
+
+            // Só insere se a base de dados de árbitros estiver zerada
+            if (arbitroController.listar().isEmpty()) {
+                
+                // Chame o método de cadastro do Admin Controller passando o que o método dele espera.
+                // Geralmente os dados base que um Admin cria: Nome e E-mail.
+                adminController.criaUsuario("Pierluigi Collina", "collina@fifa.com", "SenhaLegal123!", Usuario.Tipo.ARBITRO);
+                adminController.criaUsuario("Howard Webb", "webb@premierleague.com", "SenhaLegal123!", Usuario.Tipo.ARBITRO);
+                adminController.criaUsuario("Sandro Meira Ricci", "ricci@cbf.com", "SenhaLegal123!", Usuario.Tipo.ARBITRO);
+                adminController.criaUsuario("Nestor Pitana", "pitana@afa.com", "SenhaLegal123!", Usuario.Tipo.ARBITRO);
+
+                System.out.println("Árbitros cadastrados via Controller com sucesso para os testes!");
+            }
+        } catch (Exception e) {
+            System.err.println("Não foi possível popular os árbitros via Controller: " + e.getMessage());
+        }
+        */
+        
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(() -> new cadastroDeArbitros().setVisible(true));
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JButton btnDesignarPartida;
+    private javax.swing.JButton btnEditarArbitro;
+    private javax.swing.JButton btnLimpar;
+    private javax.swing.JButton btnPesquisarArbitro;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JFileChooser jFileChooser1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JPanel jPanel2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable jTableArbitros;
+    private javax.swing.JComboBox<String> jcbPaisesDisponiveis;
+    private javax.swing.JTextField txtExpArbitro;
+    private javax.swing.JTextField txtNomeArbitro;
     // End of variables declaration//GEN-END:variables
 }

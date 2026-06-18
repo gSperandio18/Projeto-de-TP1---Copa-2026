@@ -4,6 +4,18 @@
  */
 package guiEtelas.partidasFolder;
 
+import controller.estadios.DesignacaoController;
+import domain.classes.estadios.Arbitro;
+import domain.classes.partidas.Partida;
+import domain.classes.selecoes.Selecao;
+import domain.classes.partidas.Fase;
+import controller.partidas.PartidaController;
+
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 /**
  *
  * @author giova
@@ -12,12 +24,38 @@ public class consultarPartida extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(consultarPartida.class.getName());
 
+    private final PartidaController partidaController = new PartidaController();
+    private final DesignacaoController designacaoController = new DesignacaoController();
+    /* Atributo para guardar qual foi a lista de partidas mostrada na JTable pela última vez,
+    para poder fazer as edições e deleções de partidas */
+    private List<Partida> partidasMostradas = null;
+
     /**
      * Creates new form consultarPartida
      */
     public consultarPartida() {
         initComponents();
+        carregarFasesESelecoes();
+
+        /* Como ainda não há partidas na tela, os botões começam cinzas */
+        mostrarBotoes(false);
     }
+
+    private void mostrarBotoes(boolean mostrar) {
+        botaoEditar.setEnabled(mostrar);
+        botaoExcluir.setEnabled(mostrar);
+    }
+
+    private void carregarFasesESelecoes() {
+        for (Fase f : Fase.values()) {
+            menuFase.addItem(f);
+        }
+
+        // TODO: Pegar seleções pelo Controller
+
+        menuFase.setSelectedIndex(-1);
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -32,14 +70,18 @@ public class consultarPartida extends javax.swing.JFrame {
         jTable1 = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tabelaPartidas = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jButton1 = new javax.swing.JButton();
+        menuSelecao = new javax.swing.JComboBox<>();
+        menuFase = new javax.swing.JComboBox<>();
+        botaoBuscar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        caixaData = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        botaoExcluir = new javax.swing.JButton();
+        botaoEditar = new javax.swing.JButton();
 
         jTable1.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -58,21 +100,29 @@ public class consultarPartida extends javax.swing.JFrame {
         setTitle("Consultar Partidas - Copa 2026");
         setMaximumSize(new java.awt.Dimension(626, 419));
         setMinimumSize(new java.awt.Dimension(626, 419));
-        setPreferredSize(new java.awt.Dimension(626, 419));
+        setPreferredSize(new java.awt.Dimension(700, 500));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Partidas encontradas"));
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tabelaPartidas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Data", "Horário", "Fase", "Estádio", "Seleção 1", "Placar", "Seleção 2", "Status"
+                "Data", "Horário", "Fase", "Estádio", "Sel. 1", "Placar", "Sel. 2", "Status", "Árbitro"
             }
-        ));
-        jScrollPane2.setViewportView(jTable2);
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane2.setViewportView(tabelaPartidas);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -80,32 +130,31 @@ public class consultarPartida extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 578, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 302, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 600, 310));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 680, 340));
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Seleção --", " " }));
-        jComboBox1.addActionListener(this::jComboBox1ActionPerformed);
-
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "-- Fase --", "Grupos", "Oitavas de final", "Quartas de final", "Semifinais", "Final", " " }));
-
-        jButton1.setText("Buscar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        botaoBuscar.setText("Buscar");
+        botaoBuscar.addActionListener(this::botaoBuscarActionPerformed);
 
         jLabel1.setText("Data: ");
 
-        jTextField1.setText("jTextField1");
+        caixaData.setText("dd/MM/yyyy");
 
-        jLabel2.setText("Filtar por: ");
+        jLabel2.setText("Filtrar por: ");
+
+        jLabel3.setText("Fase:");
+
+        jLabel4.setText("Seleção:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -114,48 +163,146 @@ public class consultarPartida extends javax.swing.JFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(menuSelecao, javax.swing.GroupLayout.PREFERRED_SIZE, 133, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                        .addComponent(menuFase, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel2)
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addComponent(caixaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(botaoBuscar))
+                    .addComponent(jLabel2))
+                .addContainerGap(11, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap(9, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuSelecao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuFase, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton1))
+                    .addComponent(caixaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(botaoBuscar)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4))
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 580, 60));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 670, 60));
+
+        botaoExcluir.setText("Excluir");
+        botaoExcluir.addActionListener(this::botaoExcluirActionPerformed);
+        getContentPane().add(botaoExcluir, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 430, -1, -1));
+
+        botaoEditar.setText("Editar");
+        botaoEditar.addActionListener(this::botaoEditarActionPerformed);
+        getContentPane().add(botaoEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 430, -1, -1));
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    private void botaoBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBuscarActionPerformed
+        partidasMostradas = partidaController.filtrarPartidas(null, (Selecao) menuSelecao.getSelectedItem(),
+                (Fase) menuFase.getSelectedItem(), caixaData.getText()
+        );
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        mostrarBotoes(!partidasMostradas.isEmpty()); // Mostrar se a lista não estiver vazia, esconder se estiver
+
+        DefaultTableModel modelo = (DefaultTableModel) tabelaPartidas.getModel();
+        modelo.setRowCount(0);
+
+        DateTimeFormatter formatoData = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        DateTimeFormatter formatoHora = DateTimeFormatter.ofPattern("HH:mm");
+
+        /* Mostrar as partidas na tabela */
+        for (Partida p : partidasMostradas) {
+            String data = p.getDataEHora().format(formatoData);
+            String hora = p.getDataEHora().format(formatoHora);
+
+            /* Placar só se tiver */
+            String placar = "-";
+            if (p.getResultado() != null) {
+                placar = p.getResultado().getPlacarSelecao1() + " x " + p.getResultado().getPlacarSelecao2();
+            }
+
+            Arbitro arbitroPrincipal = designacaoController.buscarArbitroPrincipal(p);
+
+            Object[] linha = {
+                    data,
+                    hora,
+                    p.getFase(),
+                    p.getEstadio(),
+                    p.getSelecao1(),
+                    placar,
+                    p.getSelecao2(),
+                    p.getStatus(),
+                    arbitroPrincipal
+            };
+
+            modelo.addRow(linha);
+        }
+
+    }//GEN-LAST:event_botaoBuscarActionPerformed
+
+    private void botaoExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoExcluirActionPerformed
+        /* A princípio, esse botão só foi clicado se tem pelo menos uma partida na tabela */
+        int index = tabelaPartidas.getSelectedRow();
+
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecione uma partida da tabela.",
+                    "Erro na seleção de partida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+        Partida partida = partidasMostradas.get(index);
+
+        int confirmar = JOptionPane.showConfirmDialog(
+                this,
+                "Tem certeza que você quer excluir essa partida?",
+                "Confirmar exclusão",
+                JOptionPane.YES_NO_OPTION
+        );
+
+        /* TODO: ver se tem erro pra pegar nessa parte */
+        if (confirmar == JOptionPane.YES_OPTION) {
+            partidaController.excluirPartida(partida);
+
+            DefaultTableModel modelo = (DefaultTableModel) tabelaPartidas.getModel();
+            modelo.removeRow(index);
+
+            JOptionPane.showMessageDialog(this, "Partida excluída com sucesso.");
+        }
+
+    }//GEN-LAST:event_botaoExcluirActionPerformed
+
+    private void botaoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditarActionPerformed
+        /* Usar a mesma tela de cadastro, mas já preenchendo todos os campos automaticamente */
+        /* Da mesma forma, para chegar aqui precisa ter pelo menos uma partida na tabela */
+        int index = tabelaPartidas.getSelectedRow();
+        if (index == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Selecione uma partida da tabela.",
+                    "Erro na seleção de partida",
+                    JOptionPane.ERROR_MESSAGE
+            );
+        }
+
+        Partida partida = partidasMostradas.get(index);
+
+        cadastrarNovaPartida telaEdicao = new cadastrarNovaPartida(partida);
+        telaEdicao.setVisible(true);
+    }//GEN-LAST:event_botaoEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -183,17 +330,21 @@ public class consultarPartida extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
+    private javax.swing.JButton botaoBuscar;
+    private javax.swing.JButton botaoEditar;
+    private javax.swing.JButton botaoExcluir;
+    private javax.swing.JTextField caixaData;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTable1;
-    private javax.swing.JTable jTable2;
-    private javax.swing.JTextField jTextField1;
+    private javax.swing.JComboBox<Fase> menuFase;
+    private javax.swing.JComboBox<Selecao> menuSelecao;
+    private javax.swing.JTable tabelaPartidas;
     // End of variables declaration//GEN-END:variables
 }

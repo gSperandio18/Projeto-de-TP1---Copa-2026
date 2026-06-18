@@ -2,3 +2,5 @@ out/
 target/
 *.class
 .idea/
+dependency-reduced-pom.xml
+*.json
