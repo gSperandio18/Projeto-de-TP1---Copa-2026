@@ -89,6 +89,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editar Usuário");
+        setResizable(false);
 
         jPanel2.setBackground(new java.awt.Color(0, 102, 153));
 
