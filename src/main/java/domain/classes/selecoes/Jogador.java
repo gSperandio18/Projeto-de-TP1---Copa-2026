@@ -82,6 +82,8 @@ public class Jogador {
         this.status = status;
     }
 
+    public boolean getPodeParticipar() { return podeParticipar; }
+
     public void setPodeParticipar(boolean podeParticipar) {
         this.podeParticipar = podeParticipar;
     }
