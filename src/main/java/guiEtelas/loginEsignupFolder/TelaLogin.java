@@ -56,7 +56,7 @@ public class TelaLogin extends javax.swing.JFrame {
         txtSenha = new javax.swing.JPasswordField();
         jPanel5 = new javax.swing.JPanel();
         jCheckBox2 = new javax.swing.JCheckBox();
-        jButton3 = new javax.swing.JButton();
+        btnEsqueceuSenha = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         btnLogin = new javax.swing.JButton();
         jPanel8 = new javax.swing.JPanel();
@@ -128,10 +128,10 @@ public class TelaLogin extends javax.swing.JFrame {
         jCheckBox2.setText("Lembre-se de mim");
         jCheckBox2.addActionListener(this::jCheckBox2ActionPerformed);
 
-        jButton3.setBackground(new java.awt.Color(242, 242, 242));
-        jButton3.setForeground(new java.awt.Color(0, 0, 204));
-        jButton3.setText("Esqueceu sua senha?");
-        jButton3.addActionListener(this::jButton3ActionPerformed);
+        btnEsqueceuSenha.setBackground(new java.awt.Color(242, 242, 242));
+        btnEsqueceuSenha.setForeground(new java.awt.Color(0, 0, 204));
+        btnEsqueceuSenha.setText("Esqueceu sua senha?");
+        btnEsqueceuSenha.addActionListener(this::btnEsqueceuSenhaActionPerformed);
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);
@@ -141,14 +141,14 @@ public class TelaLogin extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jCheckBox2, javax.swing.GroupLayout.PREFERRED_SIZE, 135, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton3)
+                .addComponent(btnEsqueceuSenha)
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                 .addComponent(jCheckBox2)
-                .addComponent(jButton3))
+                .addComponent(btnEsqueceuSenha))
         );
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
@@ -319,9 +319,10 @@ public class TelaLogin extends javax.swing.JFrame {
         new telaSignUp().setVisible(true);
     }//GEN-LAST:event_btnCriarContaActionPerformed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnEsqueceuSenhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEsqueceuSenhaActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton3ActionPerformed
+        new TelaEsqueciSenha().setVisible(true);
+    }//GEN-LAST:event_btnEsqueceuSenhaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -346,8 +347,8 @@ public class TelaLogin extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCriarConta;
+    private javax.swing.JButton btnEsqueceuSenha;
     private javax.swing.JButton btnLogin;
-    private javax.swing.JButton jButton3;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
