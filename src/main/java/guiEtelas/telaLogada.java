@@ -93,9 +93,7 @@ public class telaLogada extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Copa 2026");
-        setMaximumSize(new java.awt.Dimension(695, 613));
         setMinimumSize(new java.awt.Dimension(695, 613));
-        setPreferredSize(new java.awt.Dimension(695, 640));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 

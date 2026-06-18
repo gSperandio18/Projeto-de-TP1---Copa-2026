@@ -9,6 +9,7 @@ import controller.estadios.DesignacaoController;
 import controller.exceptions.Copa2026Exceptions;
 import controller.partidas.PartidaController;
 import controller.estadios.EstadioController;
+import controller.selecoes.SelecaoController;
 import domain.classes.estadios.ConflitoHorarioException;
 import domain.classes.estadios.ConflitoPaisException;
 import domain.classes.estadios.Estadio;
@@ -20,6 +21,7 @@ import domain.classes.estadios.Arbitro;
 
 import javax.swing.*;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         carregarMenuEstadios();
         carregarFasesEStatus();
         carregarArbitros();
-//        carregarMenuSelecoes();
+        carregarMenuSelecoes();
 
         /* Esconder a parte dos resultados a princípio, e só mostrar se o status selecionado for de "finalizado" */
         verParteEscondida(false);
@@ -51,7 +53,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         carregarMenuEstadios();
         carregarFasesEStatus();
         carregarArbitros();
-//        carregarMenuSelecoes();
+        carregarMenuSelecoes();
 
         /*
           * Todos os campos são definidos com os atributos da partida
@@ -148,12 +150,26 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         listaArbitros.setModel(modelo);
     }
-/*
-    TODO: colocar as seleções nos menus
     private void carregarMenuSelecoes() {
+        SelecaoController controller = new SelecaoController();
+        List<Selecao> selecoes = new ArrayList<>(); // TODO: Pegar do listar()
 
+        for (Selecao s : selecoes) {
+            menuSelecao1.addItem(s);
+            menuSelecao2.addItem(s);
+        }
+
+        menuSelecao1.setSelectedIndex(-1);
+        menuSelecao2.setSelectedIndex(-1);
     }
-*/
+
+    private void carregarMenuArbitroPrincipal(List<Arbitro> arbitros) {
+        for (Arbitro a : arbitros) {
+            menuArbitroPrincipal.addItem(a);
+        }
+
+        menuArbitroPrincipal.setSelectedIndex(-1);
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -195,9 +211,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar nova partida - Copa 2026");
-        setMaximumSize(new java.awt.Dimension(400, 300));
         setMinimumSize(new java.awt.Dimension(400, 300));
-        setPreferredSize(new java.awt.Dimension(615, 590));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -223,11 +237,10 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         jLabel8.setText("Árbitros:");
 
+        listaArbitros.addListSelectionListener(this::listaArbitrosValueChanged);
         jScrollPane1.setViewportView(listaArbitros);
 
         jLabel9.setText("Árbitro Principal:");
-
-        menuArbitroPrincipal.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
         javax.swing.GroupLayout painelFixoLayout = new javax.swing.GroupLayout(painelFixo);
         painelFixo.setLayout(painelFixoLayout);
@@ -389,7 +402,6 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
-        // TODO: Tratamento de exceções só pra edição
         try {
             if (partidaEditada == null) { /* Foi feito um cadastro de partida nova */
                 Partida novaPartida = partidaController.cadastrarPartida(
@@ -404,12 +416,27 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                         (Arbitro) menuArbitroPrincipal.getSelectedItem()
                 );
             } else { /* Foi feita uma edição */
-                partidaController.salvarPartidaEditada(partidaEditada);
+                partidaController.editarPartida(
+                        partidaEditada,
+                        (Estadio) menuEstadios.getSelectedItem(), (Selecao) menuSelecao1.getSelectedItem(),
+                        (Selecao) menuSelecao2.getSelectedItem(), dataPartida.getText(), horarioPartida.getText(),
+                        (Fase) fasePartida.getSelectedItem(), (StatusPartida) statusPartida.getSelectedItem()
+                );
+
+                /* Tirar todos os árbitros e recolocar os selecionados */
+                designacaoController.limparArbitros(partidaEditada);
+
+                designacaoController.designarLista(
+                        listaArbitros.getSelectedValuesList(),
+                        partidaEditada,
+                        (Arbitro) menuArbitroPrincipal.getSelectedItem()
+                );
             }
         } catch (Copa2026Exceptions | ConflitoHorarioException | ConflitoPaisException e) {
+            String titulo = (partidaEditada == null) ? "Erro no cadastro de partida" : "Erro na edição de partida";
             JOptionPane.showMessageDialog(this,
                     e.getMessage(),
-                    "Erro no cadastro de partida",
+                    titulo,
                     JOptionPane.ERROR_MESSAGE
             );
         }
@@ -419,6 +446,23 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         StatusPartida status = (StatusPartida) statusPartida.getSelectedItem();
         verParteEscondida(status == StatusPartida.FINALIZADA); // true se o selecionado é FINALIZADA, false senão
     }//GEN-LAST:event_statusPartidaActionPerformed
+
+    private void listaArbitrosValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listaArbitrosValueChanged
+        if (!evt.getValueIsAdjusting()) {
+            Arbitro principalAtual = (Arbitro) menuArbitroPrincipal.getSelectedItem();
+
+            List<Arbitro> selecionados = listaArbitros.getSelectedValuesList();
+            menuArbitroPrincipal.removeAllItems();
+            carregarMenuArbitroPrincipal(selecionados);
+
+            /* Se o que tava selecionado antes ainda tiver, ele continua; senão, nada fica marcado */
+            if (principalAtual != null && selecionados.contains(principalAtual)) {
+                menuArbitroPrincipal.setSelectedItem(principalAtual);
+            } else {
+                menuArbitroPrincipal.setSelectedIndex(-1);
+            }
+        }
+    }//GEN-LAST:event_listaArbitrosValueChanged
 
     /**
      * @param args the command line arguments
@@ -465,7 +509,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     private javax.swing.JLabel labelPlacar1;
     private javax.swing.JLabel labelPlacar2;
     private javax.swing.JList<Arbitro> listaArbitros;
-    private javax.swing.JComboBox<String> menuArbitroPrincipal;
+    private javax.swing.JComboBox<Arbitro> menuArbitroPrincipal;
     private javax.swing.JComboBox<Estadio> menuEstadios;
     private javax.swing.JComboBox<Selecao> menuSelecao1;
     private javax.swing.JComboBox<Selecao> menuSelecao2;
