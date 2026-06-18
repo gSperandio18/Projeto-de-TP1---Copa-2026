@@ -52,6 +52,7 @@ public class SelecaoController {
                 .filter(a ->
                         pais == null ||
                                 pais.isBlank() ||
+                                pais.equals("Todos") ||
                                 (a.getPaisSelecao() != null &&
                                         a.getPaisSelecao().equalsIgnoreCase(pais)))
 
