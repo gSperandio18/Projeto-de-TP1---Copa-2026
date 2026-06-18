@@ -34,27 +34,27 @@ public class JogadorInfo extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         nomeJogador = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        nomeJogador1 = new javax.swing.JTextField();
+        posicaoJogador = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTextPane1 = new javax.swing.JTextPane();
+        numeroJogador = new javax.swing.JTextPane();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTextPane2 = new javax.swing.JTextPane();
+        idadeJogador = new javax.swing.JTextPane();
         jLabel5 = new javax.swing.JLabel();
-        nomeJogador2 = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        selecaoJogador = new javax.swing.JTextField();
+        botaoCadastrar = new javax.swing.JButton();
+        botaoAddFoto = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        statusJogador = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
+        botaoSalvar = new javax.swing.JButton();
         jLabel8 = new javax.swing.JLabel();
-        jButton2 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        botaoNovaSelecao = new javax.swing.JButton();
+        botaoSelecaoExistente = new javax.swing.JButton();
+        botaoCancela = new javax.swing.JButton();
+        botaoEditar = new javax.swing.JButton();
 
         jButton6.setText("jButton6");
 
@@ -63,7 +63,6 @@ public class JogadorInfo extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Informações do Jogador - Copa 2026");
-        setMaximumSize(new java.awt.Dimension(516, 395));
         setMinimumSize(new java.awt.Dimension(516, 395));
         setResizable(false);
 
@@ -86,24 +85,24 @@ public class JogadorInfo extends javax.swing.JFrame {
 
         jLabel2.setText("Posição:");
 
-        nomeJogador1.addActionListener(this::nomeJogador1ActionPerformed);
+        posicaoJogador.addActionListener(this::posicaoJogadorActionPerformed);
 
         jLabel3.setText("Numero:");
 
-        jScrollPane1.setViewportView(jTextPane1);
+        jScrollPane1.setViewportView(numeroJogador);
 
         jLabel4.setText("Idade:");
 
-        jScrollPane2.setViewportView(jTextPane2);
+        jScrollPane2.setViewportView(idadeJogador);
 
         jLabel5.setText("Seleção:");
 
-        nomeJogador2.addActionListener(this::nomeJogador2ActionPerformed);
+        selecaoJogador.addActionListener(this::selecaoJogadorActionPerformed);
 
-        jButton1.setText("Cadastrar novo jogador");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        botaoCadastrar.setText("Cadastrar novo jogador");
+        botaoCadastrar.addActionListener(this::botaoCadastrarActionPerformed);
 
-        jButton3.setText("Adicionar foto");
+        botaoAddFoto.setText("Adicionar foto");
 
         jLabel6.setText("Status:");
 
@@ -128,19 +127,19 @@ public class JogadorInfo extends javax.swing.JFrame {
                 .addContainerGap(8, Short.MAX_VALUE))
         );
 
-        jButton5.setText("Salvar");
+        botaoSalvar.setText("Salvar");
 
         jLabel8.setText("Associar jogador a seleção:");
 
-        jButton2.setText("Nova");
+        botaoNovaSelecao.setText("Nova");
 
-        jButton9.setText("Existente");
-        jButton9.addActionListener(this::jButton9ActionPerformed);
+        botaoSelecaoExistente.setText("Existente");
+        botaoSelecaoExistente.addActionListener(this::botaoSelecaoExistenteActionPerformed);
 
-        jButton4.setText("Cancelar");
+        botaoCancela.setText("Cancelar");
 
-        jButton7.setText("Editar informações");
-        jButton7.addActionListener(this::jButton7ActionPerformed);
+        botaoEditar.setText("Editar informações");
+        botaoEditar.addActionListener(this::botaoEditarActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -170,32 +169,32 @@ public class JogadorInfo extends javax.swing.JFrame {
                                         .addComponent(jLabel5))
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(nomeJogador1, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
-                                        .addComponent(nomeJogador2)))
+                                        .addComponent(posicaoJogador, javax.swing.GroupLayout.DEFAULT_SIZE, 242, Short.MAX_VALUE)
+                                        .addComponent(selecaoJogador)))
                                 .addComponent(jLabel8, javax.swing.GroupLayout.Alignment.LEADING)))
                         .addGap(0, 0, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 26, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButton5)
+                                .addComponent(botaoSalvar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton7))
+                                .addComponent(botaoEditar))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(25, 25, 25)
-                                .addComponent(jButton1))
+                                .addComponent(botaoCadastrar))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                .addComponent(jButton9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(botaoSelecaoExistente, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(botaoNovaSelecao, javax.swing.GroupLayout.PREFERRED_SIZE, 308, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(botaoAddFoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                             .addComponent(jLabel6)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(statusJogador, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addComponent(fotoJogador, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jButton4, javax.swing.GroupLayout.Alignment.TRAILING))
+                    .addComponent(botaoCancela, javax.swing.GroupLayout.Alignment.TRAILING))
                 .addGap(24, 24, 24))
             .addGroup(layout.createSequentialGroup()
                 .addGap(133, 133, 133)
@@ -212,7 +211,7 @@ public class JogadorInfo extends javax.swing.JFrame {
                     .addComponent(nomeJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jLabel6)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(statusJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -223,31 +222,31 @@ public class JogadorInfo extends javax.swing.JFrame {
                             .addComponent(jLabel4, javax.swing.GroupLayout.Alignment.TRAILING))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(nomeJogador1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(posicaoJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel2))
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel5)
-                            .addComponent(nomeJogador2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(selecaoJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(18, 18, 18)
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton2)
+                        .addComponent(botaoNovaSelecao)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton9)
+                        .addComponent(botaoSelecaoExistente)
                         .addGap(26, 26, 26)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton5)
-                            .addComponent(jButton7))
+                            .addComponent(botaoSalvar)
+                            .addComponent(botaoEditar))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botaoCadastrar, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(4, 4, 4))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(fotoJogador, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jButton3)
+                        .addComponent(botaoAddFoto)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
-                .addComponent(jButton4)
+                .addComponent(botaoCancela)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -259,25 +258,25 @@ public class JogadorInfo extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_nomeJogadorActionPerformed
 
-    private void nomeJogador1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeJogador1ActionPerformed
+    private void posicaoJogadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_posicaoJogadorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nomeJogador1ActionPerformed
+    }//GEN-LAST:event_posicaoJogadorActionPerformed
 
-    private void nomeJogador2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_nomeJogador2ActionPerformed
+    private void selecaoJogadorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_selecaoJogadorActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_nomeJogador2ActionPerformed
+    }//GEN-LAST:event_selecaoJogadorActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
+    private void botaoSelecaoExistenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSelecaoExistenteActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    }//GEN-LAST:event_botaoSelecaoExistenteActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void botaoCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoCadastrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_botaoCadastrarActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void botaoEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoEditarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_botaoEditarActionPerformed
 
     /**
      * @param args the command line arguments
@@ -305,15 +304,16 @@ public class JogadorInfo extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botaoAddFoto;
+    private javax.swing.JButton botaoCadastrar;
+    private javax.swing.JButton botaoCancela;
+    private javax.swing.JButton botaoEditar;
+    private javax.swing.JButton botaoNovaSelecao;
+    private javax.swing.JButton botaoSalvar;
+    private javax.swing.JButton botaoSelecaoExistente;
     private javax.swing.JPanel fotoJogador;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
+    private javax.swing.JTextPane idadeJogador;
     private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton9;
     private javax.swing.JCheckBoxMenuItem jCheckBoxMenuItem1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -326,11 +326,10 @@ public class JogadorInfo extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextPane jTextPane1;
-    private javax.swing.JTextPane jTextPane2;
     private javax.swing.JTextField nomeJogador;
-    private javax.swing.JTextField nomeJogador1;
-    private javax.swing.JTextField nomeJogador2;
+    private javax.swing.JTextPane numeroJogador;
+    private javax.swing.JTextField posicaoJogador;
+    private javax.swing.JTextField selecaoJogador;
+    private javax.swing.JTextField statusJogador;
     // End of variables declaration//GEN-END:variables
 }
