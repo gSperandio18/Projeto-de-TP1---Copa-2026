@@ -113,7 +113,15 @@ public class consultarPartida extends javax.swing.JFrame {
             new String [] {
                 "Data", "Horário", "Fase", "Estádio", "Sel. 1", "Placar", "Sel. 2", "Status", "Árbitro"
             }
-        ));
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jScrollPane2.setViewportView(tabelaPartidas);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);

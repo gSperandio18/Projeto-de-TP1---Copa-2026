@@ -152,7 +152,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
     }
     private void carregarMenuSelecoes() {
         SelecaoController controller = new SelecaoController();
-        List<Selecao> selecoes = new ArrayList<>(); // TODO: Pegar do listar()
+        List<Selecao> selecoes = controller.listar();
 
         for (Selecao s : selecoes) {
             menuSelecao1.addItem(s);
@@ -212,7 +212,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastrar nova partida - Copa 2026");
         setMinimumSize(new java.awt.Dimension(400, 300));
-        setResizable(false);
+        setPreferredSize(new java.awt.Dimension(614, 684));
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setText("Estádios: ");
@@ -395,7 +395,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         botaoSalvar.setText("Salvar Partida");
         botaoSalvar.addActionListener(this::botaoSalvarActionPerformed);
-        getContentPane().add(botaoSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 680, 303, -1));
+        getContentPane().add(botaoSalvar, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 610, 303, -1));
 
         pack();
         setLocationRelativeTo(null);
