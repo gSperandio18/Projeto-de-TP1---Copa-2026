@@ -150,7 +150,6 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
             designacaoController.designar(arbitro, partida, principal);
         }
 
-
     }//GEN-LAST:event_botaoDesignarActionPerformed
 
     /**
