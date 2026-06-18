@@ -1,5 +1,6 @@
 package controller.selecoes;
 
+import domain.classes.selecoes.Jogador;
 import domain.classes.selecoes.Selecao;
 import domain.dao.SelecaoDAO;
 import domain.dao.SelecaoJsonDAO;
@@ -108,4 +109,18 @@ public class SelecaoController {
     }
 
 
+    public void designarJogador(Selecao sel, Jogador jogador) {
+        for (Selecao selecao : selecoes) {
+            if (selecao.getJogadores().contains(jogador)) {
+                selecao.removerJogador(jogador);
+            }
+        }
+
+        for (Selecao selecao : selecoes) {
+            if (selecao.getIdSelecao() == sel.getIdSelecao()) {
+                selecao.adicionarJogador(jogador);
+                jogador.setSelecaoJogador(selecao);
+            }
+        }
+    }
 }

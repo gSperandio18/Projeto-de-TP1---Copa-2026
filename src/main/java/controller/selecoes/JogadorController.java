@@ -83,7 +83,8 @@ public class JogadorController {
             int numero,
             int idade,
             Selecao selecao,
-            String status) {
+            String status,
+            SelecaoController selecaoController) {
 
         for (Jogador jogador : jogadores) {
 
@@ -93,7 +94,9 @@ public class JogadorController {
                 jogador.setPosicaoJogador(posicao);
                 jogador.setNumeroJogador(numero);
                 jogador.setIdadeJogador(idade);
-                jogador.setSelecaoJogador(selecao);
+
+                selecaoController.designarJogador(selecao, jogador);
+
                 jogador.setStatus(status);
                 if (status.equalsIgnoreCase("ativo")){
                     jogador.setPodeParticipar(true);

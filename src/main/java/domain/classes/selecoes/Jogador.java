@@ -2,12 +2,11 @@ package domain.classes.selecoes;
 
 public class Jogador {
 
-
     private String idJogador, nomeJogador, posicaoJogador;
     private int numeroJogador, idadeJogador;
     private Selecao selecaoJogador;
     private String status;
-    private boolean podeParticipar; //podeParticipar eh um booleano que indica se o jogador pode participar de acordo com o status do jogador
+    private boolean podeParticipar; //podeParticipar eh um booleano que indica se o jogador pode participar de acordo com o status
 
     public Jogador (String idJogador, String nomeJogador, String posicaoJogador, int numeroJogador,
                     int idadeJogador, Selecao selecaoJogador, String status) {
@@ -23,6 +22,12 @@ public class Jogador {
         }
         else {
             this.podeParticipar = true;
+        }
+
+        if (idJogador == null || idJogador.isBlank()) {
+            throw new IllegalArgumentException(
+                    "ID do jogador não pode ser vazio."
+            );
         }
     }
 
