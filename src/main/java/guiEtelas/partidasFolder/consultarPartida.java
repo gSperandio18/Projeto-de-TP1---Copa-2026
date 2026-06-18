@@ -4,6 +4,8 @@
  */
 package guiEtelas.partidasFolder;
 
+import controller.estadios.DesignacaoController;
+import domain.classes.estadios.Arbitro;
 import domain.classes.partidas.Partida;
 import domain.classes.selecoes.Selecao;
 import domain.classes.partidas.Fase;
@@ -23,6 +25,7 @@ public class consultarPartida extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(consultarPartida.class.getName());
 
     private final PartidaController partidaController = new PartidaController();
+    private final DesignacaoController designacaoController = new DesignacaoController();
     /* Atributo para guardar qual foi a lista de partidas mostrada na JTable pela última vez,
     para poder fazer as edições e deleções de partidas */
     private List<Partida> partidasMostradas = null;
@@ -223,6 +226,8 @@ public class consultarPartida extends javax.swing.JFrame {
                 placar = p.getResultado().getPlacarSelecao1() + " x " + p.getResultado().getPlacarSelecao2();
             }
 
+            Arbitro arbitroPrincipal = designacaoController.buscarArbitroPrincipal(p);
+
             Object[] linha = {
                     data,
                     hora,
@@ -232,7 +237,7 @@ public class consultarPartida extends javax.swing.JFrame {
                     placar,
                     p.getSelecao2(),
                     p.getStatus(),
-                    p.getArbitros().getFirst()
+                    arbitroPrincipal
             };
 
             modelo.addRow(linha);

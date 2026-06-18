@@ -88,6 +88,15 @@ public class DesignacaoController {
                 .toList();
     }
 
+    public Arbitro buscarArbitroPrincipal(Partida partida) {
+        return designacoes.stream()
+                .filter(d -> d.getPartida().equals(partida)) // Designações com essa partida
+                .filter(DesignacaoArbitroPartida::isPrincipal) // Em que o árbitro é o principal
+                .map(DesignacaoArbitroPartida::getArbitro) // Pegar o árbitro
+                .findFirst() // Parar de procurar
+                .orElse(null); // Retornar null se não achar
+    }
+
     public void limparArbitros(Partida partida) {
         designacoes.removeIf(d -> d.getPartida().equals(partida));
         dao.salvar(designacoes);
