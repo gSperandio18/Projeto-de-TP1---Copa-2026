@@ -25,13 +25,16 @@ public class registroPartida extends javax.swing.JFrame {
      */
     public registroPartida() {
         initComponents();
-        carregarPartidasFinalizadas();
+        carregarPartidas();
     }
 
-    private void carregarPartidasFinalizadas() {
-        List<Partida> partidasFinalizadas = partidaController.filtrarPartidas(Partida.StatusPartida.FINALIZADA, null, null, null);
+    private void carregarPartidas() {
+        List<Partida> partidasDisponiveis = partidaController.listar().stream()
+                .filter(p -> p.getStatus() == Partida.StatusPartida.AGENDADA ||
+                        p.getStatus() == Partida.StatusPartida.ANDAMENTO)
+                .toList();
 
-        for (Partida p : partidasFinalizadas) { menuPartidas.addItem(p); }
+        for (Partida p : partidasDisponiveis) { menuPartidas.addItem(p); }
 
         menuPartidas.setSelectedIndex(-1);
     }
@@ -65,7 +68,7 @@ public class registroPartida extends javax.swing.JFrame {
 
         jPanel1.setPreferredSize(new java.awt.Dimension(460, 350));
 
-        jLabel1.setText("Partidas finalizadas: ");
+        jLabel1.setText("Partidas não finalizadas: ");
 
         jLabel2.setText("Placar da Seleção 1: ");
 
@@ -134,8 +137,11 @@ public class registroPartida extends javax.swing.JFrame {
             partidaController.registrarResultados((Partida) menuPartidas.getSelectedItem(), placarSelecao1.getText(),
                     placarSelecao2.getText(), acontecimentos.getText()
             );
+
+            JOptionPane.showMessageDialog(this, "Resultado registrado com sucesso!");
+            this.dispose();
         } catch (Copa2026Exceptions e) {
-            JOptionPane.showMessageDialog(null,
+            JOptionPane.showMessageDialog(this,
                     e.getMessage(),
                     "Erro no registro de resultados da partida",
                     JOptionPane.ERROR_MESSAGE

@@ -5,6 +5,7 @@
 package guiEtelas.partidasFolder;
 
 import controller.estadios.DesignacaoController;
+import controller.selecoes.SelecaoController;
 import domain.classes.estadios.Arbitro;
 import domain.classes.partidas.Partida;
 import domain.classes.selecoes.Selecao;
@@ -211,8 +212,12 @@ public class consultarPartida extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBuscarActionPerformed
+        String dataFiltro = caixaData.getText();
+        if (dataFiltro.equals("dd/MM/yyyy")) {
+            dataFiltro = "";
+        }
         partidasMostradas = partidaController.filtrarPartidas(null, (Selecao) menuSelecao.getSelectedItem(),
-                (Fase) menuFase.getSelectedItem(), caixaData.getText()
+                (Fase) menuFase.getSelectedItem(), dataFiltro
         );
 
         mostrarBotoes(!partidasMostradas.isEmpty()); // Mostrar se a lista não estiver vazia, esconder se estiver
@@ -263,6 +268,7 @@ public class consultarPartida extends javax.swing.JFrame {
                     "Erro na seleção de partida",
                     JOptionPane.ERROR_MESSAGE
             );
+            return;
         }
 
         Partida partida = partidasMostradas.get(index);
@@ -274,12 +280,12 @@ public class consultarPartida extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION
         );
 
-        /* TODO: ver se tem erro pra pegar nessa parte */
         if (confirmar == JOptionPane.YES_OPTION) {
             partidaController.excluirPartida(partida);
 
             DefaultTableModel modelo = (DefaultTableModel) tabelaPartidas.getModel();
             modelo.removeRow(index);
+            partidasMostradas.remove(index);
 
             JOptionPane.showMessageDialog(this, "Partida excluída com sucesso.");
         }
@@ -296,12 +302,14 @@ public class consultarPartida extends javax.swing.JFrame {
                     "Erro na seleção de partida",
                     JOptionPane.ERROR_MESSAGE
             );
+            return;
         }
 
         Partida partida = partidasMostradas.get(index);
 
         cadastrarNovaPartida telaEdicao = new cadastrarNovaPartida(partida);
         telaEdicao.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_botaoEditarActionPerformed
 
     /**

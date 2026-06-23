@@ -145,9 +145,20 @@ public class designarArbitroParaNovaPartida extends javax.swing.JFrame {
                     JOptionPane.ERROR_MESSAGE
             );
         } else {
-            /* Essa só vai ser a principal se a partida ainda não tiver um principal */
-            boolean principal = !designacaoController.possuiArbitroPrincipal(partida);
-            designacaoController.designar(arbitro, partida, principal);
+            /* Tratamento de exceções */
+            try {
+                /* Essa só vai ser a principal se a partida ainda não tiver um principal */
+                boolean principal = !designacaoController.possuiArbitroPrincipal(partida);
+                designacaoController.designar(arbitro, partida, principal);
+                JOptionPane.showMessageDialog(this, "Árbitro designado com sucesso!");
+                this.dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(this,
+                        e.getMessage(),
+                        "Erro na designação",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         }
 
     }//GEN-LAST:event_botaoDesignarActionPerformed

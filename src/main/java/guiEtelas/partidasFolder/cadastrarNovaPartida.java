@@ -14,6 +14,7 @@ import domain.classes.estadios.ConflitoHorarioException;
 import domain.classes.estadios.ConflitoPaisException;
 import domain.classes.estadios.Estadio;
 import domain.classes.partidas.Partida;
+import domain.classes.partidas.Resultado;
 import domain.classes.selecoes.Selecao;
 import domain.classes.partidas.Partida.StatusPartida;
 import domain.classes.partidas.Fase;
@@ -403,8 +404,9 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
     private void botaoSalvarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoSalvarActionPerformed
         try {
+            Partida partidaAtual;
             if (partidaEditada == null) { /* Foi feito um cadastro de partida nova */
-                Partida novaPartida = partidaController.cadastrarPartida(
+                partidaAtual = partidaController.cadastrarPartida(
                         (Estadio) menuEstadios.getSelectedItem(), (Selecao) menuSelecao1.getSelectedItem(),
                         (Selecao) menuSelecao2.getSelectedItem(), dataPartida.getText(), horarioPartida.getText(),
                         (Fase) fasePartida.getSelectedItem(), (StatusPartida) statusPartida.getSelectedItem()
@@ -412,7 +414,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
                 designacaoController.designarLista(
                         listaArbitros.getSelectedValuesList(),
-                        novaPartida,
+                        partidaAtual,
                         (Arbitro) menuArbitroPrincipal.getSelectedItem()
                 );
             } else { /* Foi feita uma edição */
@@ -431,7 +433,28 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
                         partidaEditada,
                         (Arbitro) menuArbitroPrincipal.getSelectedItem()
                 );
+                partidaAtual = partidaEditada;
             }
+
+            /* Incluir os placares */
+            if (statusPartida.getSelectedItem() == StatusPartida.FINALIZADA) {
+                int p1, p2;
+                try {
+                    p1 = Integer.parseInt(placarSelecao1.getText());
+                    p2 = Integer.parseInt(placarSelecao2.getText());
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(this, "O placar deve conter apenas números válidos!", "Erro no placar", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+                partidaAtual.setResultado(new Resultado(partidaAtual.getId(), p1, p2, acontecimentos.getText()));
+            } else {
+                partidaAtual.setResultado(null); // Apagar o que tiver lá
+            }
+
+            partidaController.salvarPartidaEditada(partidaAtual);
+            JOptionPane.showMessageDialog(this, "Partida salva com sucesso!");
+            this.dispose();
+
         } catch (Copa2026Exceptions | ConflitoHorarioException | ConflitoPaisException e) {
             String titulo = (partidaEditada == null) ? "Erro no cadastro de partida" : "Erro na edição de partida";
             JOptionPane.showMessageDialog(this,
