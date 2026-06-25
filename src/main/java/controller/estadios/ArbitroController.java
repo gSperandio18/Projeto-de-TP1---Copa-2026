@@ -55,6 +55,8 @@ public class ArbitroController {
     public void editar(String codigo,String pais,int experiencia) {
         validarPermissao();
 
+        //implementando restrições
+
         if (pais == null || pais.trim().isBlank() || "Selecione um País".equals(pais)) {
             throw new IllegalArgumentException(
                     "Selecione um país válido."
