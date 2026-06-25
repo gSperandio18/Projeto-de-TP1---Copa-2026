@@ -26,8 +26,7 @@ public class PartidaJsonDAO implements PartidaDAO {
 
     @Override
     public void salvar(List<Partida> partidas) {
-        try {
-            FileWriter arq = new FileWriter(ARQUIVO);
+        try (FileWriter arq = new FileWriter(ARQUIVO)) {
             gson.toJson(partidas, arq);
         } catch (Exception e) {
             e.printStackTrace();
