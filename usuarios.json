@@ -7,7 +7,7 @@
   },
   {
     "experiencia": 0,
-    "codigo": "ARB-6e09515d",
+    "codigo": "ARB-de04ec61",
     "nomeCompleto": "Pierluigi Collina",
     "email": "collina@fifa.com",
     "senha": "SenhaLegal123!",
@@ -15,7 +15,7 @@
   },
   {
     "experiencia": 0,
-    "codigo": "ARB-7eddf68c",
+    "codigo": "ARB-825cff6c",
     "nomeCompleto": "Howard Webb",
     "email": "webb@premierleague.com",
     "senha": "SenhaLegal123!",
@@ -23,7 +23,7 @@
   },
   {
     "experiencia": 0,
-    "codigo": "ARB-888cdabc",
+    "codigo": "ARB-40007c46",
     "nomeCompleto": "Sandro Meira Ricci",
     "email": "ricci@cbf.com",
     "senha": "SenhaLegal123!",
@@ -31,10 +31,24 @@
   },
   {
     "experiencia": 0,
-    "codigo": "ARB-f52e93ef",
+    "codigo": "ARB-a311ded9",
     "nomeCompleto": "Nestor Pitana",
     "email": "pitana@afa.com",
     "senha": "SenhaLegal123!",
+    "personagem": "ARBITRO"
+  },
+  {
+    "nomeCompleto": "Organizador",
+    "email": "organizador@gmail.com",
+    "senha": "Organizador18!",
+    "personagem": "ORGANIZADOR"
+  },
+  {
+    "experiencia": 0,
+    "codigo": "ARB-3c54c49a",
+    "nomeCompleto": "Arbitro Teste",
+    "email": "arbitro@gmail.com",
+    "senha": "Arbitro18!",
     "personagem": "ARBITRO"
   }
 ]

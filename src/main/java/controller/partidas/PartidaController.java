@@ -82,6 +82,11 @@ public class PartidaController {
                 continue;
             }
 
+            /* Checar se o dia bate primeiro */
+            if (!dataPartida.toLocalDate().equals(p.getDataEHora().toLocalDate())) {
+                continue;
+            }
+
             /* Considerando que um jogo tem aproximadamente 90 minutos, não pode haver outros jogos com a mesma seleção
              * nem 90min antes do início desse jogo, nem menos de 90min depois do começo do jogo */
             LocalDateTime finalPartidaExistente = p.getDataEHora().plusMinutes(90);

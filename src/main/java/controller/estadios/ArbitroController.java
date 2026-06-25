@@ -55,6 +55,20 @@ public class ArbitroController {
     public void editar(String codigo,String pais,int experiencia) {
         validarPermissao();
 
+        //implementando restrições
+
+        if (pais == null || pais.trim().isBlank() || "Selecione um País".equals(pais)) {
+            throw new IllegalArgumentException(
+                    "Selecione um país válido."
+            );
+        }
+
+        if (experiencia < 0){
+            throw new IllegalArgumentException(
+                    "Insira uma experiência não-negativa válida."
+            );
+        }
+
         for (Arbitro arbitro : arbitros) {
             if (arbitro.getCodigo().equals(codigo)) {
                 arbitro.setPais(pais);
@@ -108,7 +122,7 @@ public class ArbitroController {
                 .filter(a ->
                         pais == null ||
                                 pais.isBlank() ||
-                                pais.equals("Todos") ||
+                                pais.equals("Selecione um País") ||
                                 (a.getPais() != null &&
                                         a.getPais().equalsIgnoreCase(pais)))
 

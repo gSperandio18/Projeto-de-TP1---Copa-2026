@@ -116,6 +116,7 @@ public class cadastrarNovaPartida extends javax.swing.JFrame {
 
         /* Com os índices, preencher o campo dos árbitros */
         listaArbitros.setSelectedIndices(indices);
+        menuArbitroPrincipal.setSelectedItem(designacaoController.buscarArbitroPrincipal(partida));
     }
     
     private void carregarMenuEstadios() {

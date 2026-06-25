@@ -255,7 +255,7 @@ public class cadastroDeArbitros extends javax.swing.JFrame {
             String nome = txtNomeArbitro.getText().trim();
             String pais = (String) jcbPaisesDisponiveis.getSelectedItem();
             
-            if ("Todos".equals(pais)) {
+            if ("Selecione um País".equals(pais)) {
                 pais = null;
             }
 
