@@ -34,13 +34,43 @@ public class EstadioController {
 
         validarPermissao();
 
-        for(Estadio e : estadios){
+        if(estadio == null){
+            throw new IllegalArgumentException(
+                    "Estádio inválido."
+            );
+        }
 
-            if ("Todos".equals(estadio.getPais())) {
-                throw new IllegalArgumentException(
-                        "Selecione um país válido."
-                );
-            }
+        if(estadio.getNome() == null || estadio.getNome().trim().isBlank()){
+            throw new IllegalArgumentException(
+                    "Insira um nome válido de estádio"
+            );
+        }
+
+        if(estadio.getEstado() == null || estadio.getCidade() == null || estadio.getEstado().trim().isBlank() || estadio.getCidade().trim().isBlank()){
+            throw new IllegalArgumentException(
+                    "Insira um local válido de estádio"
+            );
+        }
+
+        if(estadio.getAnoInauguracao() < 1895 || estadio.getAnoInauguracao() > 2026){
+            throw new IllegalArgumentException(
+                    "Insira um ano válido para cadastrar o estádio"
+            );
+        }
+
+        if(estadio.getCapacidade() <= 0){
+            throw new IllegalArgumentException(
+                    "Insira uma capacidade maior que 0 para o estádio"
+            );
+        }
+
+        if ("Todos".equals(estadio.getPais())) {
+            throw new IllegalArgumentException(
+                    "Selecione um país válido."
+            );
+        }
+
+        for(Estadio e : estadios){
 
             if(e.getCodigo().equals(
                     estadio.getCodigo())){
@@ -48,12 +78,7 @@ public class EstadioController {
                 throw new IllegalArgumentException(
                         "Código já cadastrado.");
             }
-        }
 
-        if(estadio == null){
-            throw new IllegalArgumentException(
-                    "Estádio inválido."
-            );
         }
 
         estadios.add(estadio);
@@ -71,6 +96,36 @@ public class EstadioController {
             int ano) {
 
         validarPermissao();
+
+        if(nome == null || nome.trim().isBlank()){
+            throw new IllegalArgumentException(
+                    "Insira um nome válido de estádio"
+            );
+        }
+
+        if(estado == null || cidade == null || estado.trim().isBlank() || cidade.trim().isBlank()){
+            throw new IllegalArgumentException(
+                    "Insira um local válido de estádio"
+            );
+        }
+
+        if(ano < 1895 || ano > 2026){
+            throw new IllegalArgumentException(
+                    "Insira um ano válido para cadastrar o estádio"
+            );
+        }
+
+        if(capacidade <= 0){
+            throw new IllegalArgumentException(
+                    "Insira uma capacidade maior que 0 para o estádio"
+            );
+        }
+
+        if ("Todos".equals(pais)) {
+            throw new IllegalArgumentException(
+                    "Selecione um país válido."
+            );
+        }
 
         for (Estadio estadio : estadios) {
 

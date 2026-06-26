@@ -61,7 +61,7 @@ public class PartidaController {
         try {
             dataPartida = LocalDateTime.parse(data + ' ' + horario, formato);
         } catch (DateTimeParseException e) {
-            throw new Copa2026Exceptions("Data ou horário inserido é inválido. Eles deve estar no formato" +
+            throw new Copa2026Exceptions("Data ou horário inserido é inválido. Eles devem estar no formato" +
                     " dd/MM/yyyy e HH:mm.");
         }
 
@@ -79,6 +79,11 @@ public class PartidaController {
             /* Para usar na edição; se estivermos editando uma partida, não queremos que ela cheque a disponibilidade
               * de horário com ela mesma, então passamos o código da partida para que ela seja ignorada */
             if (p.getId().equals(idPartidaAIgnorar) && idPartidaAIgnorar != null) {
+                continue;
+            }
+
+            /* Checar se o dia bate primeiro */
+            if (!dataPartida.toLocalDate().equals(p.getDataEHora().toLocalDate())) {
                 continue;
             }
 
@@ -143,6 +148,7 @@ public class PartidaController {
                                          Fase filtroFase, String dataFiltro) {
 
         ArrayList<Partida> partidasEncontradas = new ArrayList<>();
+        DateTimeFormatter formatoBusca = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
         for (Partida p : partidas) {
             // Verifica se o filtro está vazio ou se encaixa nessa partida
@@ -150,7 +156,7 @@ public class PartidaController {
             boolean selecaoDesejada = (filtroSelecao == null) || (p.getSelecao1().equals(filtroSelecao)) || (p.getSelecao2().equals(filtroSelecao));
             boolean faseDesejada = (filtroFase == null) || (p.getFase() == filtroFase);
             boolean dataDesejada = (dataFiltro == null) || (dataFiltro.trim().isEmpty()) ||
-                                    (p.getDataEHora().toLocalDate().toString().contains(dataFiltro)); // TODO: validar formato da data
+                                    (p.getDataEHora().format(formatoBusca).contains(dataFiltro));
 
             if (statusDesejado && selecaoDesejada && faseDesejada && dataDesejada) {
                 partidasEncontradas.add(p);
@@ -182,7 +188,7 @@ public class PartidaController {
         }
 
         /* passar mesmo ID gerado para a partida */
-        partida.setResultado(new Resultado(partida.getId(), partida, sel1, sel2, descricao));
+        partida.setResultado(new Resultado(partida.getId(), sel1, sel2, descricao));
         partida.setStatus(Partida.StatusPartida.FINALIZADA);
 
         salvarPartidaEditada(partida);

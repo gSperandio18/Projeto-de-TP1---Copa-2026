@@ -5,6 +5,7 @@
 package guiEtelas.partidasFolder;
 
 import controller.estadios.DesignacaoController;
+import controller.selecoes.SelecaoController;
 import domain.classes.estadios.Arbitro;
 import domain.classes.partidas.Partida;
 import domain.classes.selecoes.Selecao;
@@ -51,8 +52,14 @@ public class consultarPartida extends javax.swing.JFrame {
             menuFase.addItem(f);
         }
 
-        // TODO: Pegar seleções pelo Controller
+        SelecaoController selecaoController = new SelecaoController();
+        List<Selecao> selecoes = selecaoController.listar();
 
+        for (Selecao s : selecoes) {
+            menuSelecao.addItem(s);
+        }
+
+        menuSelecao.setSelectedIndex(-1);
         menuFase.setSelectedIndex(-1);
     }
 
@@ -100,7 +107,7 @@ public class consultarPartida extends javax.swing.JFrame {
         setTitle("Consultar Partidas - Copa 2026");
         setMaximumSize(new java.awt.Dimension(626, 419));
         setMinimumSize(new java.awt.Dimension(626, 419));
-        setPreferredSize(new java.awt.Dimension(700, 500));
+        setPreferredSize(new java.awt.Dimension(830, 500));
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
@@ -108,14 +115,14 @@ public class consultarPartida extends javax.swing.JFrame {
 
         tabelaPartidas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null, null, null, null, null, null}
+                {null, null, null, null, null, null, null, null, null, null}
             },
             new String [] {
-                "Data", "Horário", "Fase", "Estádio", "Sel. 1", "Placar", "Sel. 2", "Status", "Árbitro"
+                "Data", "Horário", "Fase", "Estádio", "Sel. 1", "Placar", "Sel. 2", "Status", "Árbitro", "Código"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -130,7 +137,7 @@ public class consultarPartida extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 658, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 788, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -141,7 +148,7 @@ public class consultarPartida extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 680, 340));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 810, 340));
 
         botaoBuscar.setText("Buscar");
         botaoBuscar.addActionListener(this::botaoBuscarActionPerformed);
@@ -174,10 +181,12 @@ public class consultarPartida extends javax.swing.JFrame {
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(caixaData, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 153, Short.MAX_VALUE)
                         .addComponent(botaoBuscar))
-                    .addComponent(jLabel2))
-                .addContainerGap(11, Short.MAX_VALUE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel2)
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,7 +205,7 @@ public class consultarPartida extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 670, 60));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, 800, 60));
 
         botaoExcluir.setText("Excluir");
         botaoExcluir.addActionListener(this::botaoExcluirActionPerformed);
@@ -211,8 +220,12 @@ public class consultarPartida extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botaoBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botaoBuscarActionPerformed
+        String dataFiltro = caixaData.getText();
+        if (dataFiltro.equals("dd/MM/yyyy")) {
+            dataFiltro = "";
+        }
         partidasMostradas = partidaController.filtrarPartidas(null, (Selecao) menuSelecao.getSelectedItem(),
-                (Fase) menuFase.getSelectedItem(), caixaData.getText()
+                (Fase) menuFase.getSelectedItem(), dataFiltro
         );
 
         mostrarBotoes(!partidasMostradas.isEmpty()); // Mostrar se a lista não estiver vazia, esconder se estiver
@@ -245,7 +258,8 @@ public class consultarPartida extends javax.swing.JFrame {
                     placar,
                     p.getSelecao2(),
                     p.getStatus(),
-                    arbitroPrincipal
+                    arbitroPrincipal,
+                    p.getId()
             };
 
             modelo.addRow(linha);
@@ -263,6 +277,7 @@ public class consultarPartida extends javax.swing.JFrame {
                     "Erro na seleção de partida",
                     JOptionPane.ERROR_MESSAGE
             );
+            return;
         }
 
         Partida partida = partidasMostradas.get(index);
@@ -274,12 +289,12 @@ public class consultarPartida extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION
         );
 
-        /* TODO: ver se tem erro pra pegar nessa parte */
         if (confirmar == JOptionPane.YES_OPTION) {
             partidaController.excluirPartida(partida);
 
             DefaultTableModel modelo = (DefaultTableModel) tabelaPartidas.getModel();
             modelo.removeRow(index);
+            partidasMostradas.remove(index);
 
             JOptionPane.showMessageDialog(this, "Partida excluída com sucesso.");
         }
@@ -296,12 +311,14 @@ public class consultarPartida extends javax.swing.JFrame {
                     "Erro na seleção de partida",
                     JOptionPane.ERROR_MESSAGE
             );
+            return;
         }
 
         Partida partida = partidasMostradas.get(index);
 
         cadastrarNovaPartida telaEdicao = new cadastrarNovaPartida(partida);
         telaEdicao.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_botaoEditarActionPerformed
 
     /**

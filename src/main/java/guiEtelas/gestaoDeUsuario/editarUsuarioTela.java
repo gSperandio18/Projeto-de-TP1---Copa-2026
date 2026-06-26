@@ -45,6 +45,7 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         comboBoxTipo.setSelectedItem(usuarioOriginal.getPersonagem());
         
         txtNomeCompleto.setText(usuarioOriginal.getNomeCompleto());
+        txtNomeCompleto.setEditable(false);
         txtEmailAntigo.setText(usuarioOriginal.getEmail());
         txtEmailAntigo.setEditable(false);
     }
@@ -361,16 +362,11 @@ public class editarUsuarioTela extends javax.swing.JFrame {
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
         // TODO add your handling code here:
         Tipo novoTipo = (Tipo)comboBoxTipo.getSelectedItem();
-        String novoNome = txtNomeCompleto.getText().trim();
         String emailAntigo = txtEmailAntigo.getText().trim();
         String novoEmail = txtEmailNovo.getText().trim();
         String novaSenha = new String(txtSenha.getPassword());
         String confirmarSenha = new String(txtConfirmarSenha.getPassword());
-        
-        if(novoNome.isEmpty()){
-            JOptionPane.showMessageDialog(this,"Nome não pode ficar vazio!","Aviso",JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+
         if(!novoEmail.isEmpty() && !novoEmail.contains("@")){
             JOptionPane.showMessageDialog(this,"Email inválido! Ele deve conter '@'","Aviso",JOptionPane.WARNING_MESSAGE);
             return;
@@ -387,10 +383,6 @@ public class editarUsuarioTela extends javax.swing.JFrame {
         }
         
         try{
-            if(!novoNome.equals(usuarioOriginal.getNomeCompleto())){
-                adminController.editarUsuario(usuarioOriginal.getNomeCompleto(),novoNome,null,null);
-                usuarioOriginal.setNomeCompleto(novoNome);
-            }
             if(!novoEmail.isEmpty() && !novoEmail.equals(emailAntigo)){
                 adminController.editarEmail(usuarioOriginal.getNomeCompleto(),novoEmail);
                 usuarioOriginal.setEmail(novoEmail);

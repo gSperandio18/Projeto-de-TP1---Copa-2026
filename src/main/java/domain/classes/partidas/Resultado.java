@@ -2,14 +2,12 @@ package domain.classes.partidas;
 
 public class Resultado {
     private String idResultado;
-    private Partida partida;
     private int placarSelecao1;
     private int placarSelecao2;
     private String eventos;
 
-    public Resultado(String idResultado, Partida partida, int placarSelecao1, int placarSelecao2, String eventos) {
+    public Resultado(String idResultado, int placarSelecao1, int placarSelecao2, String eventos) {
         this.idResultado = idResultado;
-        this.partida = partida;
         this.placarSelecao1 = placarSelecao1;
         this.placarSelecao2 = placarSelecao2;
         this.eventos = eventos;
@@ -21,14 +19,6 @@ public class Resultado {
 
     public void setIdResultado(String idResultado) {
         this.idResultado = idResultado;
-    }
-
-    public Partida getPartida() {
-        return partida;
-    }
-
-    public void setPartida(Partida partida) {
-        this.partida = partida;
     }
 
     public int getPlacarSelecao1() {
