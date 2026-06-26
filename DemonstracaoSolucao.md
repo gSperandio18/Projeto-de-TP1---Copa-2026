@@ -320,9 +320,9 @@ Este guia consolida a arquitetura visual desenvolvida para a interface do sistem
 
 | Desenvolvedor | Módulo de Responsabilidade | Perfil GitHub |
 | :--- | :--- | :--- |
-| **João Guilherme Possati** | Gestão de Usuários (Módulo Administrador) | [@João Guilherme Possati](https://github.com/JPossati) |
-| **Helio Dias** | Gestão de Seleções e Jogadores | [@Helio Dias](https://github.com/heliovo) |
-| **Giovanna Sperandio** | Gestão de Estádios e Árbitros | [@Giovanna Sperandio](https://github.com/gSperandio18) |
-| **Leonardo Aoki** | Gestão e Calendário de Partidas | [@Leonardo Aoki]((https://github.com/LeoAokii)) |
+| **João Guilherme Possati** | Gestão de Usuários (Módulo Administrador) | [João Guilherme Possati](https://github.com/JPossati) |
+| **Helio Dias** | Gestão de Seleções e Jogadores | [Helio Dias](https://github.com/heliovo) |
+| **Giovanna Sperandio** | Gestão de Estádios e Árbitros | [Giovanna Sperandio](https://github.com/gSperandio18) |
+| **Leonardo Aoki** | Gestão e Calendário de Partidas | [Leonardo Aoki](https://github.com/LeoAokii) |
 
 <br>
